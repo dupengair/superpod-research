@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(curl -s --max-time 30 \"http://export.arxiv.org/api/query?search_query=all:%22supernode%22&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending\")",
+      "Bash(curl -s --max-time 60 -X POST \"https://api.semanticscholar.org/graph/v1/paper/batch?fields=title,year,venue,citationCount\" -H \"Content-Type: application/json\" -d @/tmp/s2_ids.json -o /tmp/s2_result.json -w \"HTTP:%{http_code}\\\\n\")",
+      "Bash(python3 -c ' *)"
+    ]
+  }
+}
