@@ -22,6 +22,7 @@ AI 基础设施**超节点（Supernode / SuperPod）**方向的论文调研仓�
 
 ```
 .
+├── CLAUDE.md                          # 项目规范入口（@import 引入检索工作流）
 ├── research/                          # 调研工作目录
 │   ├── CLAUDE.md                      # 检索工作流定义（课题背景、平台边界、报告模板）
 │   ├── 超节点硬件系统结构论文调研_2024以来Top20.md
@@ -56,6 +57,6 @@ AI 基础设施**超节点（Supernode / SuperPod）**方向的论文调研仓�
 git clone --recurse-submodules git@github.com:dupengair/superpod-research.git
 ```
 
-调研工作流详见 [research/CLAUDE.md](research/CLAUDE.md)：定义了课题解析 → 检索式构造 → 轻量摘要表 → 深拉元数据 → 分析撰写 → 引用规范化的完整流程，以及两个用户确认点与降级规则（CDP 不可用、Semantic Scholar 限流等）。
+调研工作流详见 [CLAUDE.md](CLAUDE.md)（经 `@import` 引入 [research/CLAUDE.md](research/CLAUDE.md) 的完整定义）：课题解析 → 检索式构造 → 轻量摘要表 → 深拉元数据 → 分析撰写 → 引用规范化，以及两个用户确认点与降级规则（CDP 不可用、Semantic Scholar 限流等）。
 
 `research/tmp/` 为检索过程的中间产物（论文 PDF、脚本、JSON 数据），随仓库保留以便回溯。
