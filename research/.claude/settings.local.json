@@ -3,7 +3,21 @@
     "allow": [
       "Bash(curl -s --max-time 30 \"http://export.arxiv.org/api/query?search_query=all:%22supernode%22&start=0&max_results=20&sortBy=submittedDate&sortOrder=descending\")",
       "Bash(curl -s --max-time 60 -X POST \"https://api.semanticscholar.org/graph/v1/paper/batch?fields=title,year,venue,citationCount\" -H \"Content-Type: application/json\" -d @/tmp/s2_ids.json -o /tmp/s2_result.json -w \"HTTP:%{http_code}\\\\n\")",
-      "Bash(python3 -c ' *)"
+      "Bash(python3 -c ' *)",
+      "Read(//home/dupengair/.claude/skills/academic-search/scripts/**)",
+      "Bash(bash ~/.claude/skills/academic-search/scripts/check-deps.sh)",
+      "Bash(bash /home/dupengair/shared/work/superpod/tools/skills/academic-search/scripts/check-deps.sh)",
+      "Bash(mkdir -p /tmp/superpod_search)",
+      "Read(//tmp/**)",
+      "Bash(curl -s --max-time 30 \"http://export.arxiv.org/api/query?search_query=all:%22UnifiedBus%22+OR+all:%22CloudMatrix%22+OR+all:%22Ascend+SuperPOD%22+OR+all:%22unified+memory+semantics%22&start=0&max_results=30&sortBy=submittedDate&sortOrder=descending\" -o q1_huawei.xml)",
+      "Bash(curl -s --max-time 30 \"http://export.arxiv.org/api/query?search_query=all:%22supernode%22+OR+all:%22superpod%22+OR+all:%22scale-up+domain%22+OR+all:%22scale-up+fabric%22+AND+submittedDate:%5B202201010000+TO+202608312359%5D&start=0&max_results=40&sortBy=submittedDate&sortOrder=descending\" -o q2_supernode.xml)",
+      "Read(//home/dupengair/shared/work/superpod/tools/skills/**)",
+      "Read(//home/dupengair/.claude/skills/**)",
+      "Read(//home/dupengair/shared/work/superpod/tools/skills/academic-search/**)",
+      "Bash(curl -s --max-time 5 http://localhost:9222/json/version)",
+      "Bash(wslinfo --networking-mode)",
+      "Read(//mnt/c/Users/**)",
+      "Bash(curl *)"
     ]
   }
 }
