@@ -1,0 +1,19 @@
+[1] ZUO P, LIN H, DENG J, 等. Serving Large Language Models on Huawei CloudMatrix384[EB/OL]. arXiv:2506.12708[2025]. https://arxiv.org/abs/2506.12708.
+[2] XIAO A, HE B, ZHANG B, 等. Huawei Cloud Model-as-a-Service on the CloudMatrix384 SuperPod[EB/OL]. arXiv:2508.02520[2025]. https://arxiv.org/abs/2508.02520.
+[3] LI D, LUO X, SUN R, 等. SLAI T-Rex: Full-Parameter Post-training of the DeepSeek-V4 Family on Ascend SuperPOD[EB/OL]. arXiv:2607.20145[2026]. https://arxiv.org/abs/2607.20145.
+[4] LIU Y, LIU C, SHEN S, 等. UBEP: Re-architecting Expert Parallelism Communication Library for Production Superpods[EB/OL]. arXiv:2607.06202[2026]. https://arxiv.org/abs/2607.06202.
+[5] HU T, QIN J, WANG Y, 等. StrataCL: Fabric-Native Communication Library for Production Supernodes[EB/OL]. arXiv:2607.26444[2026]. https://arxiv.org/abs/2607.26444.
+[6] ZHANG X, SUN B, SU T, 等. HyperParallel: A Supernode-Affinity AI Framework[EB/OL]. arXiv:2603.03731[2026]. https://arxiv.org/abs/2603.03731.
+[7] LIU F, ZHANG Q, SHEN H, 等. HyperOffload: Graph-Driven Hierarchical Memory Management for Large Language Models on SuperNode Architectures[EB/OL]. arXiv:2602.00748[2026]. https://arxiv.org/abs/2602.00748.
+[8] SEO M, NGUYEN XT, HWANG SJ, 等. IANUS: Integrated Accelerator based on NPU-PIM Unified Memory System[EB/OL]. arXiv:2410.15008[2024]. https://arxiv.org/abs/2410.15008.
+[9] GU Y, KHADEM A, UMESH S, 等. PIM Is All You Need: A CXL-Enabled GPU-Free System for Large Language Model Inference[EB/OL]. arXiv:2502.07578[2025]. https://arxiv.org/abs/2502.07578.
+[10] WAHLGREN J, SCHIEFFER G, SHI R, 等. Dissecting CPU-GPU Unified Physical Memory on AMD MI300A APUs[EB/OL]. arXiv:2508.12743[2025]. https://arxiv.org/abs/2508.12743.
+[11] COOPER B, SCOGLAND T, GE R. Shared Virtual Memory: Its Design and Performance Implications for Diverse Applications[EB/OL]. arXiv:2405.06811[2024]. https://arxiv.org/abs/2405.06811.
+[12] HE B, ZHENG X, CHEN Y, 等. DxPU: Large-scale Disaggregated GPU Pools in the Datacenter[EB/OL]. arXiv:2310.04648[2023]. https://arxiv.org/abs/2310.04648.
+[13] ASSA G, LUMME M, BÜRGI L, 等. A Programming Model for Disaggregated Memory over CXL[EB/OL]. arXiv:2407.16300[2026]. https://arxiv.org/abs/2407.16300.
+[14] LI H, BERGER DS, NOVAKOVIĆ S, 等. Pond: CXL-Based Memory Pooling Systems for Cloud Platforms[EB/OL]. arXiv:2203.00241[2022]. https://arxiv.org/abs/2203.00241.
+[15] SENSI DD, PICHETTI L, VELLA F, 等. Exploring GPU-to-GPU Communication: Insights into Supercomputer Interconnects[EB/OL]. arXiv:2408.14090[2024]. https://arxiv.org/abs/2408.14090.
+[16] WANG W, KHAZRAEE M, ZHONG Z, 等. TopoOpt: Co-optimizing Network Topology and Parallelization Strategy for Distributed Training Jobs[EB/OL]. arXiv:2202.00433[2022]. https://arxiv.org/abs/2202.00433.
+[17] DEVRAJ A, BOWEN L, SINGH R. Understanding the Synchronization Tax in GPU Scale-Up Domains[EB/OL]. arXiv:2608.22503[2026]. https://arxiv.org/abs/2608.22503.
+[18] LUO S, SADIQ AZ, YANG R, 等. C2CServe: Leveraging NVLink-C2C for Elastic Serverless LLM Serving on MIG[EB/OL]. arXiv:2605.19481[2026]. https://arxiv.org/abs/2605.19481.
+[19] LI W, PENG J, JING Z, 等. DWDP: Distributed Weight Data Parallelism for High-Performance LLM Inference on NVL72[EB/OL]. arXiv:2604.01621[2026]. https://arxiv.org/abs/2604.01621.
