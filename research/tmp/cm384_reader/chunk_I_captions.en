@@ -1,0 +1,34 @@
+C001	caption	Fig. 1. Huawei’s CloudMatrix architecture vision reimagines AI datacenter infrastructure from the ground up. By dismantling traditional siloed designs, it enables full peer-to-peer disaggregation and pooling of CPUs, NPUs, memory, NICs, and other resources over a unified, ultra-high-performance networking, forming the foundation for scalable, AI-native datacenters.
+C002	caption	Fig. 2. Peer-to-peer hardware architecture of a CloudMatrix384 supernode, featuring an ultra-high-bandwidth Unified Bus (UB) plane for intra-supernode scaling, an RDMA plane for inter-supernode communication, and a Virtual Private Cloud (VPC) plane for integration with the datacenter network. All reported network bandwidth values denote unidirectional bandwidth.
+C003	caption	Fig. 3. Logical overview of the Huawei Ascend 910 chip, highlighting its dual-die architecture. All reported network bandwidth values denote unidirectional bandwidth.
+C004	caption	Fig. 4. Logical overview of an Ascend 910 node within the CloudMatrix384. All reported network bandwidth values denote unidirectional bandwidth.
+C005	caption	Fig. 5. The UB switch system in the CloudMatrix384. All reported network bandwidth values denote unidi-rectional bandwidth.
+C006	caption	Fig. 6. The CANN software stack for Huawei Ascend NPUs.
+C007	caption	Fig. 7. The cloud infrastructure software stack for deploying CloudMatrix384.
+C008	caption	Fig. 8. An overview of our proposed optimization techniques in different layers of the AI software stack.
+C009	caption	Fig. 9. Peer-to-peer serving architecture with prefill-decode-caching (PDC) disaggregation on CloudMatrix384, enabling all NPUs to uniformly access a shared caching cluster backed by a disaggregated memory pool over the ultra-high-bandwidth UB network.
+C010	caption	Fig. 10. Comparison between basic MoE computation flow with all-to-all communications and our proposed MoE computation flow with fused communication operators.
+C011	caption	Fig. 11. SDMA-based vs. AIV-direct communication across NPUs. The red and blue lines indicate data transmission paths using SDMA and AIV-direct, respectively.
+C012	caption	Fig. 12. Data-sending pipelines for token dispatch, which employs dynamic quantization, and for combine, which transmits unquantized data.
+C013	caption	Fig. 13. The MLAProlog and FA operators, key components of our MLA optimization.
+C014	caption	Fig. 14. Comparison of decode pipelines: (a) DeepSeek’s approach on H800 and (b) our proposed pipeline on CloudMatrix384. Alternating colors denote two interleaved microbatches.
+C015	caption	Fig. 15. The pipelined MTP optimization on Asend NPUs.
+C016	caption	Fig. 16. Comparison between basic MLA flow using pure DP and our proposed MLA flow leveraging hybrid parallelism during the prefill phase.
+C017	caption	Fig. 17. Illustrative data flow of the staged hybrid parallelism (SP-TP-SP) for MLA computation in prefill.
+C018	caption	Fig. 18. Comparison of prefill pipeline strategies: (a) DeepSeek’s approach on H800, reserving compute units for communication, versus (b) our proposed pipeline on CloudMatrix384, leveraging heterogeneous AIC, AIV, and SDMA units for specialized task execution and enhanced computation-communication overlap. In both diagrams, alternating colors are used to distinguish the two interleaved microbatches being processed.
+C019	caption	Fig. 19. The deployment architecture of the UB-driven disaggregated memory pool in EMS.
+C020	caption	Table 1. Performance comparison of model loading strategies for loading a 671B INT8 model (approximately 671GB data size) into 8 model instances within a CloudMatrix384 (The model is originally stored in an OBS bucket with 2.5GB/s bandwidth. We consider two scenarios: 1) Model load: all 8 instances concurrently load the same model using different load strategies for comparing their load latency and DRAM overhead; 2) Model switch: with 8 distinct active models, we compare the model switch latency and cache hit rate when one instance performs a random model switching to one of these 8 models. Latencies are illustrative and representative of defined scenarios.).
+C021	caption	Table 2. Overall prefill throughput (per accelerator) for DeepSeek-R1.
+C022	caption	Table 3. Overall decode throughput (per accelerator) for DeepSeek-R1.
+C023	caption	Table 4. The decode throughput of CloudMatrix-Infer under different TPOT SLOs and prompt/output lengths.
+C024	caption	Table 5. Accuracy comparison of DeepSeek-R1 with INT8 quantization on Ascend 910, the official DeepSeek- R1 API [10], and results reported in the DeepSeek-R1 technical report [13] across multiple benchmarks (Results from benchmarks with testing configurations deemed inconsistent have been excluded.).
+C025	caption	Fig. 20. Decode throughput and per-layer latency breakdown with and without the microbatch-based pipeline. All requests have a 4,096-token KV cache length. In (b), the “Overall” with Microbatch indicates the per-layer latency after overlapping two microbatches (Microbatch 0 and Microbatch 1).
+C026	caption	Fig. 21. Prefill throughput and per-layer latency breakdown with and without the microbatch-based pipeline. All experiments are executed with a batch containing 16K total tokens per NPU. In (b), the “Overall” with Microbatch indicates the per-layer latency after overlapping Microbatch 0 and Microbatch 1.
+C027	caption	Fig. 22. Decode throughput and per-layer latency breakdown with and without MTP. All experiments use an input sequence length of 4,096 tokens. In (b), “Overall” refers to the per-layer latency after overlapping two microbatches, and the operator latency represents the latency of a single microbatch.
+C028	caption	Fig. 23. The overall prefill throughput and TTFT using EMS-Context Caching with different configurations.
+C029	caption	Table 6. Communication operator performance (latency and bandwidth per rank) on NVIDIA H800 (RDMA) and CloudMatrix384 (UB plane) for Dispatch and Combine operations across different EP degrees.
+C030	caption	Table 7. Utilization of MLA operators on NVIDIA H800 and an Ascend 910 die (CloudMatrix384) in compute-intensive settings (BF16/FP16 precision).
+C031	caption	Table 8. Memory bandwidth utilization of MLA operators on NVIDIA H800 and an Ascend 910 die (CloudMa-trix384) in memory-intensive settings.
+C032	caption	Table 9. INT8 GEMM achieved memory bandwidth and compute utilization on an Ascend 910 die (CloudMa-trix384) across different configurations, using INT8 inputs and BF16 outputs. Tiling: BM × BN = 128 × 152.
+C033	caption	Fig. 24. NPU allocation rates under different supernode scales and tightly-coupled block sizes.
+C034	caption	Table 10. Switch utilization across different supernode scales. Note that each logical switch consists of two physical switch chips presented in §3.3.3.

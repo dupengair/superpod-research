@@ -1,0 +1,34 @@
+C001	Fig. 1. 华为 CloudMatrix 架构愿景从底层重新构想 AI 数据中心基础设施。它打破传统的烟囱式（siloed）设计，在统一的超高性能网络之上实现 CPU、NPU、内存、网卡（NIC）等资源的完全对等分离与池化，为可扩展的 AI 原生数据中心奠定基础。
+C002	Fig. 2. CloudMatrix384 超节点的对等硬件架构：超节点内部通过超高带宽统一总线（UB，灵衢）平面进行 scale-up（纵向扩展），超节点之间通过 RDMA 平面通信，并通过虚拟私有云（VPC）平面接入数据中心网络。图中所有网络带宽数值均指单向带宽。
+C003	Fig. 3. 华为昇腾 910（Ascend 910）芯片的逻辑概览，重点展示其双芯粒架构。图中所有网络带宽数值均指单向带宽。
+C004	Fig. 4. CloudMatrix384 中单个 Ascend 910 节点的逻辑概览。图中所有网络带宽数值均指单向带宽。
+C005	Fig. 5. CloudMatrix384 中的 UB 交换系统。图中所有网络带宽数值均指单向带宽。
+C006	Fig. 6. 面向华为 Ascend NPU 的 CANN 软件栈。
+C007	Fig. 7. 用于部署 CloudMatrix384 的云基础设施软件栈。
+C008	Fig. 8. 我们提出的各项优化技术在 AI 软件栈不同层次中的总览。
+C009	Fig. 9. CloudMatrix384 上采用 prefill-解码-缓存分离（PDC 分离）的对等推理服务架构，使所有 NPU 都能经由超高带宽 UB 网络统一访问由分离式内存池支撑的共享缓存集群。
+C010	Fig. 10. 采用 all-to-all 通信的基本 MoE（混合专家）计算流程与我们提出的采用融合通信算子的 MoE 计算流程的对比。
+C011	Fig. 11. NPU 间基于 SDMA（系统 DMA）的通信与 AIV 直连通信的对比。红线与蓝线分别表示使用 SDMA 与 AIV 直连的数据传输路径。
+C012	Fig. 12. token 分发与 token 合并的数据发送流水线：前者采用动态量化，后者传输未量化数据。
+C013	Fig. 13. MLAProlog 与 FA 算子，是我们 MLA（多头潜在注意力）优化的关键组件。
+C014	Fig. 14. 解码流水线对比：(a) DeepSeek 在 H800 上的方案与 (b) 我们提出的 CloudMatrix384 流水线。交替的颜色表示两个交错执行的微批次。
+C015	Fig. 15. Ascend NPU 上的流水线化多 token 预测（MTP）优化。
+C016	Fig. 16. prefill（预填充）阶段采用纯数据并行（DP）的基本 MLA 流程与我们提出的利用混合并行的 MLA 流程的对比。
+C017	Fig. 17. prefill 中 MLA 计算的分阶段混合并行（SP-TP-SP）数据流示意图。
+C018	Fig. 18. prefill 流水线策略对比：(a) DeepSeek 在 H800 上的方案，为通信预留计算单元；(b) 我们在 CloudMatrix384 上提出的流水线，利用异构的 AIC、AIV 和 SDMA 单元执行专门化任务，增强计算与通信的重叠。两幅图中，交替的颜色用于区分正在处理的两个交错微批次。
+C019	Fig. 19. 弹性内存服务（EMS）中由 UB 驱动的分离式内存池的部署架构。
+C020	Table 1. 在 CloudMatrix384 内将一个 671B INT8 模型（数据量约 671GB）加载到 8 个模型实例的不同模型加载策略的性能对比（模型最初存储在带宽为 2.5GB/s 的对象存储（OBS）桶中。我们考虑两种场景：1) 模型加载：8 个实例采用不同加载策略并发加载同一模型，比较其加载时延与 DRAM 开销；2) 模型切换：在 8 个不同模型同时活跃的情况下，比较某一实例随机切换到这 8 个模型之一时的模型切换时延与缓存命中率。表中时延为示意值，能够代表所定义场景下的典型水平。）
+C021	Table 2. DeepSeek-R1 的整体 prefill 吞吐量（每加速器）。
+C022	Table 3. DeepSeek-R1 的整体解码吞吐量（每加速器）。
+C023	Table 4. CloudMatrix-Infer 在不同每 token 输出时间（TPOT）服务级目标（SLO）与 prompt/输出长度下的解码吞吐量。
+C024	Table 5. 在多个 benchmark 上对 DeepSeek-R1 的精度比较，包括 Ascend 910 上经 INT8 量化的版本、DeepSeek-R1 官方 API [10]，以及 DeepSeek-R1 技术报告 [13] 中报告的结果（测试配置被视为不一致的 benchmark 结果已被排除）。
+C025	Fig. 20. 采用与不采用基于微批次的流水线时的解码吞吐量与每层时延分解。所有请求的 KV 缓存长度均为 4,096 token。在 (b) 中，带 Microbatch 的“Overall”表示两个微批次（Microbatch 0 与 Microbatch 1）重叠后的每层时延。
+C026	Fig. 21. 采用与不采用基于微批次的流水线时的 prefill 吞吐量与每层时延分解。所有实验均以每 NPU 共含 16K token 的批次执行。在 (b) 中，带 Microbatch 的“Overall”表示 Microbatch 0 与 Microbatch 1 重叠后的每层时延。
+C027	Fig. 22. 采用与不采用 MTP 时的解码吞吐量与每层时延分解。所有实验的输入序列长度均为 4,096 token。在 (b) 中，“Overall”指两个微批次重叠后的每层时延，算子时延表示单个微批次的时延。
+C028	Fig. 23. 采用不同配置的 EMS 上下文缓存（EMS-Context Caching）时的整体 prefill 吞吐量与首 token 时间（TTFT）。
+C029	Table 6. 不同专家并行（EP）度数下，NVIDIA H800（RDMA）与 CloudMatrix384（UB 平面）上 Dispatch 与 Combine 操作的通信算子性能（每个 rank 的时延与带宽）。
+C030	Table 7. 计算密集场景下 MLA 算子在 NVIDIA H800 与单颗 Ascend 910 芯粒（CloudMatrix384）上的利用率（BF16/FP16 精度）。
+C031	Table 8. 访存密集场景下 MLA 算子在 NVIDIA H800 与单颗 Ascend 910 芯粒（CloudMatrix384）上的内存带宽利用率。
+C032	Table 9. 在不同配置下，单颗 Ascend 910 芯粒（CloudMatrix384）上 INT8 GEMM（通用矩阵乘）达到的内存带宽与计算利用率，采用 INT8 输入与 BF16 输出。分块（Tiling）：BM × BN = 128 × 152。
+C033	Fig. 24. 不同超节点规模与紧耦合块大小下的 NPU 分配率。
+C034	Table 10. 不同超节点规模下的交换机利用率。注意，每个逻辑交换机由两颗物理交换芯片组成，如 §3.3.3 所述。

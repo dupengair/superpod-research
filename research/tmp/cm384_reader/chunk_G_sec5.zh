@@ -1,0 +1,51 @@
+S193	**离群值抑制与结构变换。**大模型中的某些组件，尤其是 MoE 架构中的特定专家子网络或门控结构，其激活值或权重分布可能呈现长尾或显著离群值。这些离群值会对量化范围产生不成比例的影响，导致大多数数值出现精度损失。为缓解这一问题，我们采用一种*基于结构变换的离群值抑制技术*：在量化之前引入简单的线性变换（概念上类似于施加学习得到的正交基旋转，或将缩放因子吸收进前序/后继层）。这些变换旨在把极端值重新分布到更均衡、更利于量化的数值范围内，同时不改变该层原本的数学函数。通过降低离群值的影响，该方法最大程度地减小了出现大量化误差的风险，并抑制了误差在网络中的后续放大。
+S194	**高效的 INT8 矩阵乘算子。**INT8 量化的性能收益在很大程度上取决于高度优化的执行算子。我们为矩阵乘采用*$X$/$W$ 混合粒度量化方案*：激活值（$X$）按 token 粒度量化（动态范围逐 token 确定），而权重（$W$）按通道粒度量化（通常为逐输出通道、每通道静态范围）。该方案既满足了适应快速变化的激活统计特性的需要，又兼顾了保持权重表示稳定性的诉求。这种混合粒度，再加上为权重与激活精心对齐的内存布局，使 Ascend NPU 上专用的整数矩阵乘指令得以被充分利用。与等效的 BF16 或 FP16 实现相比，这些优化后的 INT8 算子在同一硬件上可带来数倍的推理吞吐量提升，同时确保任何精度下降都保持在应用可接受的容差范围内。
+S195	**块级裁剪与误差补偿。**为进一步提升精度并处理大型权重张量内部的局部差异，我们实现了*块级裁剪与误差补偿*。先对权重进行统计分析并划分为较小的块，然后为每个块建立一个独立的、可容忍的裁剪范围。该范围可通过为裁剪优化缩放因子 $α$ 来确定（例如 $W$ = $α$ · max($W$) 与 $W$ = $α$ · min($W$)），使该特定块的 clip_max block clip_min block 量化误差最小化，例如通过求解：$XWXQWα$
+E004	arg min || Block ( ; ) − Block ( ; ( ; ))|| (4)
+S196	这五种策略相互配合，构成了一个稳健且分层的 INT8 量化框架，使 DeepSeek-V3/R1 这类超大模型能够在 Ascend 硬件上进行高性能推理，并在计算效率与模型精度保持之间实现了精心平衡。5 评估 本章对我们提出的推理服务系统 CloudMatrix-Infer（前文 §4 已详述）部署于 CloudMatrix384 之上时的表现进行全面性能评估。我们首先概述评估所用的通用实验设置（§5.1）；随后从若干关键维度分析性能与效果：包括整体系统性能（§5.2）；INT8 量化方案下的推理精度（§5.3）；一项消融研究，
+S197	考察所采用的各种优化技术的具体贡献（§5.4）；最后是关键底层算子的性能分析（§5.5）。
+S198	5.1 实验设置
+S199	**解码集群：**我们部署单个解码实例，使用 160 个 Ascend 910 NPU（分布在 20 个计算节点上，即 320 个 NPU 芯粒）。该实例对稀疏 MoE 层采用 320 的专家并行度（EP320）；对于 MLA 和密集 FFN 层等其他组件，则在全部 NPU 芯粒上采用 320 的数据并行度（DP320）。在这 320 个 EP rank 中，每个 rank 部署一个专家实例。专家配置包括 32 份共享专家副本、256 个不同的路由专家，以及额外的 32 个冗余路由专家，用于支持专家并行负载均衡（EPLB）。
+S200	**prefill（预填充）集群：**prefill 集群由 6 个 prefill 实例组成，每个实例分配 16 个 Ascend 910 NPU（每个实例 2 个计算节点，即 32 个 NPU 芯粒）。prefill 集群总计使用 96 个 NPU。每个 prefill 实例对稀疏 MoE 层采用 32 的专家并行度（EP32）。prefill 实例中的 MLA 组件采用 §4.3.1 详述的混合并行策略。在每个 32-rank 的 prefill 实例内部，每个 rank 配置 10 个专家，包括 1 个共享专家、8 个路由选择的专家和 1 个冗余路由专家，以实现有效的 EPLB。
+S201	**缓存集群（弹性内存服务，EMS）：**EMS 提供的分布式缓存通过利用构成 prefill 与解码集群的全部物理计算节点的主机 CPU DRAM 来实现。这 32 个计算节点（解码集群 20 个 + prefill 集群 12 个）上的鲲鹏（Kunpeng）CPU 及其配套 DRAM 共同构成由 UB 驱动的分离式内存池。EMS 将该池同时用于模型缓存（Model Caching，§4.4.3）与上下文缓存（Context Caching，§4.4.2）。所有 NPU 对该共享内存池的访问依托 CloudMatrix384 的高速 UB 平面完成。
+S202	上述实验配置是后文精度与性能评估的基础。所评估的 DeepSeek-R1 模型为 671B 参数版本，已量化为 INT8（§4.5）以在 Ascend 910 NPU 上执行。
+S203	5.2 整体性能
+S204	**prefill 吞吐量。**我们首先考察 prefill 吞吐量，这是高效处理输入提示词的关键因素。Table 2 详细列出了按每加速器口径的对比。有效的 MoE 模型 2 https://www.siliconflow.com/
+S205	推理服务在 prefill 阶段同样在很大程度上依赖健壮的 EPLB，这一点在 SGLang 的分析 [53] 中被重点指出。DeepSeek（Profile）数据吞吐量很高（每 GPU 7,839 tokens/s），可能反映的是接近理想专家负载均衡下的性能。为了与这类优化场景建立可比的分析基线，Table 2 为 SGLang 与 CloudMatrix-Infer 均列入了 *Perfect EPLB* 配置。这些结果表示在专家间完全均匀负载分布的理想化假设下的预测性能。
+S206	在默认配置下，CloudMatrix-Infer 每 NPU 处理 5,655 tokens/s，计算效率为 3.76 tokens/s per TFLOPS。尽管 SGLang 在 NVIDIA H100 上的默认配置原始吞吐量略高，其效率（3.18 tokens/s per TFLOPS）仍明显低于我们。在理想化的 "Perfect EPLB" 条件下测试时，CloudMatrix-Infer 达到每 NPU 6,688 tokens/s，折合 4.45 tokens/s per TFLOPS 的效率，同时超越了 SGLang 在 H100 上的理想效率（3.75 tokens/s per TFLOPS）与 DeepSeek 在 H800 上的 Profile 效率（3.96 tokens/s per TFLOPS）。这些对比凸显了 CloudMatrix-Infer 的强劲潜力，而我们默认结果与理想结果之间的差距也表明负载均衡算法仍有进一步改进空间。
+S207	**解码吞吐量。**接下来，我们分析自回归解码阶段的性能，详见 Table 3。我们评估在每 token 输出时间（TPOT）低于 50 ms 的服务级目标（SLO）约束下的绝对解码吞吐量（tokens/s），同时评估按加速器算力归一化的吞吐量（tokens/s per TFLOPS），作为计算效率的指标。值得注意的是，SGLang（Simulated MTP）与 CloudMatrix-Infer 两种配置均采用了多 token 预测（MTP），并假设单个投机 token 的有效接受率为 70%。
+S208	CloudMatrix-Infer 配置为每 NPU batch size 96、KV 缓存长度 4,096 tokens，实现了 49.4 ms 的优异 TPOT。在绝对系统吞吐量方面，CloudMatrix-Infer 在 batch size 为 96 时达到每 NPU 1,943 tokens/s，高于 DeepSeek（Blog）在 H800 上的基线（每 GPU 1,850 tokens/s）。虽然数值上低于 DeepSeek（Profile）在 H800（每 GPU 2,325 tokens/s）和 SGLang 在 H100（每 GPU 2,172 tokens/s）上的结果，但后两个系统是在更大的 batch size 128 下测得的。每 TFLOPS 吞吐量指标进一步揭示了系统计算效率：CloudMatrix-Infer 取得了最高的计算效率（1.29 tokens/s per TFLOPS），高于 SGLang 在 H100 上的 1.10 tokens/s per TFLOPS、DeepSeek（Blog）在 H800 上的 0.93 tokens/s per TFLOPS，以及 DeepSeek（Profile）在 H800 上的 1.17 tokens/s per TFLOPS。这表明我们的推理服务方案在解码阶段有效利用了 CloudMatrix384 的可用算力。
+S209	5.3 精度
+S210	方法与在线 DeepSeek-R1 API 进行对照，以确保对实际性能的比较公平且直接。
+S211	我们的评测套件源自 DeepSeek-R1 技术报告中的详尽清单以及其他广泛使用的 benchmark，共包含 16 个不同的 benchmark，用于多维度评估。排除项包括 AlpacaEval 2.0 [17] 与 Arena-Hard [36]——它们依赖 GPT-4 进行 3 评测（超出我们当前的实验条件），以及 CodeForces——因其缺乏现成的自动化评测脚本。所选 benchmark 覆盖广泛的能力维度：英文（MMLU [23]、MMLU-Pro [9]、DROP [16]、IFEval [58]、GPQA Diamond [50]、SimpleQA [44]），代码生成（LiveCodeBench [31]、HumanEval [7]），数学（AIME 2024 [3]、MATH-500 [24]、CNMO 2024 [1]、MGSM [51]），以及中文（CLUEWSC [55]、C-Eval [25]、C-SimpleQA [22]、C-MMLU [35]）。我们相信这一精选集合为精度评估提供了稳健的基础。
+S212	为保证评估的一致性，MMLU、DROP、MGSM、GPQA Diamond、HumanEval、MATH-500、SimpleQA 与 C-SimpleQA 等 benchmark 的提示词取自 simple-evals 框架；其余 benchmark，包括 CMMLU、C-Eval、LiveCodeBench、IFEval 与 CLUEWSC，则使用 OpenCompass 框架 4。遵循 DeepSeek-R1 技术报告中的方法，MMLU-Pro、C-Eval 与 CLUEWSC 在 zero-shot 设置下测试，其他测试集遵循其原始协议。数学竞赛类 benchmark（AIME 2024 与 CNMO 2024）各进行 32 次重复测试，以准确估计其 pass@1 指标。对于 *MATH-500*、*SimpleQA* 与 *C-SimpleQA* 这些官方评估据报道使用了不同版本 GPT-4 的 benchmark，我们 5 采用 Qwen2.5-72B-Instruct 作为评分模型，对 DeepSeek-R1（INT8）与 DeepSeek-R1 API 的输出进行评估。虽然这一选择确保了本研究内部的评估一致性，但与 DeepSeek-R1 技术
+S213	3 https://codeforces.com 4 https://github.com/open-compass/opencompass 5 https://huggingface.co/Qwen/Qwen2.5-72B-Instruct
+S214	报告中的分数相比，由于后者依赖基于 GPT-4 的评分，可能存在一定偏差。关键生成参数包括温度 0.6 与 top-p 0.95，与 DeepSeek-R1 技术报告 [13] 中指定的设置保持一致。
+S215	对比精度结果见 Table 5。总体而言，我们在 Ascend 910 上实现的 DeepSeek-R1（INT8）表现出与官方 DeepSeek-R1 API 以及原技术论文所报告指标大体相当的性能。这表明为部署到 Ascend 910 而实施的 INT8 量化在多样化的任务上有效保持了模型能力。
+S216	5.4 消融实验
+S217	5.4.1 基于微批次的流水线
+S218	**解码流水线。**我们首先评估前文 §4.2.3 详述的解码阶段基于微批次的流水线。该消融实验对比启用与不启用这一微批次优化时的系统性能。Figure 20a 展示了不同 batch size 下的解码吞吐量。我们观察到，启用基于微批次的流水线后，batch size 为 64、96 和 128 时解码吞吐量分别提升 5.8%、9.4% 和 6.9%。这一收益虽然有益，但与其他平台报道的潜在改进（例如 SGLang [53] 在 NVIDIA H100 集群上称达 35%）相比相对温和。这一差异主要归因于：与通常采用 RDMA 的 NVIDIA GPU 集群相比，CloudMatrix384 凭借高性能 UB 平面，其 MoE 分发（dispatch）与合并（combine）的通信开销本身更低（详见 Section 5.5.1）。由于 UB 平面上的 MoE 通信停顿更小，通过微批次实现通信隐藏所能带来的改进上限对 CloudMatrix384 而言自然更受限制。
+S219	Figure 20b 给出了 batch size 为 96 时解码执行的逐层时延分解。结果显示，尽管门控（Gating）、分发（Dispatch）、MoE 等阶段的单个微批次执行时延因每流计算资源减少（例如
+S220	AIC 数量从 24 减至 16）而略有增加，基于微批次的流水线仍显著改善了整体性能。其机制在于让不同微批次的注意力路径（Stream 0）与 MoE 路径（Stream 1）有效重叠，使整体逐层时延降低约 10%，并相应带来端到端解码吞吐量的可观提升。
+S221	**prefill 流水线。**接下来，我们考察所提出的基于微批次的 prefill 流水线的影响，详见 Section 4.3.2。Figure 21a 展示了不同提示词长度下的 prefill 吞吐量，对比启用与不启用该流水线的性能。我们观察到，在所有测试配置中，启用基于微批次的流水线可使 prefill 吞吐量显著提升 23% 至 31%。此外，prefill 吞吐量随提示词长度增加而下降。这一趋势的原因在于，注意力计算的每 token 执行时延随提示词长度增加而上升。
+S222	Figure 21b 给出了 4K 提示词长度下请求执行的相应逐层时延分解。数据显示，微批次流水线启用时，每层整体执行时延降低约 24%。这一可观收益主要来自：将与通信相关的轻量计算任务（如 DispatchCompute、CombineCompute）卸载到 AIV，并让 SDMA（系统 DMA）引擎专职执行批量数据传输（如 MoE 的 All-to-All 通信）。这一策略使上述操作的执行时延能够与 AIC 上执行的核心计算（如 ATTN 与 FFN）有效重叠，从而带来更高的 NPU 利用率和更短的端到端 prefill 时间。
+S223	5.4.2 多 token 预测（MTP）
+S224	如 Figure 22a 所示，我们观察到，在不同 batch size 下，启用单投机 token 的 MTP 相比非 MTP 基线可使解码吞吐量提升 6% 至 49%，且加速比在较小 batch size 下更为显著。这一现象的可能原因在于：较小 batch size 时，非 MTP 基线系统距离其峰值效率更远（例如，固定的每迭代开销难以被充分摊销），此时经 MTP 额外接受的 token（接受率 70%）带来更大的相对吞吐收益。随着 batch size
+S225	增大，虽然 MTP 仍能带来绝对收益，但由于基线系统本身趋于饱和或 MTP 自身开销变得更加显著，其相对加速比可能减小。
+S226	然而，吞吐量的这一提升伴随着 MTP 启用时每个解码层迭代执行时延的增加。如 Figure 22b（batch size 为 96）所示，使用 MTP 使每层执行时延增加约 44%（例如从基线的 874 µs 增至启用 MTP 后的 1,260 µs）。这主要是因为每个启用 MTP 的 LLM 解码步要为每个请求处理来自上一次迭代的两个输入 token：一个基 token 和一个投机 token。每次迭代中更大的有效 batch size 自然导致 Attention Core、Gating、Dispatch、MoE 与 Combine 等核心操作的执行时间变长。
+S227	尽管每次迭代的时延有所增加，整体吞吐量仍得到提升。投机 token 以 70% 的接受率成功通过验证，意味着平均每个启用 MTP 的迭代可产出 1.7 个 token（1 个基 token + 0.7 个投机 token）。每迭代 token 数上的收益超过了约 44% 的迭代时间增幅，证实了我们的 MTP 实现对 CloudMatrix384 上 4K 序列长度负载具有净正向收益。
+S228	5.4.3 上下文缓存
+S229	Figure 23 展示了这些不同 EMS 配置下性能随 token 复用率变化的趋势。如 Figure 23a 所示，两种网络配置下吞吐量与复用率均呈强正相关。对于基于 UB 的 EMS，复用率从 12.5% 提高到 50% 使 prefill 吞吐量提升 1.42 ×；在 90% 复用率下，吞吐量相较无 EMS 的基线提升 2.28 ×。这一显著改善的原因在于，更高的复用率意味着输入序列 KV 缓存中
+S230	有更大比例可以直接从 EMS 缓存加载而无需重新计算，从而显著降低 prefill NPU 上的计算负载。此外，对比两种网络配置，基于 UB 的 EMS 始终优于基于 VPC 的 EMS：使用 UB 平面最多可将 prefill 吞吐量提升 1.52 ×。这一收益直接归因于 UB 平面显著更高的带宽和更低的时延，它加速了 KV 缓存块从分布式 EMS 缓存向 NPU 的加载。
+S231	与此同时，如 Figure 23b 所示，TTFT（首 token 时间）随 token 复用率提高而显著下降。例如，对于基于 UB 的 EMS，50% 的 token 复用率使 TTFT 相比无上下文缓存减少 861 ms（34%），而 90% 复用率带来 1,505 ms（59%）的降幅。TTFT 的这一显著降低是缓存命中时跳过大量 prefill 计算的直接结果。快速从 EMS 加载历史 KV 缓存的能力——特别是在经由高带宽 UB 平面访问、且可能由分离式内存池的 DRAM 层提供服务时——直接转化为更快的首 token 生成。同样地，在所有复用率下，经由 UB 平面访问 EMS 缓存的 TTFT 均持续低于 VPC 平面，凸显了高性能互连对时延敏感型缓存检索的重要性。
+S232	5.5 算子性能
+S233	5.5.1 通信算子
+S234	对于分发（Dispatch）操作，CloudMatrix384（CM384）上的 CANN EP 实现在所有测试的 EP 度下均比 H800 上的 DeepEP 表现出更低的时延。
+S235	例如，在 EP 度为 8 时，CM384 的时延为 116 µs，而 H800 为 163 µs。随着 EP 度增大，CM384 的时延优势持续保持：EP256 下 CM384 为 152 µs，H800 为 194 µs。在 Dispatch 的每 rank 带宽方面，CM384 在较小 EP 度下表现更优（例如 EP8 下 71 GB/s 对 46 GB/s）。然而，在较大 EP 度下，我们观察到 CANN EP 在 CloudMatrix384 上的有效带宽显著下降。这一退化凸显了当前 EP 实现中的可扩展性瓶颈，我们将其留作未来的优化方向。
+S236	合并（Combine）操作则显示出 CANN 在 CM384 上更为显著的性能优势：在所有 EP 规模下，CM384 的时延均明显更低。例如，EP8 时 CM384 的时延为 118 µs，而 H800 为 318 µs；这一大幅时延优势一直保持到 EP256（CM384 为 149 µs，H800 为 360 µs）。此外，CM384 上 Combine 达到的每 rank 带宽也显著高于 H800：EP8 时 CM384 每 rank 达 131 GB/s，几乎是 H800 所达 46 GB/s 的三倍。这一带宽优势在所有测试的 EP 度下均保持，EP256 时 CM384 仍提供强劲的每 rank 103 GB/s，而 H800 为 40 GB/s。
+S237	这些结果凸显了 CANN 集合通信库的效率，以及 CloudMatrix384 的 UB 平面在应对 MoE 特有通信模式方面的高性能能力。CloudMatrix384 上持续更低的时延与更高的每 rank 带宽，对于缓解大规模专家并行所固有的通信瓶颈至关重要。
+S238	5.5.2 MLA 算子
+S239	Table 7 给出了负载以计算受限为主时 MLA 算子的 TFLOPS 利用率。H800 上的 DeepSeek FlashMLA 达到 66.7% 的计算利用率；我们在 CloudMatrix384 上的 CANN MLA 同样以 BF16/FP16 运行，达到了相当的 65.4% 利用率。这表明在计算密集场景下，两个平台对 MLA 可用算力的利用效率处于相近水平。
+S240	5.5.3 GEMM 算子
+S241	如 Table 9 所示，Ascend 910 芯粒上的 CANN INT8 GEMM 算子在各种矩阵形状（M、N、K）与分组数下均表现出持续的高计算利用率，范围从 77.4% 到 82.7%。例如，在 4 个分组、维度 M=7168、N=4096、K=8192 时，该算子达到 82.7% 的利用率。这种高效率在不同配置下均得以保持，表明 Ascend 910 芯粒上 INT8 计算单元的稳健性能。
+S242	该表还给出了这些 GEMM 操作期间达到的持续内存带宽，范围为 195 GB/s 至 327 GB/s。这些数值远低于 Ascend 910 芯粒的峰值内存带宽。这一观察与高计算利用率相结合，有力地表明在所测试的矩阵维度下，这些 INT8 GEMM 操作主要受计算限制而非内存带宽限制。这一特性表明数据在 NPU 内部缓存层次与寄存器中得到了高效复用，使计算单元能够在接近峰值能力的水平上运行，而不会持续因来自内存的数据传输供给不足而受限。6 未来方向的讨论 AI 模型的快速演进及其无处不在的应用，持续对 AI 基础设施提出日益严苛的要求。虽然 CloudMatrix384 标志着紧耦合 AI 计算扩展的一个重要架构里程碑，但要满足
