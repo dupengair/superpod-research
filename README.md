@@ -28,6 +28,7 @@ AI 基础设施**超节点（Supernode / SuperPod）**方向的论文调研仓�
 │   ├── 超节点硬件系统结构论文调研_2024以来Top20.md
 │   ├── 超节点多节点设备管理统一性论文调研_2022以来Top19.md
 │   ├── original_papers/               # 开放获取论文 PDF 库（19 篇，含 INDEX.md 索引）
+│   ├── log.md                         # 论文操作日志（论文/目录/操作/时间，处理前必查）
 │   ├── CloudMatrix384_2025/           # 论文深加工目录（<关键词>_<发表年>）
 │   │   └── nature-reader/             #   中英对照 reader（paper.md + assets + build/）
 │   └── tmp/                           # 检索中间产物（superpod_search/ 等，可清理）
@@ -64,4 +65,4 @@ git clone git@github.com:dupengair/superpod-research.git
 
 调研工作流详见 [CLAUDE.md](CLAUDE.md)（经 `@import` 引入 [research/CLAUDE.md](research/CLAUDE.md) 的完整定义）：课题解析 → 检索式构造 → 轻量摘要表 → 深拉元数据 → 分析撰写 → 引用规范化，以及两个用户确认点与降级规则（CDP 不可用、Semantic Scholar 限流等）。
 
-`research/tmp/` 为检索过程的中间产物（脚本、JSON 数据），随仓库保留以便回溯；论文 PDF 已改存 `research/original_papers/`。目录与资产管理规范（论文目录结构、original_papers 登记规则、tools 沉淀规则）见 [research/CLAUDE.md](research/CLAUDE.md)「六、目录与资产管理」。
+`research/tmp/` 为检索过程的中间产物（脚本、JSON 数据），随仓库保留以便回溯；论文 PDF 已改存 `research/original_papers/`。目录与资产管理规范（论文目录结构、original_papers 登记规则、tools 沉淀规则、论文操作日志）见 [research/CLAUDE.md](research/CLAUDE.md)「六、目录与资产管理」。**用 skill 处理论文前，先查 `research/log.md` 确认该论文的已登记目录；同一论文的同一操作复用同一 skill 子目录。**

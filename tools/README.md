@@ -28,7 +28,7 @@ tools/
 
 ## 管理规则（对所有会话生效）
 
-1. **先查后用**：运行任一 skill/command 前，先读 `tools/<skill名>/<skill名>-experiences.md`；没有该文件则表示尚无沉淀，运行后按规则 3 创建。
+1. **先查后用**：运行任一 skill/command 前，先读 `tools/<skill名>/<skill名>-experiences.md`；没有该文件则表示尚无沉淀，运行后按规则 3 创建。处理**论文**时还须先查 `research/log.md`（论文操作日志），确保在同一论文目录、同一 skill 子目录内操作。
 2. **工具落位**：某次 skill/command 运行中产生的**通用性**工具脚本（可复用于未来论文/任务）存入 `tools/<skill名>/`；一次性、任务特定的中间产物留在 `research/<论文目录>/<skill名>/build/` 或 `research/tmp/`，不得混入 tools。
 3. **经验登记**：每次 skill/command 运行结束（或产生新脚本/新结论）时更新对应 `<skill名>-experiences.md`：新脚本加进清单表，新经验追加条目（先查重，避免重复记录）。
 4. **不硬编码项目路径**：tools/ 下的脚本一律通过 argv/环境变量接收路径，保证跨论文复用。
