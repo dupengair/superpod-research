@@ -24,15 +24,18 @@ AI 基础设施**超节点（Supernode / SuperPod）**方向的论文调研仓�
 .
 ├── CLAUDE.md                          # 项目规范入口（@import 引入检索工作流）
 ├── research/                          # 调研工作目录
-│   ├── CLAUDE.md                      # 检索工作流定义（课题背景、平台边界、报告模板）
+│   ├── CLAUDE.md                      # 检索工作流 + 目录与资产管理规范
 │   ├── 超节点硬件系统结构论文调研_2024以来Top20.md
 │   ├── 超节点多节点设备管理统一性论文调研_2022以来Top19.md
-│   └── tmp/
-│       ├── download/                  # 开放获取论文 PDF（19 篇）
-│       └── superpod_search/           # 检索脚本与中间数据（arXiv/OpenAlex）
-└── tools/skills/                      # 检索工具链（git 子模块）
-    ├── academic-search/               # 学术检索 Skill（arXiv/S2/OpenAlex/CNKI 等平台）
-    └── research-superpower/           # 研究工作流插件（文献筛选、引用追溯等子技能）
+│   ├── original_papers/               # 开放获取论文 PDF 库（19 篇，含 INDEX.md 索引）
+│   ├── CloudMatrix384_2025/           # 论文深加工目录（<关键词>_<发表年>）
+│   │   └── nature-reader/             #   中英对照 reader（paper.md + assets + build/）
+│   └── tmp/                           # 检索中间产物（superpod_search/ 等，可清理）
+└── tools/                             # skill/command 工具与经验资产（单层，按 skill 名分目录）
+    ├── README.md                      # 管理规范（先查后用、经验登记规则）
+    ├── nature-reader/                 # PDF→中英对照 reader 流水线（4 脚本 + 调参经验）
+    ├── academic-search/               # 学术检索 Skill 说明（arXiv/S2/OpenAlex/CNKI 等）
+    └── research-superpower/           # 研究工作流插件说明（文献筛选、引用追溯）
 ```
 
 ## 已有调研报告
@@ -47,16 +50,16 @@ AI 基础设施**超节点（Supernode / SuperPod）**方向的论文调研仓�
 ## 检索方法与工具链
 
 - **平台分层**：arXiv / Semantic Scholar / OpenAlex（REST API）为主；Google Scholar / CNKI 知网经 CDP 直连浏览器（中英文并重策略下知网为必查平台）；ACM DL / IEEE 尽力而为；Scopus / Web of Science 不在覆盖范围。
-- **工具**：[academic-search skill](tools/skills/academic-search/README.md) 负责检索、元数据提取、引用数与 OA PDF 判定；相关性分析、主题归纳与引用规范化（GB/T 7714）由 Agent 基于检索元数据完成。
+- **工具**：[academic-search skill](tools/academic-search/README.md) 负责检索、元数据提取、引用数与 OA PDF 判定；相关性分析、主题归纳与引用规范化（GB/T 7714）由 Agent 基于检索元数据完成。
 - **引用可回溯**：所有参考文献来自检索实际返回的元数据（arXiv ID / DOI / CNKI 链接），禁止凭记忆生成。
 - **PDF 获取**：仅下载合法开放获取（OA）论文。
 
 ## 使用说明
 
 ```bash
-git clone --recurse-submodules git@github.com:dupengair/superpod-research.git
+git clone git@github.com:dupengair/superpod-research.git
 ```
 
 调研工作流详见 [CLAUDE.md](CLAUDE.md)（经 `@import` 引入 [research/CLAUDE.md](research/CLAUDE.md) 的完整定义）：课题解析 → 检索式构造 → 轻量摘要表 → 深拉元数据 → 分析撰写 → 引用规范化，以及两个用户确认点与降级规则（CDP 不可用、Semantic Scholar 限流等）。
 
-`research/tmp/` 为检索过程的中间产物（论文 PDF、脚本、JSON 数据），随仓库保留以便回溯。
+`research/tmp/` 为检索过程的中间产物（脚本、JSON 数据），随仓库保留以便回溯；论文 PDF 已改存 `research/original_papers/`。目录与资产管理规范（论文目录结构、original_papers 登记规则、tools 沉淀规则）见 [research/CLAUDE.md](research/CLAUDE.md)「六、目录与资产管理」。

@@ -39,7 +39,7 @@
   "group": "E3",
   "ub_priority": false,
   "download_status": "downloaded",
-  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/tmp/download/2022_TopoOpt_Co-optimizing_Network_Topology_and_Parallelization_Strategy_for_Distribu_ed104aea1ebf.pdf"
+  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/original_papers/2022_TopoOpt_Co-optimizing_Network_Topology_and_Parallelization_Strategy_for_Distribu_ed104aea1ebf.pdf"
  },
  {
   "title": "Pond: CXL-Based Memory Pooling Systems for Cloud Platforms",
@@ -86,7 +86,7 @@
   "group": "E3",
   "ub_priority": false,
   "download_status": "downloaded",
-  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/tmp/download/2022_Pond_CXL-Based_Memory_Pooling_Systems_for_Cloud_Platforms_54ea64e35632.pdf"
+  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/original_papers/2022_Pond_CXL-Based_Memory_Pooling_Systems_for_Cloud_Platforms_54ea64e35632.pdf"
  },
  {
   "title": "DxPU: Large-scale Disaggregated GPU Pools in the Datacenter",
@@ -132,7 +132,7 @@
   "group": "E2",
   "ub_priority": false,
   "download_status": "downloaded",
-  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/tmp/download/2023_DxPU_Large-scale_Disaggregated_GPU_Pools_in_the_Datacenter_0d1c8d05c1ab.pdf"
+  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/original_papers/2023_DxPU_Large-scale_Disaggregated_GPU_Pools_in_the_Datacenter_0d1c8d05c1ab.pdf"
  },
  {
   "title": "Shared Virtual Memory: Its Design and Performance Implications for Diverse Applications",
@@ -169,7 +169,7 @@
   "group": "E1",
   "ub_priority": false,
   "download_status": "downloaded",
-  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/tmp/download/2024_Shared_Virtual_Memory_Its_Design_and_Performance_Implications_for_Diverse_Applic_f02bacbcfec7.pdf"
+  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/original_papers/2024_Shared_Virtual_Memory_Its_Design_and_Performance_Implications_for_Diverse_Applic_f02bacbcfec7.pdf"
  },
  {
   "title": "A Programming Model for Disaggregated Memory over CXL",
@@ -203,7 +203,7 @@
   "group": "E2",
   "ub_priority": false,
   "download_status": "downloaded",
-  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/tmp/download/2026_A_Programming_Model_for_Disaggregated_Memory_over_CXL_118f714683bc.pdf"
+  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/original_papers/2026_A_Programming_Model_for_Disaggregated_Memory_over_CXL_118f714683bc.pdf"
  },
  {
   "title": "Exploring GPU-to-GPU Communication: Insights into Supercomputer Interconnects",
@@ -251,7 +251,7 @@
   "group": "E3",
   "ub_priority": false,
   "download_status": "downloaded",
-  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/tmp/download/2024_Exploring_GPU-to-GPU_Communication_Insights_into_Supercomputer_Interconnects_51891a30dfb3.pdf"
+  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/original_papers/2024_Exploring_GPU-to-GPU_Communication_Insights_into_Supercomputer_Interconnects_51891a30dfb3.pdf"
  },
  {
   "title": "IANUS: Integrated Accelerator based on NPU-PIM Unified Memory System",
@@ -304,7 +304,7 @@
   "group": "E1",
   "ub_priority": false,
   "download_status": "downloaded",
-  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/tmp/download/2024_IANUS_Integrated_Accelerator_based_on_NPU-PIM_Unified_Memory_System_660ab3f91405.pdf"
+  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/original_papers/2024_IANUS_Integrated_Accelerator_based_on_NPU-PIM_Unified_Memory_System_660ab3f91405.pdf"
  },
  {
   "title": "PIM Is All You Need: A CXL-Enabled GPU-Free System for Large Language Model Inference",
@@ -346,7 +346,7 @@
   "group": "E3",
   "ub_priority": false,
   "download_status": "downloaded",
-  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/tmp/download/2025_PIM_Is_All_You_Need_A_CXL-Enabled_GPU-Free_System_for_Large_Language_Model_Infer_4207736487f2.pdf"
+  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/original_papers/2025_PIM_Is_All_You_Need_A_CXL-Enabled_GPU-Free_System_for_Large_Language_Model_Infer_4207736487f2.pdf"
  },
  {
   "title": "Serving Large Language Models on Huawei CloudMatrix384",
@@ -426,7 +426,7 @@
   "group": "E1",
   "ub_priority": true,
   "download_status": "downloaded",
-  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/tmp/download/2025_Serving_Large_Language_Models_on_Huawei_CloudMatrix384_1fc88b9a8c2f.pdf"
+  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/original_papers/2025_Serving_Large_Language_Models_on_Huawei_CloudMatrix384_1fc88b9a8c2f.pdf"
  },
  {
   "title": "Huawei Cloud Model-as-a-Service on the CloudMatrix384 SuperPod",
@@ -560,7 +560,7 @@
   "group": "E1",
   "ub_priority": true,
   "download_status": "downloaded",
-  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/tmp/download/2025_Huawei_Cloud_Model-as-a-Service_on_the_CloudMatrix384_SuperPod_71b1df57d522.pdf"
+  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/original_papers/2025_Huawei_Cloud_Model-as-a-Service_on_the_CloudMatrix384_SuperPod_71b1df57d522.pdf"
  },
  {
   "title": "Dissecting CPU-GPU Unified Physical Memory on AMD MI300A APUs",
@@ -601,7 +601,7 @@
   "group": "E1",
   "ub_priority": false,
   "download_status": "downloaded",
-  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/tmp/download/2025_Dissecting_CPU-GPU_Unified_Physical_Memory_on_AMD_MI300A_APUs_12ffacee057f.pdf"
+  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/original_papers/2025_Dissecting_CPU-GPU_Unified_Physical_Memory_on_AMD_MI300A_APUs_12ffacee057f.pdf"
  },
  {
   "title": "HyperOffload: Graph-Driven Hierarchical Memory Management for Large Language Models on SuperNode Architectures",
@@ -643,7 +643,7 @@
   "group": "E1",
   "ub_priority": true,
   "download_status": "downloaded",
-  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/tmp/download/2026_HyperOffload_Graph-Driven_Hierarchical_Memory_Management_for_Large_Language_Mode_9b6ec680e143.pdf"
+  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/original_papers/2026_HyperOffload_Graph-Driven_Hierarchical_Memory_Management_for_Large_Language_Mode_9b6ec680e143.pdf"
  },
  {
   "title": "HyperParallel: A Supernode-Affinity AI Framework",
@@ -684,7 +684,7 @@
   "group": "E1",
   "ub_priority": true,
   "download_status": "downloaded",
-  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/tmp/download/2026_HyperParallel_A_Supernode-Affinity_AI_Framework_9fa196b2a71f.pdf"
+  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/original_papers/2026_HyperParallel_A_Supernode-Affinity_AI_Framework_9fa196b2a71f.pdf"
  },
  {
   "title": "DWDP: Distributed Weight Data Parallelism for High-Performance LLM Inference on NVL72",
@@ -728,7 +728,7 @@
   "group": "E1",
   "ub_priority": false,
   "download_status": "downloaded",
-  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/tmp/download/2026_DWDP_Distributed_Weight_Data_Parallelism_for_High-Performance_LLM_Inference_on_N_5d5b31b328dd.pdf"
+  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/original_papers/2026_DWDP_Distributed_Weight_Data_Parallelism_for_High-Performance_LLM_Inference_on_N_5d5b31b328dd.pdf"
  },
  {
   "title": "C2CServe: Leveraging NVLink-C2C for Elastic Serverless LLM Serving on MIG",
@@ -769,7 +769,7 @@
   "group": "E1",
   "ub_priority": false,
   "download_status": "downloaded",
-  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/tmp/download/2026_C2CServe_Leveraging_NVLink-C2C_for_Elastic_Serverless_LLM_Serving_on_MIG_8ac864e25213.pdf"
+  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/original_papers/2026_C2CServe_Leveraging_NVLink-C2C_for_Elastic_Serverless_LLM_Serving_on_MIG_8ac864e25213.pdf"
  },
  {
   "title": "UBEP: Re-architecting Expert Parallelism Communication Library for Production Superpods",
@@ -822,7 +822,7 @@
   "group": "E1",
   "ub_priority": true,
   "download_status": "downloaded",
-  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/tmp/download/2026_UBEP_Re-architecting_Expert_Parallelism_Communication_Library_for_Production_Sup_3c18a15df0ad.pdf"
+  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/original_papers/2026_UBEP_Re-architecting_Expert_Parallelism_Communication_Library_for_Production_Sup_3c18a15df0ad.pdf"
  },
  {
   "title": "SLAI T-Rex: Full-Parameter Post-training of the DeepSeek-V4 Family on Ascend SuperPOD",
@@ -921,7 +921,7 @@
   "group": "E1",
   "ub_priority": true,
   "download_status": "downloaded",
-  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/tmp/download/2026_SLAI_T-Rex_Full-Parameter_Post-training_of_the_DeepSeek-V4_Family_on_Ascend_Supe_b520bc2a882e.pdf"
+  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/original_papers/2026_SLAI_T-Rex_Full-Parameter_Post-training_of_the_DeepSeek-V4_Family_on_Ascend_Supe_b520bc2a882e.pdf"
  },
  {
   "title": "StrataCL: Fabric-Native Communication Library for Production Supernodes",
@@ -972,7 +972,7 @@
   "group": "E1",
   "ub_priority": true,
   "download_status": "downloaded",
-  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/tmp/download/2026_StrataCL_Fabric-Native_Communication_Library_for_Production_Supernodes_1d7b880d7176.pdf"
+  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/original_papers/2026_StrataCL_Fabric-Native_Communication_Library_for_Production_Supernodes_1d7b880d7176.pdf"
  },
  {
   "title": "Understanding the Synchronization Tax in GPU Scale-Up Domains",
@@ -1009,6 +1009,6 @@
   "group": "E1",
   "ub_priority": false,
   "download_status": "downloaded",
-  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/tmp/download/2026_Understanding_the_Synchronization_Tax_in_GPU_Scale-Up_Domains_b4e5f8134e40.pdf"
+  "local_pdf_path": "/home/dupengair/shared/work/superpod/research/original_papers/2026_Understanding_the_Synchronization_Tax_in_GPU_Scale-Up_Domains_b4e5f8134e40.pdf"
  }
 ]

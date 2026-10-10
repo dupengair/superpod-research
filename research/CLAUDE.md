@@ -126,7 +126,8 @@ bash ~/.claude/skills/academic-search/scripts/check-deps.sh
 
 - 所有交付物写入本目录（`research/`），**不要只在对话中输出**；
 - 报告命名：`{课题关键词}_{时间范围或主题}.md`（如 `超节点硬件系统结构论文调研_2022以来Top20.md`）；
-- 中间产物（metadata JSON、manifest、下载的 PDF、临时脚本输出等）一律存入 `./tmp/` 下的子目录（如 `./tmp/download/`、`./tmp/superpod_search/`），**不使用系统 `/tmp`，不在 `research/` 根目录或其他位置散落临时文件**；不混入正式报告目录。
+- 下载的论文 PDF 统一存入 `./original_papers/`（详见「目录与资产管理」），**不再使用 `./tmp/download/`**；
+- 其余中间产物（metadata JSON、manifest、临时脚本输出等）一律存入 `./tmp/` 下的子目录（如 `./tmp/superpod_search/`），**不使用系统 `/tmp`，不在 `research/` 根目录或其他位置散落临时文件**；不混入正式报告目录。
 
 ### 报告结构模板（以已有 Top20 报告为标杆）
 
@@ -168,4 +169,47 @@ bash ~/.claude/skills/academic-search/scripts/check-deps.sh
 2. **失败信号即方向**：同一方式重试 3 次无改善就换平台或换访问方式（skill 的失败信号表），不空转；
 3. **诚实呈现**：没搜到的平台写进"局限"，拿不到的字段（如影响因子）明说，宁缺毋假；
 4. **完成即止**：对照成功标准确认完成后停止，不为"更完整"而过度检索；
-5. **工作目录约束**：始终以当前目录（`research/`）作为工作目录；所有临时文件、临时下载、各类临时目录统一在 `./tmp/` 下操作并按用途建子目录（如 `./tmp/download/`、`./tmp/superpod_search/`），**禁止写入系统 `/tmp` 或当前目录其他位置**。
+5. **工作目录约束**：始终以当前目录（`research/`）作为工作目录；临时文件、各类临时目录统一在 `./tmp/` 下操作并按用途建子目录（如 `./tmp/superpod_search/`），论文 PDF 下载到 `./original_papers/`，**禁止写入系统 `/tmp` 或当前目录其他位置**。
+
+---
+
+## 六、目录与资产管理
+
+### 1. 论文目录（单篇论文深加工）
+
+对同一篇论文会用多个 nature skills 做不同操作（翻译、PPT、PDF、精读推理等）。统一按**论文总目录 + skill 子目录**管理：
+
+```
+research/
+├── CloudMatrix384_2025/          # 论文总目录：<关键词>_<发表年>
+│   ├── nature-reader/            # 一个 nature skill 一个子目录（目录名=skill 名）
+│   │   ├── paper.md              # 该 skill 的交付物
+│   │   ├── source_map.json
+│   │   ├── translation_notes.md
+│   │   ├── assets/
+│   │   └── build/                # 再生成所需的构建产物（blocks_raw.json、
+│   │                             #   chunk_*.zh、crops.json 等中间件）
+│   ├── nature-paper2ppt/         # 后续其它 skill 操作各建子目录
+│   └── ...
+```
+
+规则：
+- **总目录命名** `<论文关键词>_<发表年>`（如 `CloudMatrix384_2025`），一篇论文唯一；
+- **子目录名 = nature skill 名**（`nature-reader`、`nature-paper-trans`、`nature-paper2ppt`、`nature-paper-xray` 等），同一 skill 重跑复用原目录，不另开新目录；
+- **build/ 存放可再生成的中间产物**（结构块、翻译分块、清单等），保证交付物可由 tools/ 脚本 + build/ 重建；`research/tmp/` 只放一次性探查产物，可随时清理；
+- **分工边界**：课题级调研报告（检索产物，多篇论文汇总）→ `research/` 根目录；单篇论文的深加工产物 → 论文总目录。
+
+### 2. 原始论文库（original_papers/）
+
+- 检索工作流下载的论文 PDF 统一存 `research/original_papers/`（**替代原 `tmp/download/`**），这是跨课题共享的关键资产，不放 tmp；
+- 文件命名保持 `<年份>_<关键词>_<哈希>.pdf`（academic-search 默认名）；
+- **下载新论文后必须同步登记 `original_papers/INDEX.md`**（文件名 ↔ 题名 ↔ arXiv ID/DOI 对应表）；
+- 检索产生的 manifest/metadata JSON 中记录的 PDF 路径一律使用 `original_papers/` 前缀。
+
+### 3. 工具与经验资产（tools/，仓库根）
+
+- 按 skill/command 名单层管理：`tools/<skill名>/README.md`（脚本清单 + 经验沉淀）+ 工具脚本；
+- **每次运行 skill/command 前，先查看 `tools/<skill名>/README.md`**；没有则运行后按规创建；
+- 运行中产生的**通用性**脚本存入 `tools/<skill名>/`并登记清单；任务特定中间产物不进 tools；
+- tools/ 下脚本**不得硬编码项目路径**，一律 argv/环境变量传参；
+- 详细规范见 `tools/README.md`。
