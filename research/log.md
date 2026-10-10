@@ -12,3 +12,5 @@
 | Serving Large Language Models on Huawei CloudMatrix384 | CloudMatrix384_2025 | nature-reader | 2026-10-10 09:30 |
 | Serving Large Language Models on Huawei CloudMatrix384 | CloudMatrix384_2025 | nature-paper2ppt | 2026-10-10 16:45 |
 | Serving Large Language Models on Huawei CloudMatrix384 | CloudMatrix384_2025 | nature-paper-card | 2026-10-10 17:20 |
+| Serving Large Language Models on Huawei CloudMatrix384 | CloudMatrix384_2025 | nature-paper-trans | 2026-10-10 17:50 |
+| Serving Large Language Models on Huawei CloudMatrix384 | CloudMatrix384_2025 | nature-paper-xray | 2026-10-10 18:10 |

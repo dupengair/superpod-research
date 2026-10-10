@@ -32,7 +32,9 @@ AI 基础设施**超节点（Supernode / SuperPod）**方向的论文调研仓�
 │   ├── CloudMatrix384_2025/           # 论文深加工目录（<关键词>_<发表年>）
 │   │   ├── nature-reader/             #   中英对照 reader（paper.md + assets + build/）
 │   │   ├── nature-paper2ppt/          #   12 页中文组会 PPT（pptx + qa + assets）
-│   │   └── nature-paper-card/         #   16 节精读卡（paper-card + source_bundle + audit）
+│   │   ├── nature-paper-card/         #   16 节精读卡（paper-card + source_bundle + audit）
+│   │   ├── nature-paper-trans/        #   中文全文 PDF（文本排版替代产物 + 构建脚本）
+│   │   └── nature-paper-xray/         #   透视精读长文（研究路径/承重判断/公式微例/证据边界）
 │   └── tmp/                           # 检索中间产物（superpod_search/ 等，可清理）
 └── tools/                             # skill/command 工具与经验资产（单层，按 skill 名分目录）
     ├── README.md                      # 管理规范（先查后用、经验登记规则）
@@ -54,6 +56,18 @@ AI 基础设施**超节点（Supernode / SuperPod）**方向的论文调研仓�
 | [超节点多节点设备管理统一性论文调研](research/超节点多节点设备管理统一性论文调研_2022以来Top19.md) | 2022-01 至今 | Top 19 | OpenAlex API（arXiv 源过滤） |
 
 报告均按主题分组（灵衢/华为超节点体系固定为首组），每篇核心论文附中文简介与课题相关性分析，文末含检索方法说明与局限声明。
+
+## 论文深加工产物
+
+单篇论文经多个 nature skills 处理的产物集中在 `research/<关键词>_<发表年>/` 下，操作历史见 [research/log.md](research/log.md)。首个完整样例（CloudMatrix384，[arXiv:2506.12708](https://arxiv.org/abs/2506.12708)）：
+
+| Skill | 产物 | 说明 |
+|-------|------|------|
+| [nature-reader](research/CloudMatrix384_2025/nature-reader/paper.md) | 中英对照全文 reader | 段落级双语 + 34 张图表裁片 + 4 公式 + source_map 溯源锚点 |
+| [nature-paper2ppt](research/CloudMatrix384_2025/nature-paper2ppt/output/final_presentation_cn.pptx) | 12 页中文组会 PPT | methods 叙事弧线，图表复用 + QA 审计闭环（high=0） |
+| [nature-paper-card](research/CloudMatrix384_2025/nature-paper-card/paper-card.md) | 16 节精读卡 | 8 模块拆解、E1–E10 证据链（支持/不支持结论）、5 个候选研究方向，audit errors=0 |
+| [nature-paper-trans](research/CloudMatrix384_2025/nature-paper-trans/CloudMatrix384_中文全文.pdf) | 中文全文 PDF（45 页） | 文本排版替代产物（环境缺 image_gen，已在首页声明）；译文源自 reader |
+| [nature-paper-xray](research/CloudMatrix384_2025/nature-paper-xray/paper-xray.md) | 透视精读长文 | 研究路径重构、承重三级判断、公式微例对账、证据边界分级 |
 
 ## 检索方法与工具链
 
