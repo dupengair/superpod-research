@@ -31,7 +31,8 @@ AI 基础设施**超节点（Supernode / SuperPod）**方向的论文调研仓�
 │   ├── log.md                         # 论文操作日志（论文/目录/操作/时间，处理前必查）
 │   ├── CloudMatrix384_2025/           # 论文深加工目录（<关键词>_<发表年>）
 │   │   ├── nature-reader/             #   中英对照 reader（paper.md + assets + build/）
-│   │   └── nature-paper2ppt/          #   12 页中文组会 PPT（pptx + qa + assets）
+│   │   ├── nature-paper2ppt/          #   12 页中文组会 PPT（pptx + qa + assets）
+│   │   └── nature-paper-card/         #   16 节精读卡（paper-card + source_bundle + audit）
 │   └── tmp/                           # 检索中间产物（superpod_search/ 等，可清理）
 └── tools/                             # skill/command 工具与经验资产（单层，按 skill 名分目录）
     ├── README.md                      # 管理规范（先查后用、经验登记规则）
