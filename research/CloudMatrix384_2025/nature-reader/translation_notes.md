@@ -1,7 +1,7 @@
 # 翻译与提取说明（translation_notes）
 
 Reader 对象：*Serving Large Language Models on Huawei CloudMatrix384*（arXiv:2506.12708v3，58 页，CC BY 4.0）。
-生成日期：2026-10-10。流程：字体/缩进感知的结构化提取（`tools/pdf-reader-tools/`）→ 分块人工级翻译 → 装配校验。
+生成日期：2026-10-10。流程：字体/缩进感知的结构化提取（`tools/nature-reader/`，经验见其 `nature-reader-experiences.md`）→ 分块人工级翻译 → 装配校验。
 
 ## 术语与翻译约定
 

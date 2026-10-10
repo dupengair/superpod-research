@@ -1,62 +1,47 @@
-# nature-reader 工具与经验（tools/nature-reader）
+# `nature-reader` 技能
 
-运行 nature-reader skill/command 前先读本文件。本目录保存该 skill 在本项目使用过程中
-沉淀的确定性工具脚本与调参经验；skill 官方说明见 [OFFICIAL.md](OFFICIAL.md)。
+[English](README_EN.md)
 
-## 脚本清单
+`nature-reader` 用于把论文 PDF、DOI、arXiv、出版社 HTML 或粘贴文本转换为可回溯的全文 Markdown 阅读材料，包含中英对照、图表定位、可直接阅读的公式和 source map。
 
-| 脚本 | 作用 |
-|---|---|
-| `pdf_structure_extract.py` | PDF → 结构块 + 图表裁剪。`python3 pdf_structure_extract.py <paper.pdf> <out_dir>`，产出 `blocks_raw.json`（S/C/E 块）、`crops.json`、`assets/figNN\|tableNN.png`、`dbg_lines.pkl` |
-| `generate_reader.py` | 装配 paper.md + source_map.json。`python3 generate_reader.py <work_dir> [out_dir]`，读取 `<work_dir>/blocks_raw.json` 与 `chunk_*.zh` 翻译分块 |
-| `montage_check.py` | 把 assets/ 拼成 contact sheet 供视觉模型批量核验裁图质量 |
-| `crop_equations.py` | 公式行定位裁剪（需按论文指定页码/模式，作参考模板用） |
+## 适合用它做什么
 
-依赖：`pdfplumber`、`pypdfium2`（无可用的 pdftotext/pymupdf 时的替代组合）。
+- 制作论文全文中英对照 Markdown。
+- 在首次实质性讨论处插入对应图表和图注翻译。
+- 为每段文本、图、表建立页码和来源锚点。
+- 将公式渲染为 Markdown 数学块，并为每个独立公式建立 `E...` 锚点。
+- 扫描件或无法可靠转写的公式会保留原图裁剪，不会用猜测出的 LaTeX 替代原式。
+- 从 PDF、HTML 或预印本文本中提取可复核阅读材料。
+- 生成适合后续写作、汇报或引用核查的阅读底稿。
 
-## 标准流水线（在论文目录 `<论文>/<skill名>/build/` 中操作）
+## 典型请求
 
-1. `pdf_structure_extract.py <pdf> build/` → 结构块与图表裁剪
-2. 视觉核验裁图（montage + analyze_image 类工具）
-3. 按章节切分翻译分块（chunk_*.en），翻译产出 chunk_*.zh（术语表锁定，格式 `ID\t译文`）
-4. `generate_reader.py build/ ..` → paper.md + source_map.json
-5. `validate_reader_math.py`（skill 自带）校验
+- “把这篇 PDF 做成中英对照全文 Markdown。”
+- “翻译并解读这篇论文，图表要放在对应正文附近。”
+- “根据 DOI 获取论文内容，生成带 source map 的阅读材料。”
 
-实战样例：`research/CloudMatrix384_2025/nature-reader/`（构建产物在其 `build/`）。
+## 你需要提供
 
-## 调参经验（踩坑记录，换 PDF 模板前必读）
+- PDF、DOI、arXiv 链接、出版社 HTML、题名或粘贴文本。
+- 输出目录和是否需要图片裁剪。
+- 是否保留英文原文、中文翻译、图表、表格和翻译备注。
 
-以下针对 arXiv tex2pdf 模板（Linux Libertine/Biolinum 字体、7×10in 书版、
-图顶浮动、图注在图下/表注在表上）。换模板先跑 `build_structure.py` 式探查确认字体签名。
+## 产出
 
-1. **用 word 级提取而非 char 级拼串**：LaTeX PDF 常无空格字符，char 拼接丢所有空格。
-   `extract_words(extra_attrs=["fontname","size"])` 同时拿字体属性做行分类。
-2. **行合并判据用垂直重叠**（`next.top < cur.bot - 2`），不要用 x 不相交——粗体 run-in
-   引导句与后续常规词 x 区间互相嵌套但属同一视觉行。合并时给子桶打 `_lseq` 序号，
-   重排按 `(lseq, x0)`，否则两行词按 x 混排打乱语序。
-3. **公式行保护**：数学行因上下标纵向偏高会与邻行垂直重叠而误合并；合并前检查双方
-   文本是否 `结尾 (N) 且含 =/min/||`，是则禁止合并。
-4. **旋转水印过滤**：arXiv 左侧竖排水印 `upright=False`，但数学斜体也常被判非 upright，
-   过滤条件应为 `not upright AND x0 < 30`（仅页边）。
-5. **多行图注续行**（斜体/等宽/符号字体混排）会被误判为正文。识别规则：`^(Fig\.|Table)\d+`
-   开头 + 主体字体为 caption 字族；符号字体（txsys/txmiaX/MathMI）要放行。
-6. **段落切分按缩进带**，不能一刀切 `x0 >= 50`：正文续行 45.8、段首缩进 55.8、列表项
-   起始 60.4、列表悬挂续行 76.0。规则：`54–62.5 → 新段；>= 50.5 → 悬挂续行；垂直间距 > 16.5 → 新段`。
-7. **图表区域**：图=页顶浮动（裁 `[页顶, 图注上边界]`），表=图注下方（`[图注下边界, 聚类底]`）。
-   表格聚类要在**图元+文字行**上做（纯图元会在表格文字行处断开），并以**下一个图注/标题
-   的 top 为硬停止边界**，否则容差会把后文正文吞进来。图注不进裁剪。
-8. **渲染裁剪**：`pypdfium2` 的 `render(crop=...)` 坐标语义易错（底原点），稳妥做法：
-   整页 `render(scale)` 后用 PIL 按像素 crop。
-9. **视觉核验闭环**：裁 30+ 张图后拼 contact sheet，用视觉模型批量判完整性。
-   本环境 Read 图片只返回 CDN URL，需将 URL 喂给 `analyze_image` 类工具完成核验。
-10. **翻译分块工程**：`ID\t类型\t英文` → 分块并行翻译（`ID\t中文`，术语表锁定）→ 装配。
-    注意：**装配脚本加载翻译必须 `sorted(glob(...))`**，否则修正覆盖文件（Z 后缀）加载
-    顺序不确定被原分块覆盖；拆分段落时易产生重复 ID 块，装配前需去重；章节标题常以
-    行内形式嵌在段落里（版式噪声），需扫描拆分。
-11. **文本清洗** `tidy()`：标点前空格、行尾连字符 `([A-Za-z])- ([a-z])`、`(cid:66)`→✉、
-    Unicode 数学斜体（U+1D400 区）NFKC 归一后包 `$...$`。
+- `paper.md`：全文阅读材料。
+- `source_map.json`：页码、文本块和图表来源映射。
+- `translation_notes.md`：术语、无法确认内容和翻译说明。
+- `assets/`：图表、裁剪图片和必要附件。
+- `assets/equations/`：低置信度或图片化公式的原始裁剪（按需生成）。
 
-## 维护约定
+## 边界
 
-- 新脚本入本目录后必须在上方"脚本清单"登记一行。
-- 踩到新坑：先查本 README 是否已有结论，解决后追加条目。
+- 默认以 Markdown 为中心，不默认生成交互式问答面板。
+- 扫描 PDF、双栏错序或版权受限全文可能需要额外人工校对；图片化公式会优先显示原图并标记转写置信度。
+- 无法合法获取全文时，会基于可用摘要/元数据说明限制。
+
+## 相关技能
+
+- `nature-downloader`：先合法获取 PDF 或 HTML 全文。
+- `nature-paper2ppt`：把阅读材料转成中文汇报 PPT。
+- `nature-citation`：从阅读材料中抽取需要引用支撑的 claim。

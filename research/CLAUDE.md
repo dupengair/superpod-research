@@ -208,8 +208,8 @@ research/
 
 ### 3. 工具与经验资产（tools/，仓库根）
 
-- 按 skill/command 名单层管理：`tools/<skill名>/README.md`（脚本清单 + 经验沉淀）+ 工具脚本；
-- **每次运行 skill/command 前，先查看 `tools/<skill名>/README.md`**；没有则运行后按规创建；
+- 按 skill/command 名单层管理，目录内固定两类文档：`tools/<skill名>/README.md`（skill 官方说明，直接从 skill 目录拷贝）+ `tools/<skill名>/<skill名>-experiences.md`（经验沉淀：脚本清单 + 踩坑记录），另有该 skill 的通用工具脚本；
+- **每次运行 skill/command 前，先查看 `tools/<skill名>/<skill名>-experiences.md`**；没有则运行后按规创建；
 - 运行中产生的**通用性**脚本存入 `tools/<skill名>/`并登记清单；任务特定中间产物不进 tools；
 - tools/ 下脚本**不得硬编码项目路径**，一律 argv/环境变量传参；
 - 详细规范见 `tools/README.md`。
