@@ -8,18 +8,20 @@
 ```
 tools/
 ├── README.md                       # 本文件：管理规范
-├── nature-skills-overview.md       # nature-skills 全库 21 个 skill 的官方总览（参考件）
 ├── <skill名>/                      # 每个 skill 一个目录（单层）
 │   ├── README.md                   # skill 官方 README（直接从 skill 目录拷贝，便于随上游更新覆盖）
 │   ├── <skill名>-experiences.md    # 经验沉淀：工具脚本清单 + 使用过程踩坑记录
 │   └── *.py / *.sh                 # 该 skill 的通用工具脚本
 ```
 
+> `nature-skills/` 目录同理：其 README.md 即 nature-skills 全库 21 个 skill 的官方总览。
+
 现有资产：
 
 | 目录 | README.md | 经验文件 |
 |---|---|---|
 | `nature-reader/` | skill 官方说明 | `nature-reader-experiences.md`（提取流水线 4 脚本 + 11 条调参经验，含 generate_reader.py 装配器） |
+| `nature-skills/` | 全库 21 个 skill 官方总览 | 不适用（参考件） |
 | `academic-search/` | skill 官方说明 | 尚未沉淀 |
 | `nature-paper2ppt/` | skill 官方说明 | 尚未沉淀 |
 | `research-superpower/` | skill 官方说明 | 尚未沉淀 |
