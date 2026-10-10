@@ -23,8 +23,11 @@ tools/
 | `nature-reader/` | skill 官方说明 | `nature-reader-experiences.md`（提取流水线 4 脚本 + 11 条调参经验，含 generate_reader.py 装配器） |
 | `nature-skills/` | 全库 21 个 skill 官方总览 | 不适用（参考件） |
 | `academic-search/` | skill 官方说明 | 尚未沉淀 |
-| `nature-paper2ppt/` | skill 官方说明 | 尚未沉淀 |
-| `research-superpower/` | skill 官方说明 | 尚未沉淀 |
+| `nature-paper2ppt/` | skill 官方说明 | `nature-paper2ppt-experiences.md`（9 条经验：EMU/英寸混算、布局预算、复用链等） |
+| `nature-paper-card/` | skill 官方说明（单篇论文结构化精读卡片） | 尚未沉淀 |
+| `nature-paper-trans/` | skill 官方说明（整篇/指定页中文翻译为图片型 PDF） | 尚未沉淀 |
+| `nature-paper-xray/` | skill 官方说明（论文透视精读，组会/读书会用） | 尚未沉淀 |
+| `research-superpower/` | 研究工作流插件官方说明 | 尚未沉淀 |
 
 ## 管理规则（对所有会话生效）
 
