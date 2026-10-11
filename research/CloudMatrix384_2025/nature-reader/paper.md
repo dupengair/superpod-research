@@ -316,7 +316,7 @@
 
 **Original:** (3)**Unified Infrastructure for Converged Workloads.** The high-bandwidth UB network supports both AI and data-intensive applications within a single, scale-up infrastructure. This enables converged execution of LLM inference, training, simulation, and analytics workloads, an increasingly common requirement for hybridized AI pipelines. **Memory-class Storage via Disaggregated Memory Pool.**(4) CloudMatrix aggregates CPU-attached DRAM across the cluster into a shared, high-performance memory pool accessible via UB. This substrate powers services such as the elastic memory service (EMS) [26], which accelerates latency-critical operations like KV cache reuse, parameter loading, and model checkpointing by eliminating conventional I/O bottlenecks.
 
-**中文:** (3)**面向融合负载的统一基础设施。**高带宽 UB 网络在单一 scale-up（纵向扩展）基础设施内同时支撑 AI 与数据密集型应用，使 LLM 推理、训练、仿真与分析负载得以融合执行——这正日益成为混合化 AI 流水线的普遍要求。**基于分离式内存池的内存级存储。**(4) CloudMatrix 将全集群 CPU 侧 DRAM 聚合为一个可经 UB 访问的共享高性能内存池。该底座支撑弹性内存服务（EMS）[26] 等服务，通过消除传统 I/O 瓶颈，加速 KV 缓存复用、参数加载与模型检查点等时延敏感操作。
+**中文:** (3)**面向融合负载的统一基础设施。** 高带宽 UB 网络在单一 scale-up（纵向扩展）基础设施内同时支撑 AI 与数据密集型应用，使 LLM 推理、训练、仿真与分析负载得以融合执行——这正日益成为混合化 AI 流水线的普遍要求。**基于分离式内存池的内存级存储。**(4) CloudMatrix 将全集群 CPU 侧 DRAM 聚合为一个可经 UB 访问的共享高性能内存池。该底座支撑弹性内存服务（EMS）[26] 等服务，通过消除传统 I/O 瓶颈，加速 KV 缓存复用、参数加载与模型检查点等时延敏感操作。
 
 <a id="S035"></a>
 **Source:** p.9 S035
