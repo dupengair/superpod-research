@@ -1,0 +1,12 @@
+C001	caption	Figure 1: Motivation of graph-level remote memory scheduling. Runtime-driven data movement leads to execution
+C002	caption	Figure 2: SuperNode Hardware Architecture. Compared to (a) traditional SIMT-based GPUs with per-device HBM,
+C003	caption	Figure 3: Comparison of execution timelines under different compute–communication orchestration strategies. (a) Serial
+C004	caption	Figure 4: Comparison of Communication Overlap Strategies in Heterogeneous Offloading Systems.
+C005	caption	Figure 5: Hierarchical memory interface usage example. The figure demonstrates how model parameters are placed in
+C006	caption	Figure 6: End-to-end training step time breakdown under different D2H bandwidths. The stacked bars decompose the
+C007	caption	Table 1: LLaMA-8B Training Baseline Configurations and Performance
+C008	caption	Table 2: DeepSeek-V3 Tranining Baseline Configuration and Performance
+C009	caption	Table 3: Effect of KV Cache Offloading on Memory Footprint and Maximum Sequence Length
+C010	caption	Table 4: Performance and Stability Comparison in Long-Sequence Inference
+C011	caption	Table 5: Inference Latency Breakdown in Short-Sequence Scenarios
+C012	caption	Table 6: Inference Latency Breakdown in Sparse Block Scenarios

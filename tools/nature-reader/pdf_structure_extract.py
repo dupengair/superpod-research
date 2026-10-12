@@ -21,10 +21,50 @@ from collections import defaultdict
 PDF = sys.argv[1] if len(sys.argv) > 1 else "paper.pdf"
 OUT = sys.argv[2] if len(sys.argv) > 2 else "."
 os.makedirs(OUT, exist_ok=True)
-SKIP_PAGES = {2, 3}   # arXiv table-of-contents pages
-EQ_PAGES = {22, 37, 38}  # pages containing numbered display equations
-CAP_FAMS = {"LinBiolinumT", "LinBiolinumTI", "Inconsolatazi4-Regular"}
-SYM_OK = lambda f: (not f.startswith("LinLibertine") and not f.startswith("Arial"))
+_args = sys.argv[3:]
+def _opt(flag, default=None):
+    if flag in _args:
+        i = _args.index(flag)
+        return _args[i + 1]
+    return default
+PROFILE = _opt("--profile", "libertine")   # libertine (7x10in Libertine/Biolinum) | times (US Letter NimbusRomNo9L)
+SKIP_PAGES = set(int(x) for x in (_opt("--skip-pages", "2,3" if PROFILE == "libertine" else "").split(",") if _opt("--skip-pages", "2,3" if PROFILE == "libertine" else "") else []))
+EQ_PAGES = set(int(x) for x in _opt("--eq-pages", "").split(",") if x)
+
+# ---- template profiles ----
+# libertine: arXiv tex2pdf 7x10in, Linux Libertine body / Biolinum headings+captions ("Fig. N." captions)
+# times:    arXiv tex2pdf US Letter, NimbusRomNo9L (Times) body, Medi-bold headings, Regu captions ("Figure N:")
+if PROFILE == "sigconf":
+    CAP_RE = r"(Figure|Table)\s*\d+\s*:"
+    CAP_FAMS = {"LinLibertineTB"}
+    SYM_OK = lambda f: (not f.startswith(("LinLibertine", "LinBiolinum", "DejaVu")) or f.startswith(("Inconsolata", "NewTXMI", "LibertineMath")))
+    HEAD_FAMS = {"LinLibertineTB"}
+    FIG_INTERIOR_FAMS_PREFIX = ("Calibri", "DejaVu", "Helvetica", "Liberation")
+    BOLD_FAM = "LinLibertineTB"
+    ITAL_FAM = "LinLibertineTI"
+    INDENT_LO, INDENT_HI = 1.4, 9.0
+    MARGIN_X = 53.5
+    TWOCOL_SPLIT = 306.0
+elif PROFILE == "times":
+    CAP_RE = r"^(Figure|Fig\.|Table)\s*\d+\s*:"
+    CAP_FAMS = {"NimbusRomNo9L-Regu", "NimbusRomNo9L-ReguItal"}
+    SYM_OK = lambda f: (not f.startswith("NimbusRomNo9L") and not f.startswith("Helvetica"))
+    HEAD_FAMS = {"NimbusRomNo9L-Medi"}
+    FIG_INTERIOR_FAMS_PREFIX = ("Helvetica", "Calibri", "DengXian", "NimbusSans")
+    BOLD_FAM = "NimbusRomNo9L-Medi"
+    ITAL_FAM = "NimbusRomNo9L-ReguItal"
+    INDENT_LO, INDENT_HI = 6.0, 22.0     # pts above left margin (72) that mean paragraph indent
+    MARGIN_X = 72.0
+else:
+    CAP_RE = r"^(Fig\.|Table)\s*\d+"
+    CAP_FAMS = {"LinBiolinumT", "LinBiolinumTI", "Inconsolatazi4-Regular"}
+    SYM_OK = lambda f: (not f.startswith("LinLibertine") and not f.startswith("Arial"))
+    HEAD_FAMS = {"LinBiolinumTB", "LinBiolinumTI"}
+    FIG_INTERIOR_FAMS_PREFIX = ("Arial",)
+    BOLD_FAM = "LinLibertineTB"
+    ITAL_FAM = "LinLibertineTI"
+    INDENT_LO, INDENT_HI = 54.0, 62.5
+    MARGIN_X = 45.8
 def is_eq_line(t):
     return (re.search(r"\((\d)\)\s*$", t) and len(t) < 150
             and any(m in t for m in ("=", "min", "||", "|"))
@@ -42,17 +82,28 @@ with pdfplumber.open(PDF) as pdf:
         buckets = defaultdict(list)
         for w in words:
             mid = (w["top"] + w["bottom"]) / 2
-            buckets[round(mid / 5.2)].append(w)
+            if globals().get("TWOCOL_SPLIT") and pno not in SKIP_PAGES:
+                col = 0 if w["x0"] < TWOCOL_SPLIT else 1
+                buckets[(col, round(mid / 5.2))].append(w)
+            else:
+                buckets[round(mid / 5.2)].append(w)
         # merge neighbor buckets with close baselines
         keys = sorted(buckets)
         cur = None
+        cur_col = None
         for k in keys:
             ws = buckets[k]
             top = min(w["top"] for w in ws); bot = max(w["bottom"] for w in ws)
             cx0 = min(w["x0"] for w in ws); cx1 = max(w["x1"] for w in ws)
+            kcol = k[0] if isinstance(k, tuple) else None
+            if cur is not None and globals().get("TWOCOL_SPLIT") and kcol is not None and kcol != cur_col:
+                if cur: lines_all.append(cur)
+                cur = None
             if cur is None:
                 for w in ws: w["_lseq"] = 0
-                cur = dict(page=pno, top=top, bot=bot, words=list(ws), x0=cx0, x1=cx1, seq=0)
+                cur = dict(page=pno, top=top, bot=bot, words=list(ws), x0=cx0, x1=cx1, seq=0,
+                           col=kcol if kcol is not None else 0)
+                cur_col = kcol
                 continue
             t_ws = " ".join(w["text"] for w in ws).strip()
             eq_like = bool(re.search(r"\(\d\)$", t_ws)) and any(m in t_ws for m in ("=", "min", "||", "|"))
@@ -81,11 +132,21 @@ for ln in lines_all:
     ln["size"] = round(max(w["size"] for w in ws), 1)
     ln["minsize"] = round(min(w["size"] for w in ws), 1)
 
+if globals().get("TWOCOL_SPLIT"):
+    for ln in lines_all:
+        ln["col"] = 0 if ln["x0"] < TWOCOL_SPLIT + 6 else 1
+    lines_all.sort(key=lambda l: (l["page"], l.get("col", 0), l["top"]))
 # ---- classify lines
 for ln in lines_all:
     t = ln["text"].strip()
     kind = "body"
-    if RUNNING.match(t) and ln["top"] < 75:
+    if PROFILE == "sigconf" and ln["top"] < 75:
+        kind = "skip"          # ACM running headers (alternating title/conference forms)
+    elif re.match(r"^UBEP SIGCOMM", t) and ln["top"] < 75:
+        kind = "skip"
+    elif re.fullmatch(r"\d{1,3}", t) and ln["top"] > 700:
+        kind = "skip"
+    elif RUNNING.match(t) and ln["top"] < 75:
         kind = "skip"
     elif re.fullmatch(r"\d{1,3}", t) and (ln["top"] < 75 or ln["bot"] > 680):
         kind = "skip"
@@ -93,10 +154,23 @@ for ln in lines_all:
         kind = "skip"
     elif ln["page"] == 1:
         kind = "front"  # handle p.1 later
-    elif (re.match(r"^(Fig\.|Table)\s*\d+", t) and ln["fams"] & {"LinBiolinumT"}
-          and all(f in CAP_FAMS or f == "LinBiolinumTB" or SYM_OK(f) for f in ln["fams"])
-          and ln["minsize"] >= 8.8):
+    elif (ln["fams"] & set(CAP_FAMS)
+          and re.search(CAP_RE, t)
+          and (ln["size"] if PROFILE == "sigconf" else ln["minsize"]) >= (9.5 if PROFILE == "times" else 8.8)
+          and len(t) < 220):
         kind = "caption"
+    elif PROFILE == "sigconf":
+        if ("LinLibertineTB" in ln["fams"] and ln["size"] >= 10.5 and len(t) < 95
+                and (re.match(r"^\d+(\.\d+)*\s+\S", t) or t.strip() in ("References", "Abstract")
+                     or re.match(r"^Algorithm\s+\d+", t))):
+            kind = "heading"
+    elif PROFILE == "times":
+        if ("NimbusRomNo9L-Medi" in ln["fams"] and len(t) < 90
+                and ln["fams"] <= {"NimbusRomNo9L-Medi", "NimbusRomNo9L-Regu"}
+                and (re.match(r"^\d+(\.\d+)*\s+[A-Za-z]", t)
+                     or t.strip() in ("References", "Abstract")
+                     or re.match(r"^Algorithm\s+\d+", t))):
+            kind = "heading"
     elif (ln["size"] >= 9.9 and len(t) < 90 and
           (("LinBiolinumTB" in ln["fams"] or "LinBiolinumTI" in ln["fams"]) and
            ln["fams"] <= {"LinBiolinumTB", "LinBiolinumTI", "LinBiolinumT"}) and
@@ -116,7 +190,7 @@ for pg, lns in by_page.items():
             j = i + 1
             while j < len(lns):
                 nxt = lns[j]
-                if (nxt["kind"] == "body" and nxt["minsize"] >= 8.8 and nxt["size"] <= 9.5
+                if (nxt["kind"] == "body" and nxt["minsize"] >= (9.5 if PROFILE == "times" else 8.8) and nxt["size"] <= (10.5 if PROFILE == "times" else 9.5)
                         and all(f in CAP_FAMS or SYM_OK(f) for f in nxt["fams"]) and nxt["x0"] < 60
                         and 0 <= nxt["top"] - lns[j-1]["bot"] < 4.5):
                     nxt["kind"] = "caption_cont"
@@ -140,23 +214,30 @@ for pg, lns in by_page.items():
     page = PAGES[pg - 1]
     objs = [(o["x0"], o["top"], o["x1"], o["bottom"]) for coll in ("images", "curves", "rects", "lines") for o in getattr(page, coll)]
     for ci, cap in enumerate(caps):
-        m = re.match(r"^(Fig\.|Table)\s*(\d+)", cap["text"])
+        m = re.match(r"^(Fig\.|Figure|Table)\s*(\d+)", cap["text"])
         if not m: continue
         num = int(m.group(2))
-        conts = [l for l in lns if l["kind"] == "caption_cont" and l["top"] > cap["top"] and (ci + 1 >= len(caps) or l["top"] < caps[ci+1]["top"])]
+        cap_col = cap.get("col", 0)
+        if globals().get("TWOCOL_SPLIT"):
+            colx = (0, TWOCOL_SPLIT + 8) if cap_col == 0 else (TWOCOL_SPLIT - 8, page.width)
+            objs = [o for o in objs if o[0] >= colx[0] and o[2] <= colx[1] + 12]
+            lns_scope = [l for l in lns if l.get("col", 0) == cap_col]
+        else:
+            lns_scope = lns
+        conts = [l for l in lns_scope if l["kind"] == "caption_cont" and l["top"] > cap["top"] and (ci + 1 >= len(caps) or l["top"] < caps[ci+1]["top"])]
         cap["conts"] = conts
         cap_bot = conts[-1]["bot"] if conts else cap["bot"]
         cap["capbot"] = cap_bot
-        if m.group(1) == "Fig.":
-            tops = [o[1] for o in objs if o[1] > 74] + [l["top"] for l in lns if l["kind"] not in ("skip",) and l["top"] > 74]
+        if m.group(1) in ("Fig.", "Figure"):
+            tops = [o[1] for o in objs if o[1] > 74] + [l["top"] for l in lns_scope if l["kind"] not in ("skip",) and l["top"] > 74]
             t0 = max(74, min(tops)) if tops else 79.7
             figband.setdefault(pg, []).append((t0, cap["top"] - 3, num))
         else:
-            nxt_caps = [c2["top"] for c2 in caps if c2["top"] > cap_bot + 2]
-            nxt_head = [l["top"] for l in lns if l["kind"] == "heading" and l["top"] > cap_bot + 2]
+            nxt_caps = [c2["top"] for c2 in caps if c2.get("col", 0) == cap_col and c2["top"] > cap_bot + 2]
+            nxt_head = [l["top"] for l in lns_scope if l["kind"] == "heading" and l["top"] > cap_bot + 2]
             stop = min(nxt_caps + nxt_head + [page.height - 25]) - 6
             b = cap_bot + 4
-            cand = objs + [(l["x0"], l["top"], l["x1"], l["bot"]) for l in lns if l["kind"] not in ("skip", "heading", "caption")]
+            cand = objs + [(l["x0"], l["top"], l["x1"], l["bot"]) for l in lns_scope if l["kind"] not in ("skip", "heading", "caption")]
             ch = True
             while ch:
                 ch = False
@@ -170,6 +251,24 @@ def in_any(bands, pg, top, bot):
         if top >= t0 - 2 and bot <= t1 + 2:
             return True
     return False
+
+if PROFILE == "sigconf":
+    CAP_RE = r"(Figure|Table)\s*\d+\s*:"
+    CAP_FAMS = {"LinLibertineTB"}
+    SYM_OK = lambda f: (not f.startswith(("LinLibertine", "LinBiolinum", "DejaVu")) or f.startswith(("Inconsolata", "NewTXMI", "LibertineMath")))
+    HEAD_FAMS = {"LinLibertineTB"}
+    FIG_INTERIOR_FAMS_PREFIX = ("Calibri", "DejaVu", "Helvetica", "Liberation")
+    BOLD_FAM = "LinLibertineTB"
+    ITAL_FAM = "LinLibertineTI"
+    INDENT_LO, INDENT_HI = 1.4, 9.0
+    MARGIN_X = 53.5
+    TWOCOL_SPLIT = 306.0
+elif PROFILE in ("times", "sigconf"):
+    # code blocks (Calibri/DengXian, p.8-9 algorithm & python listings) and figure labels
+    for ln in lines_all:
+        if ln["kind"] == "body" and ln["fams"] and all(
+                f.startswith(FIG_INTERIOR_FAMS_PREFIX) for f in ln["fams"]):
+            ln["kind"] = "fig_interior"
 
 # ---- drop figure/table interior lines from body flow
 for ln in lines_all:
@@ -190,16 +289,26 @@ for ln in p1:
         ln["kind"] = "abs_heading"
     elif ln["top"] < 250 and ln["size"] >= 10.4:
         ln["kind"] = "authors"
-    elif ln["top"] > 590:
+    elif ln["top"] > 590 and ln["size"] <= 9.0:
         ln["kind"] = "footnote"
     elif ln["size"] <= 9.4:
         ln["kind"] = "abstract"
     else:
         ln["kind"] = "front_misc"
 
-# ---- references pages 54-58
+# ---- references: lines at/after the "References" heading position
+_ref_pg, _ref_top = None, None
 for ln in lines_all:
-    if ln["page"] >= 54 and ln["kind"] == "body":
+    if ln["kind"] == "heading" and ln["text"].strip().startswith("References"):
+        _ref_pg, _ref_top = ln["page"], ln["top"]
+        break
+for ln in lines_all:
+    if _ref_pg is None:
+        break
+    if ln["kind"] != "body":
+        continue
+    after = (ln["page"] > _ref_pg) or (ln["page"] == _ref_pg and ln["top"] > _ref_top)
+    if after:
         ln["kind"] = "refentry"
 
 # ---- group body into paragraphs
@@ -219,14 +328,19 @@ def tidy(s):
     def mat(m):
         return "$" + unicodedata.normalize("NFKC", m.group(0)).replace(" ", "") + "$"
     s = MATHR.sub(mat, s)
+    # 合并被分词拆开的相邻数学段（$a$$b$ → $ab$），避免被误判为 display math
+    prev = None
+    while prev != s:
+        prev = s
+        s = re.sub(r"\$([^$\s]+)\$\$([^$\s]+)\$", r"$\1\2$", s)
     return s.strip()
 
 def render_words(ln):
     out, bold, ital = [], False, False
     for w in ln["words"]:
         f = w["fontname"].split("+")[-1]
-        b = f in ("LinLibertineTB",)
-        i = f in ("LinLibertineTI",)
+        b = f == BOLD_FAM
+        i = f == ITAL_FAM
         txt = w["text"]
         if b and not bold: out.append("**"); bold = True
         elif not b and bold: out.append("**"); bold = False
@@ -241,8 +355,14 @@ def render_words(ln):
 def new_para_check(prev, ln):
     if prev is None: return True
     x0 = ln["x0"]
-    if 54.0 <= x0 <= 62.5: return True      # paragraph indent or list-item start
-    if x0 >= 50.5: return False             # hanging-indent continuation (e.g. x0=76)
+    if PROFILE in ("times", "sigconf"):
+        off = x0 - MARGIN_X if PROFILE == "times" else (x0 - (53.5 if x0 < 300 else 317.7))
+        if INDENT_LO <= off <= INDENT_HI: return True   # paragraph indent
+        if off > INDENT_HI: return False                # continuation / figure-zone
+        if PROFILE == "sigconf":
+            return ln.get("col", 0) != prev.get("col", 0)   # column switch starts new para
+    if 54.0 <= x0 <= 62.5: return True                  # libertine paragraph indent
+    if x0 >= 50.5: return False
     if ln["top"] - prev["bot"] > 16.5: return True
     return False
 
@@ -271,8 +391,11 @@ def flush_front():
     front_acc = None
 
 prev = None
+TRACE = os.environ.get("TRACE", "")
 for ln in lines_all:
     k = ln["kind"]
+    if TRACE and ln["page"] == int(TRACE):
+        print(f"TRACE p{ln['page']} top={ln['top']:.0f} x0={ln['x0']:.1f} [{k}] {ln['text'][:40]!r}", flush=True)
     if k in ("skip", "fig_interior", "tab_interior", "caption", "caption_cont"):
         flush(); flush_front(); cur_words, cur_meta = [], None
         prev = ln
@@ -301,10 +424,14 @@ for ln in lines_all:
             prev = ln; continue
         if k == "body":
             flush_front()
-            if new_para_check(prev, ln):
+            if cur_meta is None or new_para_check(prev, ln):
+                if TRACE and ln["page"] == int(TRACE):
+                    print(f"  NEWPARA flush@p{ln['page']} top={ln['top']:.0f} prev_kind={prev['kind'] if prev else None} prev_page={prev['page'] if prev else None}", flush=True)
                 flush(); cur_words = []
                 cur_meta = dict(ln)
             cur_words.append(render_words(ln))
+            if TRACE and ln["page"] == int(TRACE):
+                print(f"  ACC p{ln['page']} top={ln['top']:.0f} cur_meta_page={cur_meta['page'] if cur_meta else None} nwords={len(cur_words)}", flush=True)
             prev = ln; continue
         # front matter & notes: accumulate consecutive same-role lines into one block
         if re.fullmatch(r"[✉∗*\s]+", ln["text"].replace("(cid:66)", "✉").strip()):
@@ -359,9 +486,16 @@ json.dump(blocks, open(OUT + "/blocks_raw.json", "w", encoding="utf-8"), ensure_
 import pypdfium2 as pdfium
 doc = pdfium.PdfDocument(PDF)
 crops = {}
+FIG_XR = {}
+for cap in [c for pg2 in by_page.values() for c in pg2 if c["kind"] == "caption"]:
+    mm = re.match(r"^(Fig\.|Figure|Table)\s*(\d+)", cap["text"])
+    if not mm: continue
+    if globals().get("TWOCOL_SPLIT"):
+        FIG_XR[(cap["page"], int(mm.group(2)))] = ((30, TWOCOL_SPLIT + 8) if cap.get("col", 0) == 0 else (TWOCOL_SPLIT - 8, PAGES[cap["page"]-1].width - 30))
 for pg, bands in list(figband.items()) + []:
     for (t0, t1, num) in bands:
-        crops[f"fig{num:02d}"] = (pg, (30, max(20, t0 - 6), PAGES[pg-1].width - 30, t1 + 2))
+        xr = FIG_XR.get((pg, num), (30, PAGES[pg-1].width - 30))
+        crops[f"fig{num:02d}"] = (pg, (xr[0], max(20, t0 - 6), xr[1], t1 + 2))
 for pg, bands in tabband.items():
     for (t0, t1, num) in bands:
         page = PAGES[pg-1]
@@ -369,7 +503,8 @@ for pg, bands in tabband.items():
         wls = [(l["x0"], l["top"], l["x1"], l["bot"]) for l in by_page[pg] if l["kind"] not in ("skip",)]
         inside = [o for o in objs + wls if o[1] >= t0 - 2 and o[3] <= t1 + 2]
         x0 = min((o[0] for o in inside), default=45); x1 = max((o[2] for o in inside), default=page.width - 45)
-        crops[f"table{num:02d}"] = (pg, (max(30, x0 - 6), max(20, t0 - 2), min(page.width - 30, x1 + 6), min(page.height - 15, t1 + 4)))
+        xr = FIG_XR.get((pg, num), (30, page.width - 30)) if globals().get("TWOCOL_SPLIT") else (30, page.width - 30)
+        crops[f"table{num:02d}"] = (pg, (max(xr[0], x0 - 6), max(20, t0 - 2), min(xr[1], x1 + 6), min(page.height - 15, t1 + 4)))
 os.makedirs(OUT + "/assets", exist_ok=True)
 for name, (pg, bbox) in sorted(crops.items()):
     page = doc[pg - 1]
@@ -380,7 +515,7 @@ for name, (pg, bbox) in sorted(crops.items()):
 json.dump({k: [v[0], list(v[1])] for k, v in crops.items()}, open(OUT + "/crops.json", "w"))
 print("crops:", len(crops))
 import pickle
-dbg = [dict(page=l["page"], top=round(l["top"]), kind=l["kind"], minsize=l["minsize"],
+dbg = [dict(page=l["page"], top=round(l["top"]), kind=l["kind"], minsize=l["minsize"], col=l.get("col"), x0=round(l.get("x0", 0), 1),
             fams=sorted(l["fams"]), text=l["text"][:60]) for l in lines_all]
 pickle.dump(dbg, open(OUT + "/dbg_lines.pkl", "wb"))
 print(f"blocks: {len(blocks)}; captions: {sum(1 for b in blocks if b['type'] == 'caption')}; "

@@ -1,0 +1,688 @@
+{
+ "paper": {
+  "title": "Serving Large Language Models on Huawei CloudMatrix384",
+  "venue": "arXiv:2506.12708v3 (2025-06), CC BY 4.0",
+  "source_type": "pdf",
+  "language": "en",
+  "source_path": "research/tmp/download/2025_Serving_Large_Language_Models_on_Huawei_CloudMatrix384_1fc88b9a8c2f.pdf"
+ },
+ "blocks": [
+  {
+   "id": "S002",
+   "page": 1,
+   "type": "paragraph",
+   "role": "front",
+   "order": 1,
+   "original_text": "Fangxin Liu 1,*, Qinghua Zhang 2,*, Hanjing Shen 1,*, Zhibo Liang 2, Li Jiang 1,†, Haibing Guan 1, Chong Bao 2, and Xuefeng Jin 2",
+   "translation": "Fangxin Liu 1,*、Qinghua Zhang 2,*、Hanjing Shen 1,*、Zhibo Liang 2、Li Jiang 1,†、Haibing Guan 1、Chong Bao 2、Xuefeng Jin 2",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S003",
+   "page": 1,
+   "type": "paragraph",
+   "role": "abstract",
+   "order": 2,
+   "original_text": "1 Shanghai Jiao Tong University, Shanghai, China 2 Huawei Technologies Co., Ltd., China",
+   "translation": "1 上海交通大学，中国上海　2 华为技术有限公司，中国",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S004",
+   "page": 1,
+   "type": "paragraph",
+   "role": "front",
+   "order": 3,
+   "original_text": "A BSTRACT",
+   "translation": "摘要",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S005",
+   "page": 1,
+   "type": "paragraph",
+   "role": "front",
+   "order": 4,
+   "original_text": "The rapid evolution of Large Language Models (LLMs) towards long-context reasoning and sparse architectures has pushed memory requirements far beyond the capacity of individual device HBM. While emerging supernode architectures offer terabyte-scale shared memory pools via high-bandwidth interconnects, existing software stacks fail to exploit this hardware effectively. Current runtime-based offloading and swapping techniques operate with a local view, leading to reactive scheduling and exposed communication latency that stall the computation pipeline. In this paper, we propose the SuperNode Memory Management Framework (HyperOffload). It employs a compiler-assisted approach that leverages graph-driven memory management to treat remote memory access as explicit operations in the computation graph, specifically designed for hierarchical SuperNode architectures. Unlike reactive runtime systems, SuperNode represents data movement using cache operators within the compiler’s Intermediate Representation (IR). This design enables a global, compile-time analysis of tensor lifetimes and execution dependencies. Leveraging this visibility, we develop a global execution-order refinement algorithm that statically schedules data transfers to hide remote memory latency behind compute-intensive regions. We implement SuperNode within the production deep learning framework MindSpore, adding a remote memory backend and specialized compiler passes. Evaluation on representative LLM workloads shows that SuperNode reduces peak device memory usage by up to 26% for inference while maintaining end-to-end performance. Our work demonstrates that integrating memory-augmented hardware into the compiler’s optimization framework is essential for scaling next-generation AI workloads. K eywords Hierarchical Memory Management · SuperNode Architecture · AI Compiler · Large Language Models 1 Introduction As large language models (LLMs) evolve toward longer-context reasoning [1], multimodal capabilities [2], and sparsely activated MoE architectures [3], modern AI systems increasingly face a severe memory wall. In inference workloads such as retrieval-augmented generation (RAG) [4] and multi-turn dialogue, as well as in training workloads that demand larger batch sizes and deeper networks, the data footprint grows faster than the capacity of on-device memory. As a result, memory capacity has become a first-order constraint on both model scalability and system performance [5]. On the inference side, multi-level key–value (KV) caches dominate memory consumption [6]. Under long-sequence workloads, KV caches alone can exceed the capacity of GPU memory. On the training side, peak activation memory frequently triggers out-of-memory (OOM) failures [7]. Existing techniques such as sparsification (e.g., NSA) [8] and",
+   "translation": "大语言模型（LLM）朝长上下文推理与稀疏架构方向的快速演进，已使内存需求远远超出单设备 HBM 的容量。新兴超节点架构虽通过高带宽互连提供了 TB 级共享内存池，现有软件栈却无法有效利用这一硬件能力。当前基于运行时的卸载与换入换出（swapping）技术以局部视角运作，导致被动式调度和暴露的通信时延，使计算流水线陷入停顿。本文提出超节点内存管理框架（SuperNode Memory Management Framework，HyperOffload）。它采用编译器辅助方法，利用图驱动的内存管理将远端内存访问表示为计算图中的显式操作，专为分层超节点架构设计。与被动响应的运行时系统不同，SuperNode 在编译器中间表示（IR）内以缓存算子表示数据搬运。这一设计使得对张量生命周期与执行依赖进行全局的编译期分析成为可能。利用这种可见性，我们提出全局执行序精化算法，静态调度数据传输，把远端内存时延隐藏在计算密集区域之后。我们在生产级深度学习框架 MindSpore 中实现了 SuperNode，新增远端内存后端与专用编译 pass。在代表性 LLM 负载上的评估表明，SuperNode 在推理中可将设备峰值内存占用最多降低 26%，同时保持端到端性能。我们的工作表明，将内存增强硬件纳入编译器的优化框架，对扩展下一代 AI 负载而言必不可少。关键词　分层内存管理 · 超节点架构 · AI 编译器 · 大语言模型　1　引言　随着大语言模型（LLM）向更长上下文推理 [1]、多模态能力 [2] 以及稀疏激活的 MoE 架构 [3] 演进，现代 AI 系统日益面临严峻的内存墙。在检索增强生成（RAG）[4] 与多轮对话等推理负载，以及需要更大批大小与更深网络的训练负载中，数据占用的增长速度快于设备内存容量。因此，内存容量已成为制约模型可扩展性与系统性能的一阶约束 [5]。在推理侧，多级键值（KV）缓存主导内存消耗 [6]。在长序列负载下，仅 KV 缓存就可能超出 GPU 内存容量。在训练侧，激活内存峰值频繁触发内存不足（OOM）故障 [7]。现有技术如稀疏化（如 NSA）[8] 与",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S007",
+   "page": 2,
+   "type": "paragraph",
+   "role": null,
+   "order": 5,
+   "original_text": "activation recomputation partially alleviate memory pressure [9], but they either degrade model quality or introduce significant computational overhead. These approaches therefore do not address the fundamental limitation: insufficient memory capacity. Consequently, modern systems increasingly rely on frequent data movement across heterogeneous memory tiers. In many cases, the cost of these memory transfers exceeds that of computation, making data movement the dominant performance bottleneck. Recent advances in hardware architectures offer a new foundation for addressing this challenge. Emerging supernode architectures provide a large-capacity shared memory pool connected by high-bandwidth interconnects [10, 11], enabling GPUs to directly access remote memory with low latency. This capability enables a memory-augmented computation paradigm, where shared memory functions as an extension of device memory for model parameters, KV caches, and activations. With sufficient bandwidth and effective scheduling, such architectures can overcome the intrinsic memory limits of a single device, supporting substantially longer context windows and larger model scales. In principle, this can significantly reduce per-token serving cost and expand the scalability envelope of both training and inference. However, fully realizing this potential requires rethinking the software stack. As illustrated in Figure 1, existing techniques such as Offload [12], ZeRO [9], pipeline parallelism [13, 14], and recomputation operate [15] primarily at the runtime layer, after the computation graph has been constructed. This late-binding execution model introduces two fundamental limitations. First, the runtime lacks global visibility into the computation graph and future execution paths. Scheduling decisions are made reactively based on instantaneous memory pressure, which prevents proactive data prefetching and leads to exposed communication delays. Second, the runtime has limited control over execution order. Without graph-level planning, data transfers often contend with computation for resources, and communication latency cannot be reliably hidden behind compute-intensive operations. As a result, even with terabyte-scale shared memory and high-bandwidth links, current systems suffer from pipeline stalls and fail to approach the performance limits implied by the hardware. Our key insight is that remote memory access must be elevated from a runtime mechanism to a first-class concept in the computation graph. As shown in Figure 1, offload and reload operations should be explicitly represented as graph operators that the compiler can analyze, schedule, and optimize. Exposing communication at the graph level enables deterministic memory planning with global knowledge of data lifetimes and execution dependencies. This design provides three major benefits. First, it enables precise compile-time analysis of memory lifecycles, eliminating redundant allocations and reducing peak memory usage. Second, it allows static reordering of operations to achieve near-complete overlap between communication and computation. Third, it integrates shared memory pools into a unified, graph-level optimization framework. Building on these insights, we propose**HyperOffload**, an AI compiler framework tailored for Supernode architectures. By integrating Graph-driven Memory management via specialized cache operators at the MindIR level, HyperOffload treats remote memory access as explicit, schedulable entities. Combined with a global execution-order refinement algorithm, our framework enables efficient and deterministic remote memory extension for both training and inference. This approach fully exploits the capabilities of supernode architectures, bridging the gap between hardware potential and software execution through HyperOffload’s unified memory orchestration. In summary, our contributions are as follows: •**Framework for Remote Cache Operations.**We propose a novel framework that treats remote cache operations as first-class entities, integrating them into the global MindIR graph scheduling pipeline. This approach enables compiler-aware memory orchestration, improving overall system efficiency. •**Graph-Driven Execution-Order Optimization.**We introduce Graph-Driven Execution-Order Optimization, a novel algorithm that effectively hides heterogeneous offload and reload operations at the graph level. This optimization maximizes the overlap between computation and communication, thereby minimizing peak memory usage. •**Hierarchical Memory Execution Model.**We develop a unified hierarchical memory execution model that reliably supports training, inference, and ensures high availability at the cluster level. This model enhances scalability and adaptability across diverse workloads.",
+   "translation": "激活重计算仅能部分缓解内存压力 [9]，但它们要么损害模型质量，要么引入显著的计算开销。因此，这些方法并未触及根本限制：内存容量不足。于是，现代系统日益依赖跨异构内存层级的频繁数据搬运。在许多情况下，这类内存传输的成本已超过计算本身，数据搬运成为主导的性能瓶颈。硬件架构的最新进展为应对这一挑战提供了新的基础。新兴超节点架构提供由高带宽互连 [10, 11] 连接的大容量共享内存池，使 GPU 能以低时延直接访问远端内存。这一能力支撑起内存增强的计算范式：共享内存作为设备内存的扩展，承载模型参数、KV 缓存与激活。在带宽充足且调度得当时，此类架构能够突破单设备内存的固有上限，支持大幅更长的上下文窗口和更大的模型规模。原则上，这可以显著降低单 token 服务成本，并拓展训练与推理两者的可扩展性边界。然而，充分兑现这一潜力需要重新思考软件栈。如图 1 所示，Offload [12]、ZeRO [9]、流水线并行 [13, 14] 与重计算 [15] 等现有技术主要作用于运行时层，即在计算图构建完成之后。这种晚绑定执行模型带来两个根本性限制。第一，运行时缺乏对计算图和未来执行路径的全局可见性。调度决策基于瞬时内存压力被动做出，无法进行主动的数据预取，并导致通信时延暴露。第二，运行时对执行序的控制能力有限。缺乏图级规划时，数据传输常与计算争抢资源，通信时延无法被可靠地隐藏在计算密集操作之后。结果是，即便拥有 TB 级共享内存和高带宽链路，现有系统仍受流水线停顿之苦，无法逼近硬件所隐含的性能极限。我们的核心洞察是：远端内存访问必须从运行时机制提升为计算图中的一等概念。如图 1 所示，卸载（offload）与重载（reload）操作应显式表示为编译器可分析、可调度、可优化的图算子。在图级暴露通信，使确定性的内存规划能够利用数据生命周期与执行依赖的全局知识。这一设计带来三大收益。第一，它支持在编译期精确分析内存生命周期，消除冗余分配并降低峰值内存占用。第二，它允许对操作进行静态重排，实现通信与计算的近乎完全重叠。第三，它将共享内存池纳入统一的图级优化框架。基于上述洞察，我们提出 **HyperOffload**——面向超节点架构定制的 AI 编译器框架。通过在 MindIR 层以专用缓存算子集成图驱动内存管理，HyperOffload 将远端内存访问视为显式、可调度的实体。结合全局执行序精化算法，我们的框架为训练与推理提供高效且确定性的远端内存扩展。该方法充分挖掘超节点架构的能力，通过 HyperOffload 的统一内存编排弥合硬件潜力与软件执行之间的鸿沟。概言之，我们的贡献如下：•**远端缓存操作框架。**我们提出一个把远端缓存操作视为一等实体的新框架，并将其集成进全局 MindIR 图调度流水线。该方法实现编译器感知的内存编排，提升整体系统效率。•**图驱动执行序优化。**我们提出图驱动执行序优化这一新算法，在图级有效隐藏异构的卸载与重载操作。该优化最大化计算与通信的重叠，从而最小化峰值内存占用。•**分层内存执行模型。**我们构建统一的分层内存执行模型，可靠地支持训练与推理，并保障集群级高可用。该模型增强了跨多样负载的可扩展性与适应性。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S010",
+   "page": 2,
+   "type": "paragraph",
+   "role": null,
+   "order": 6,
+   "original_text": "**a) Inference vs. Training Memory Components**Large language model (LLM) workloads exhibit fundamentally different memory behaviors in inference and training.",
+   "translation": "**a) 推理与训练的内存构成**　大语言模型（LLM）负载在推理与训练中表现出截然不同的内存行为。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S011",
+   "page": 3,
+   "type": "paragraph",
+   "role": null,
+   "order": 7,
+   "original_text": "bubbles and increased peak device memory usage. By explicitly scheduling communication at the graph level, we enable efficient overlap between computation and remote memory access, allowing large models to run beyond device memory limits transparently.",
+   "translation": "气泡并推高设备峰值内存占用。通过在图级显式调度通信，我们实现了计算与远端内存访问的高效重叠，使大模型得以透明地运行在超出设备内存限制的规模上。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S012",
+   "page": 3,
+   "type": "paragraph",
+   "role": null,
+   "order": 8,
+   "original_text": "During inference, the memory footprint of LLMs is primarily dominated by model parameters and KV caches. While weights remain static across inference requests, the KV caches generated by the attention mechanism grow linearly with both context length and the number of active tokens, making them the main contributor to peak memory usage in long-context or multi-turn dialogue scenarios [16]. For example, previous studies show that when sequence lengths scale to tens of thousands of tokens, the memory consumption of KV caches can significantly exceed that of model weights, accounting for the majority of total memory usage[17]. In complex inference pipelines such as RAG, different sub-queries maintain independent KV caches, resulting in multiple concurrent KV cache lifecycles within the system and further amplifying memory demand [18]. In addition to model parameters, training workloads require retaining intermediate activations for backpropagation as well as optimizer states, leading to substantially higher memory pressure. On one hand, adaptive optimizers such as Adam maintain momentum and variance tensors for each parameter, and the total memory footprint of these optimizer states is often comparable to or even larger than that of the model parameters themselves. On the other hand, the large number of activation tensors produced during the forward pass of deep models also consumes significant memory. For instance, training a 1.5B-parameter GPT-2 model with a sequence length of 1024 and batch size 32 requires approximately 60 GB of GPU memory for forward activations alone; enabling activation checkpointing can reduce this requirement to around 8 GB [9]. Nevertheless, for larger models (e.g., 100B parameters), activation memory can still reach tens of gigabytes even with checkpointing enabled. In general, the memory footprint during training can be divided into two main components: model states (parameters, gradients, and optimizer states) and residual states (intermediate activations, temporary buffers, and memory fragmentation). Among these, model states typically account for the majority of memory usage, with the remainder consumed by activations and buffers, as illustrated by the GPT-2 example above. **b) Memory Constraints of LLMs**Although the capacity of accelerator memory continues to increase, the memory requirements of LLM workloads grow at a much faster pace. For example, previous work estimates that training a trillion-parameter model using the Adam optimizer with FP16 precision requires approximately 16 TB of memory[9], far exceeding the tens of gigabytes available on a single GPU. Moreover, long-context inference can cause the combined footprint of model weights and KV caches to exceed the memory capacity of a single device, necessitating coordination across multiple devices[19]. To address this challenge, existing systems often adopt heterogeneous memory hierarchies, offloading part of the data asynchronously to CPU memory or remote storage. However, such naive offloading strategies introduce significant communication overhead and latency, which are difficult to hide, particularly in bandwidth-constrained environments.",
+   "translation": "推理期间，LLM 的内存占用主要由模型参数与 KV 缓存主导。权重在各推理请求之间保持不变，而注意力机制产生的 KV 缓存随上下文长度与活跃 token 数量线性增长，使其成为长上下文或多轮对话场景中峰值内存占用的主要来源 [16]。例如，已有研究表明，当序列长度达到数万 token 时，KV 缓存的内存消耗可显著超过模型权重，占总内存使用的大部分 [17]。在 RAG 等复杂推理流水线中，不同子查询维护彼此独立的 KV 缓存，系统内并存多条 KV 缓存生命周期，进一步放大内存需求 [18]。除模型参数外，训练负载还需为反向传播保留中间激活以及优化器状态，内存压力因此高得多。一方面，Adam 等自适应优化器为每个参数维护动量与方差张量，这些优化器状态的总内存占用往往与模型参数本身相当，甚至更大。另一方面，深层模型前向过程产生的大量激活张量也消耗可观内存。例如，训练序列长度 1024、批大小 32 的 1.5B 参数 GPT-2 模型，仅前向激活就需约 60 GB 的 GPU 内存；启用激活检查点（activation checkpointing）可将该需求降至约 8 GB [9]。尽管如此，对于更大的模型（如 100B 参数），即使启用检查点，激活内存仍可达数十 GB。总体而言，训练期间的内存占用可分为两大组成：模型状态（参数、梯度与优化器状态）和残余状态（中间激活、临时缓冲与内存碎片）。其中模型状态通常占内存使用的大头，其余由激活与缓冲消耗，上文的 GPT-2 例子正说明了这一点。**b) LLM 的内存约束**尽管加速器内存容量持续增长，LLM 负载的内存需求增长得快得多。例如，已有工作估算，使用 Adam 优化器以 FP16 精度训练一个万亿参数模型约需 16 TB 内存 [9]，远超单块 GPU 可用的数十 GB。此外，长上下文推理会使模型权重与 KV 缓存的合计占用超出单设备内存容量，必须跨多设备协调 [19]。为应对这一挑战，现有系统常采用异构内存层级，将部分数据异步卸载到 CPU 内存或远端存储。然而，这类朴素的卸载策略引入显著的通信开销与时延，且难以隐藏，在带宽受限的环境中尤为突出。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S013",
+   "page": 4,
+   "type": "paragraph",
+   "role": null,
+   "order": 9,
+   "original_text": "(b) SuperNode architectures integrate tile-based NPUs interconnected by ultra-high-bandwidth links and a large shared memory pool. The shared memory pool provides a unified address space, enabling symmetric access to model parameters, KV caches, and activations across all NPUs within the SuperNode.",
+   "translation": "(b) 超节点架构集成基于核块（tile）的 NPU，经超高带宽链路互连，并配有大容量共享内存池。共享内存池提供统一地址空间，使超节点内所有 NPU 均可对称访问模型参数、KV 缓存与激活。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S014",
+   "page": 4,
+   "type": "paragraph",
+   "role": null,
+   "order": 10,
+   "original_text": "Recent studies show that even high-bandwidth HBM cannot sustain the continuous access to model weights and KV caches during decoding, making inference performance limited by external memory bandwidth [19]. In training, offloading activation checkpoints to CPU memory can significantly reduce on-device storage, but it adds data transfer overhead [9]. As a result, memory capacity remains a primary bottleneck for both LLM training and inference. This limitation motivates new hardware and software approaches to expand the effective memory space.",
+   "translation": "近期研究表明，即便是高带宽 HBM 也无法支撑解码期间对模型权重与 KV 缓存的持续访问，推理性能因此受限于片外内存带宽 [19]。在训练中，把激活检查点卸载到 CPU 内存可显著减少设备端存储，但会增加数据传输开销 [9]。因此，内存容量仍是 LLM 训练与推理的首要瓶颈。这一限制推动了扩展有效内存空间的新的软硬件方法。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S016",
+   "page": 4,
+   "type": "paragraph",
+   "role": null,
+   "order": 11,
+   "original_text": "Figure 2 provides an overview of the SuperNode hardware architecture and highlights the key differences between traditional SIMT-based GPUs and tile-based NPU systems with shared memory pools.",
+   "translation": "图 2 概述了超节点硬件架构，并突出传统基于 SIMT（单指令多线程）的 GPU 与配备共享内存池的基于核块（tile）的 NPU 系统之间的关键差异。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S018",
+   "page": 4,
+   "type": "paragraph",
+   "role": null,
+   "order": 12,
+   "original_text": "As illustrated in Figure 2(a), traditional GPUs are based on the SIMT execution model, leveraging thousands of homogeneous CUDA cores together with high-bandwidth on-device HBM to maximize throughput [20]. While this design is highly effective for compute-intensive workloads, it increasingly faces scalability limitations in extremely memory-intensive scenarios such as LLMs, where model states and intermediate activations grow rapidly with sequence length. In contrast, next-generation tile-based NPUs, such as the Huawei Ascend series shown in Figure 2(b), adopt heteroge-neous multi-core designs that integrate specialized tensor computation units and vector engines [21]. These units are tightly coupled with deeper and higher-bandwidth memory hierarchies, including large-capacity on-package HBM and cross-die interconnects, with aggregate bandwidths reaching the TB/s scale [22]. Taking the Ascend 910 as an example, it is a dual-die packaged chip in which two compute dies share eight stacks of on-package HBM and are connected via high-bandwidth cross-die interconnects. Each die integrates 24 AI Cube matrix compute cores and 48 AI Vector cores, optimized for BF16, FP16, and INT8 computation formats [22]. As conceptually depicted in Figure 2(b), such tightly integrated compute and memory subsystems improve compute density and memory bandwidth, enabling a better balance between computation and communication for large-scale AI workloads.",
+   "translation": "如图 2(a) 所示，传统 GPU 基于 SIMT 执行模型，依靠数千个同构 CUDA 核心与设备端高带宽 HBM 来最大化吞吐 [20]。该设计对计算密集负载非常有效，但在 LLM 这类内存需求极端密集的场景中日益面临可扩展性限制——此类场景中模型状态与中间激活随序列长度快速增长。与之相对，如图 2(b) 所示的华为昇腾（Ascend）系列等新一代基于核块（tile）的 NPU 采用异构多核设计，集成专用张量计算单元与向量引擎 [21]。这些单元与更深、更高带宽的内存层级紧耦合，包括大容量封装内 HBM 与跨裸片互连，聚合带宽可达 TB/s 量级 [22]。以昇腾 910 为例，它是一颗双裸片封装芯片：两个计算裸片共享八组封装内 HBM，并经高带宽跨裸片互连相连。每个裸片集成 24 个 AI Cube 矩阵计算核心与 48 个 AI Vector 核心，针对 BF16、FP16 与 INT8 计算格式优化 [22]。如图 2(b) 所示意，这种计算与内存子系统的紧耦合提升了计算密度与内存带宽，为大规模 AI 负载实现计算与通信间更均衡的配比。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S020",
+   "page": 4,
+   "type": "paragraph",
+   "role": null,
+   "order": 13,
+   "original_text": "A defining feature of the SuperNode architecture, as shown in Figure 2(b), is the presence of large-capacity shared memory pools that are directly connected to multiple NPU/GPU devices through ultra-high-bandwidth interconnects. These memory pools expose a unified addressable space, effectively extending on-device memory and enabling symmetric access from all NPUs within the SuperNode. In Huawei’s CloudMatrix384 architecture, for example, a SuperNode is constructed from 384 Ascend 910 NPUs and 192 CPUs interconnected via an ultra-high-bandwidth Unified Bus, enabling fully connected direct communication",
+   "translation": "如图 2(b) 所示，超节点架构的一个标志性特征是拥有大容量共享内存池，这些内存池通过超高带宽互连直接连接多个 NPU/GPU 设备。内存池暴露统一的可寻址空间，有效扩展设备内存，并使超节点内所有 NPU 都能对称访问。以华为 CloudMatrix384 架构为例，一个超节点由 384 颗昇腾 910 NPU 与 192 个 CPU 组成，二者经超高带宽统一总线（Unified Bus）互连，实现全连接的直接通信",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S021",
+   "page": 5,
+   "type": "paragraph",
+   "role": null,
+   "order": 14,
+   "original_text": "execution without data prefetching, where NPU computation and DMA transfers are fully serialized. (b) Runtime-driven compute–communication overlap, in which the CPU orchestrates DMA prefetching during NPU execution, introducing runtime-induced bubbles. (c) Ideal fully overlapped execution, where DMA prefetching and NPU computation are statically orchestrated ahead of time, achieving bubble-free parallelism.",
+   "translation": "执行（无数据预取），其中 NPU 计算与 DMA 传输完全串行。(b) 运行时驱动的计算–通信重叠：CPU 在 NPU 执行期间编排 DMA 预取，引入运行时造成的气泡。(c) 理想的完全重叠执行：DMA 预取与 NPU 计算被提前静态编排，实现无气泡的并行。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S022",
+   "page": 5,
+   "type": "paragraph",
+   "role": null,
+   "order": 15,
+   "original_text": "among all compute and storage components. This design allows the entire SuperNode to operate as a single logical entity, in which compute resources and memory are pooled and uniformly accessible [22]. As a result, model parameters, KV caches, and activations stored in the shared memory pool can be accessed symmetri-cally by any NPU, regardless of where the data is originally produced or stored, with consistent bandwidth and latency characteristics. This symmetric access model, visually highlighted in Figure 2(b), fundamentally differs from traditional host-memory offloading and provides a much stronger foundation for large models and long-context workloads. However, fully exploiting shared memory pools requires careful software-level orchestration. Without compiler-or computation-graph-level coordination, direct access to external memory can still expose communication latency and waste bandwidth, preventing effective overlap between data movement and computation. This challenge motivates techniques such as operatorized prefetching. Modern ML graph optimization frameworks (e.g., Huawei CANN Graph Engine) can automatically insert prefetch operators into the computation graph and execute them asynchronously to overlap data movement with computation and communication. For example, the PRESERVE framework analyzes the computation graph and inserts prefetch operators for model weights and KV caches between attention computation and communication phases, allowing data to be proactively loaded into on-chip caches during communication[19]. Such mechanisms establish proper temporal alignment between memory transfers and computation, effectively mitigating memory bandwidth bottlenecks and providing software support for running large models efficiently on SuperNode architectures.",
+   "translation": "，覆盖所有计算与存储部件。这一设计使整个超节点可以作为单一逻辑实体运行，其中计算资源与内存被池化，并可统一访问 [22]。因此，存放在共享内存池中的模型参数、KV 缓存与激活可被任意 NPU 对称访问，无论数据最初产生或存储于何处，带宽与时延特性均保持一致。这种对称访问模型（图 2(b) 中以视觉方式突出显示）与传统的主机内存卸载有根本区别，为大模型与长上下文负载提供了强得多的基础。然而，要充分挖掘共享内存池的潜力，需要细致的软件级编排。缺少编译器或计算图级的协调时，直接访问外部内存仍会暴露通信时延并浪费带宽，无法实现数据搬运与计算的有效重叠。这一挑战催生了算子化预取等技术。现代 ML 图优化框架（如华为 CANN Graph Engine）可以自动向计算图插入预取算子并异步执行，使数据搬运与计算和通信重叠。例如，PRESERVE 框架分析计算图，在注意力计算与通信阶段之间为模型权重和 KV 缓存插入预取算子，使数据在通信期间被主动加载进片上缓存 [19]。此类机制在内存传输与计算之间建立恰当的时间对齐，有效缓解内存带宽瓶颈，为在超节点架构上高效运行大模型提供软件支撑。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S025",
+   "page": 5,
+   "type": "paragraph",
+   "role": null,
+   "order": 16,
+   "original_text": "We evaluate the overhead of existing prefetching mechanisms, we evaluate the LLaMA3-8B [23] model on an Ascend 910C platform (eight NPUs per node). While the baseline execution completes in 5.5 seconds, enabling runtime-driven prefetching increases the end-to-end latency to 15 seconds, representing a 2. 7 × slowdown. A breakdown of this latency reveals that 9 seconds are spent on computation where communication is not effectively hidden, and 6.7 seconds are consumed by memory compaction and system-level management. As shown in Figure 3(b), the execution exhibits only partial compute-communication overlap, with frequent runtime interventions introducing significant bubbles in the device timeline. This performance degradation stems from three structural inefficiencies inherent in runtime-driven designs. First, runtime-driven prefetching frequently interrupts the accelerator execution pipeline. Each prefetch operation requires the",
+   "translation": "为评估现有预取机制的开销，我们在昇腾 910C 平台（每节点八颗 NPU）上评测 LLaMA3-8B [23] 模型。基线执行在 5.5 秒内完成，而启用运行时驱动预取后，端到端时延增至 15 秒，相当于 2.7× 的减速。对该时延的分解显示：9 秒用于通信未被有效隐藏的计算，6.7 秒消耗于内存紧缩与系统级管理。如图 3(b) 所示，执行仅呈现部分的计算–通信重叠，频繁的运行时干预在设备时间线中引入显著气泡。这种性能退化源于运行时驱动设计固有的三项结构性低效。第一，运行时驱动预取频繁打断加速器执行流水线。每次预取操作都需要",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S026",
+   "page": 6,
+   "type": "paragraph",
+   "role": null,
+   "order": 17,
+   "original_text": "CPU to inspect runtime states, issue DMA requests, and synchronize with the device. These control-path overheads inject idle gaps that are difficult to overlap with computation, particularly in fine-grained or high-frequency prefetching scenarios. Second, the runtime lacks visibility into the future operator topology. Without knowledge of the upcoming computation path, the system can only trigger data transfers reactively, shortly before consumption. This prevents the system from exploiting earlier idle windows for proactive data movement, limiting the potential for latency hiding. Third, in communication-intensive workloads such as multi-level KV cache management or large-batch inference, these scheduling overheads cannot be effectively amortized. This reactive behavior contrasts with the idealized execution in Figure 3(c), where data movement is scheduled ahead of time to fully utilize the bandwidth of the shared memory pool. In summary, these issues arise because the runtime lacks a global view of the computation graph and cannot reorder operators. Consequently, the shared memory pool is treated as a reactive storage target rather than a seamless extension of device memory.",
+   "translation": "CPU 去检查运行时状态、发起 DMA 请求并与设备同步。这些控制路径开销会注入难以与计算重叠的空闲间隙，在细粒度或高频预取场景中尤为明显。其次，运行时看不到未来的算子拓扑。在不了解即将到来的计算路径的情况下，系统只能在消费前很短的时间内被动地触发数据搬运。这使系统无法利用更早的空闲窗口做主动数据搬运，限制了时延隐藏的空间。第三，在多级 KV 缓存管理、大批量推理等通信密集型负载中，这些调度开销无法被有效摊销。这种被动行为与 Figure 3(c) 中的理想执行形成对比：后者把数据搬运提前排好，充分吃满共享内存池的带宽。概括而言，这些问题都源于运行时缺少对计算图的全局视野、无法重排算子，于是共享内存池被当成被动的存储目标，而非设备内存的无缝延伸。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S028",
+   "page": 6,
+   "type": "paragraph",
+   "role": null,
+   "order": 18,
+   "original_text": "To address the limitations of runtime-driven mechanisms, we propose elevating remote memory operations to first-class operators within the computation graph. Once offload and prefetch operations are operatorized, they become visible to the compiler and can participate in graph-level analysis and optimization. •**Global Visibility of Memory Lifecycles:**Operatorization enables the compiler to gain a comprehensive view of memory lifecycles. With remote cache operations explicitly represented as graph nodes, the compiler can track when data is produced, consumed, offloaded, and reloaded. This allows for precise lifetime analysis, which is fundamentally unavailable in runtime-only approaches. •**Predictable Memory Management:**In a static computation graph, memory allocation and release points are defined at compile time. This determinism reduces redundant memory demand from dynamic loading, ensuring that data is materialized only when necessary and avoiding conservative retention driven by runtime uncertainties. •**Systematic Just-In-Time (JIT) Optimization:**The compiler can automatically pipeline communication operators alongside compute operators, enabling overlapping data transfers and computation without requiring users to manually insert low-level synchronization primitives, such as *cudaStreamSynchronize *. This shift alleviates the performance tuning burden from users to the compiler, fostering more robust and portable optimizations.",
+   "translation": "为解决运行时驱动机制的局限，我们提出把远程内存操作提升为计算图中的**一等算子**。卸载与预取操作一旦被算子化，就对编译器可见，并能参与图级分析与优化。•**内存生命周期的全局可见性：**算子化让编译器获得内存生命周期的完整视野。远程缓存操作被显式表示为图节点后，编译器可以追踪数据何时产生、消费、卸载与重载，从而进行精确的生存期分析——这在纯运行时方案中根本不可得。•**可预测的内存管理：**在静态计算图中，内存分配与释放点在编译期即已确定。这种确定性消除了动态加载带来的冗余内存需求，保证数据只在必要时物化，避免因运行时不确定性而采取的保守驻留。•**系统化的即时（JIT）优化：**编译器可以自动把通信算子与计算算子流水线化，实现数据搬运与计算的重叠，而无需用户手工插入 *cudaStreamSynchronize * 之类的底层同步原语。这一转变把性能调优负担从用户转移给编译器，带来更稳健、更可移植的优化。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S030",
+   "page": 6,
+   "type": "paragraph",
+   "role": null,
+   "order": 19,
+   "original_text": "While operatorization exposes communication operations to the compiler and enables graph-level reasoning, it does not by itself guarantee stable or efficient prefetching. In practice, end-to-end performance is highly sensitive to the concrete execution order chosen for the computation graph. Figure 4 shows that different execution orders for the same set of compute and communication operators yield dramatically different trade-offs between communication overlap and peak memory usage. The computation graph topology is deterministic, but the relative order among independent operators is often unspecified and left to the runtime scheduler. This nondeterminism leads to inefficient patterns. In Figure 4(a), prefetching occurs too late: transfers do not complete before their consumers run, causing computation to stall on data and exposing",
+   "translation": "算子化虽然把通信操作暴露给编译器、使图级推理成为可能，但它本身并不保证稳定或高效的预取。实践中，端到端性能对计算图具体执行序高度敏感。Figure 4 表明，同一组计算与通信算子在不同执行序下，会在通信重叠与峰值内存占用之间产生截然不同的权衡。计算图拓扑是确定的，但相互独立的算子之间的相对顺序往往未加规定，留给运行时调度器。这种不确定性导致低效模式。Figure 4(a) 中预取发生得太晚：搬运未能在消费者运行前完成，计算因等数据而停顿，并暴露出",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S031",
+   "page": 7,
+   "type": "paragraph",
+   "role": null,
+   "order": 20,
+   "original_text": "communication latency. Memory usage may remain low, but throughput drops due to insufficient overlap. By contrast, Figure 4(b) shows prefetching scheduled too early: transfers hide latency but prefetched data occupies device memory for long periods, increasing peak memory usage and waste. These cases demonstrate a significant trade-off between memory efficiency and performance: prefetching must be early enough to avoid stalls yet late enough to avoid unnecessary residency. Without explicit control over execution order, systems cannot reliably attain both memory-optimal and performance-optimal configurations, which results in variable performance and unpredictable peak memory across runs. To achieve effective memory reduction and reliable communication-computation overlap, explicit Graph-Driven Execution-Order Optimization is essential. As shown in Figure 4(c), an optimized execution sequence that aligns data loading with computation can fully hide communication latency while preventing unnecessary memory residency. This optimization must take into account operator execution times, data transfer volumes, and available bandwidth, ensuring that data loading occurs at the optimal moment. Only through execution-order optimization can operatorized prefetching fully realize its potential, minimizing peak memory usage while maximizing overlap efficiency.",
+   "translation": "通信时延。内存占用可能仍然很低，但重叠不足导致吞吐下降。相反，Figure 4(b) 展示了预取排得过早的情形：搬运虽然隐藏了时延，但预取来的数据长期占据设备内存，推高峰值内存占用并造成浪费。这些案例揭示了内存效率与性能之间的显著权衡：预取必须足够早以避免停顿，又必须足够晚以避免不必要的驻留。不显式控制执行序，系统就无法可靠地同时达到内存最优与性能最优配置，导致不同运行之间性能波动、峰值内存不可预测。要实现有效的内存削减与可靠的通信-计算重叠，显式的图驱动执行序优化不可或缺。如 Figure 4(c) 所示，让数据加载与计算对齐的优化执行序列既能完全隐藏通信时延，又能避免不必要的内存驻留。该优化必须综合考虑算子执行时间、数据搬运量与可用带宽，确保数据加载发生在最优时刻。只有通过执行序优化，算子化预取才能充分释放潜力，在最小化峰值内存占用的同时最大化重叠效率。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S034",
+   "page": 7,
+   "type": "paragraph",
+   "role": null,
+   "order": 21,
+   "original_text": "The HyperOffload Framework is a compiler-assisted execution system designed to fully exploit large-capacity shared memory pools on SuperNode architectures. The key insight is to elevate remote memory accesses from opaque runtime behaviors to explicit, schedulable entities at the computation graph level, enabling deterministic memory planning and effective communication–computation overlap. Figure xxx illustrates the framework’s overall architecture. Starting with a conventional MindSpore computation graph, the HyperOffload Framework transforms it into a memory-aware MindIR graph that jointly orchestrates computation and remote memory access. **Graph-Level Optimization for Remote Memory Access.**The key insight of framework is its focus on graph-level coordination of remote memory. Rather than depending on runtime-driven offloading and on-demand loading, the HyperOffload Framework explicitly models remote memory interactions within MindIR. Operations related to remote caching, such as prefetching data into device memory, persisting tensors back to remote memory, and releasing device residency, are treated as first-class operators within the graph. This design enables the compiler to globally analyze tensor lifetimes, memory residency, and data movement. Consequently, memory transfers transition from being implicit side effects to visible components that can actively participate in dependency analysis and scheduling decisions. **Latency Hiding via Graph-Driven Execution-Order Optimization.**Making cache operations explicit allows for additional execution-level optimizations. In MindIR, operators without data dependencies can execute in any order, which may lead to unstable overlap behavior: prefetches might occur too early, unnecessarily occupying device memory, or too late, resulting in computation stalls. The HyperOffload Framework tackles this challenge by optimizing the execution order of independent operators based on a cost model considering operator execution time, data transfer volume, and interconnect bandwidth. The compiler schedules prefetch operations just in time—early enough to complete before their use, yet late enough to minimize memory footprint—ensuring that remote memory latency is consistently hidden behind computation. **Non-intrusive Integration via JIT Graph Rewriting.**Importantly, the HyperOffload Framework is designed to be non-intrusive for users. Models are developed using standard MindSpore APIs without explicit offload or prefetch annotations. All cache operator insertions and execution order optimizations occur automatically during JIT compilation through graph rewriting. This approach maintains user productivity while allowing advanced users the option to fine-tune memory behavior through specialized interfaces. From the user’s perspective, the framework seamlessly transforms shared remote memory into an effective extension of device memory, all without introducing artificial data dependencies, thus preserving the optimization flexibility of the original graph.",
+   "translation": "HyperOffload 框架是一个编译器辅助的执行系统，旨在充分释放超节点架构上大容量共享内存池的潜力。其关键洞察是：把远程内存访问从运行时的不透明行为提升为计算图层面显式、可调度的实体，从而实现确定性的内存规划与有效的通信-计算重叠。Figure xxx 展示了框架总体架构。从一个常规的 MindSpore 计算图出发，HyperOffload 框架将其变换为一张内存感知的 MindIR 图，统一编排计算与远程内存访问。**面向远程内存访问的图级优化。**该框架的核心洞察在于对远程内存做图级协同：不依赖运行时驱动的卸载与按需加载，而是在 MindIR 内显式建模远程内存交互。与远程缓存相关的操作——把数据预取进设备内存、把张量持久化回远程内存、释放设备驻留——都被当作图中的一等算子。这一设计使编译器能够全局分析张量生存期、内存驻留与数据搬运。于是，内存搬运从隐式副作用转变为可见的组成部分，可以主动参与依赖分析与调度决策。**通过图驱动执行序优化实现时延隐藏。**把缓存操作显式化之后，还可以进一步做执行级优化。在 MindIR 中，无数据依赖的算子可以以任意顺序执行，这可能导致不稳定的重叠行为：预取可能发生过早，白白占用设备内存；也可能发生过晚，造成计算停顿。HyperOffload 框架通过基于代价模型的独立算子执行序优化来应对这一挑战，代价模型综合考虑算子执行时间",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S036",
+   "page": 7,
+   "type": "paragraph",
+   "role": null,
+   "order": 22,
+   "original_text": "A fundamental challenge in hierarchical memory systems is that remote memory accesses are typically managed as implicit runtime behaviors. Such accesses remain invisible to the compiler, inhibiting global reasoning about tensor lifetimes, data movement, and execution overlap. The HyperOffload Framework addresses this limitation by operatorizing remote cache management, making it an explicit component of the MindIR computation graph. By modeling remote memory interactions as first-class operators, the framework facilitates compile-time analysis and scheduling of memory movement, laying the groundwork for deterministic latency hiding.",
+   "translation": "分层内存系统的一个根本难题是：远程内存访问通常被当作隐式的运行时行为来管理。这类访问对编译器不可见，阻碍了对张量生存期、数据搬运与执行重叠的全局推理。HyperOffload 框架通过把远程缓存管理算子化来解决这一局限，使其成为 MindIR 计算图的显式组成部分。通过把远程内存交互建模为一等算子，框架为内存搬运的编译期分析与调度奠定了基础，也为确定性的时延隐藏铺平了道路。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S038",
+   "page": 8,
+   "type": "paragraph",
+   "role": null,
+   "order": 23,
+   "original_text": "**Require:**Computation graph G = (V, E) with cache operators **Require:**Execution cost C comp (v) for v ∈ V **Require:**Transfer cost C trans (c) for cache operator c **Ensure:**Refined execution order O 1: O ← topo (G) 2: C ← { c ∈ O | c is independent cache operator } 3:**for**each c ∈ C**do** u ← c 4: first consumer of 5: Pos c ← feasible positions of c in O 6:**for**each p ∈ Pos c**do** 7: T trans (c, p) ← transfer completion time at p 8: L overlap (c, p) ← overlap with computation before u 9: C (p) ← cost function based on latency and memory 10:**end for** 11: p ∗ ← arg min C (p) p ∈ Pos c 12: O ← O [ c → p ∗ ] 13:**end for** O 14:**return**",
+   "translation": "**Require:** 含缓存算子的计算图 G = (V, E) **Require:** 各算子 v ∈ V 的执行代价 C_comp(v) **Require:** 各缓存算子 c 的传输代价 C_trans(c) **Ensure:** 精化后的执行序 O 1: O ← topo(G) 2: C ← { c ∈ O | c 为独立缓存算子 } 3: **for** 每个 c ∈ C **do** 4: u ← c 的首个消费者 5: Pos_c ← c 在 O 中的可行位置集合 6: **for** 每个 p ∈ Pos_c **do** 7: T_trans(c, p) ← 在位置 p 的传输完成时间 8: L_overlap(c, p) ← 与 u 之前计算的重叠量 9: C(p) ← 基于时延与内存的代价函数 10: **end for** 11: p* ← argmin_{p ∈ Pos_c} C(p) 12: O ← O[c → p*] 13: **end for** 14: **return** O",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S040",
+   "page": 8,
+   "type": "paragraph",
+   "role": null,
+   "order": 24,
+   "original_text": "The HyperOffload Framework introduces a suite of cache-related operators into MindIR, including *Prefetch *, *Store *, and *Detach *. These operators explicitly represent remote-to-device loading, device-to-remote eviction, and residency control, respectively. Unlike runtime-triggered memory operations, cache operators are directly embedded into the computation graph and actively participate in standard graph analyses, such as dependency inference and topological ordering. Each cache operator has well-defined semantics: a *Prefetch *operator asynchronously initiates data transfer from remote memory to device memory, ensuring correctness by enforcing completion before the first consumer; a *Store *operator safely releases device memory by transferring data back to remote storage; and a *Detach *operator marks tensors whose device residency can be relinquished. This operatorization transforms memory movement from an opaque side effect into a schedulable unit, enabling the compiler to reason jointly about computation and communication.",
+   "translation": "HyperOffload 框架向 MindIR 引入了一组缓存相关算子，包括 *Prefetch*、*Store* 与 *Detach*。它们分别显式表示远程到设备的加载、设备到远程的换出以及驻留控制。与运行时触发的内存操作不同，缓存算子被直接嵌入计算图，并积极参与依赖推断、拓扑排序等标准图分析。每个缓存算子都有明确定义的语义：*Prefetch* 算子异步发起从远程内存到设备内存的数据传输，并强制在首个消费者之前完成以保证正确性；*Store* 算子把数据传回远程存储，从而安全释放设备内存；*Detach* 算子标记那些可以放弃设备驻留的张量。这种算子化把内存搬运从不可见的副作用变成可调度的单元，使编译器能够对计算与通信进行联合推理。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S042",
+   "page": 8,
+   "type": "paragraph",
+   "role": null,
+   "order": 25,
+   "original_text": "Once cache operations are explicitly represented, the compiler can determine when and where to insert them. During graph compilation, HyperOffload Framework analyzes tensor lifetimes and future access patterns to identify data that will be required by upcoming operators but need not remain resident in device memory continuously. Based on this analysis, *Prefetch *operators are automatically inserted ahead of their first use, allowing data to be transferred asynchronously from remote memory before it is consumed. Because prefetching is performed at compile time, the framework can plan memory movement across operator boundaries rather than reacting to runtime memory pressure. This design eliminates the need for conservative, on-demand loading strategies that often expose communication latency on the critical path.",
+   "translation": "缓存操作一旦被显式表示，编译器就能决定在何时、何处插入它们。图编译期间，HyperOffload 框架分析张量生存期与未来访问模式，找出将被后续算子使用、但不必持续驻留设备内存的数据。基于该分析，*Prefetch* 算子被自动插入到首次使用之前，使数据在被消费前就从远程内存异步传输过来。由于预取发生在编译期，框架可以跨算子边界规划内存搬运，而不是被动应对运行时内存压力。这一设计免除了保守的按需加载策略——后者往往把通信时延暴露在关键路径上。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S044",
+   "page": 8,
+   "type": "paragraph",
+   "role": null,
+   "order": 26,
+   "original_text": "Although operatorized remote cache management enables asynchronous data movement, its effectiveness critically depends on when cache operators are executed. In MindIR, the execution order among operators without explicit data dependencies is not fixed and may vary across runs. Such nondeterminism can significantly impact both memory footprint and performance, especially when remote memory operations are involved. HyperOffload Framework addresses this challenge through Graph-Driven Execution-Order Optimization, a compiler-driven optimization that refines the relative order of independent operators based on graph-level analysis. This optimization achieves just-in-time prefetching and maximizes communication–computation overlap, without introducing artificial dependencies or modifying the original computation graph. Algorithm 1 summarizes the compiler procedure used in Graph-Driven Execution-Order Optimization. Starting from a valid topological order, the algorithm evaluates multiple feasible positions for each cache operator using a cost model that captures both memory residency duration and exposed communication latency, and selects a placement that best aligns data availability with its first use.",
+   "translation": "算子化的远程缓存管理虽然实现了异步数据搬运，但其效果关键取决于缓存算子何时执行。在 MindIR 中，无显式数据依赖的算子之间的执行顺序并不固定，可能随运行而变。这种不确定性会显著影响内存占用与性能，在涉及远程内存操作时尤甚。HyperOffload 框架通过图驱动执行序优化应对该挑战：这是一种由编译器驱动的优化，基于图级分析精化独立算子的相对顺序。该优化在不引入人为依赖、不修改原始计算图的前提下，实现即时预取并最大化通信-计算重叠。Algorithm 1 概括了图驱动执行序优化的编译流程。从一个合法拓扑序出发，算法用同时刻画内存驻留时长与暴露通信时延的代价模型，评估每个缓存算子的多个可行位置，并选出能让数据可用性与首次使用最佳对齐的放置。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S045",
+   "page": 9,
+   "type": "paragraph",
+   "role": null,
+   "order": 27,
+   "original_text": "remote memory and how cache prefetch, store, and detach operations are exposed to users. Both explicit API calls and JIT-based static graph annotations are shown, illustrating flexible and unified interfaces for hierarchical memory management.",
+   "translation": "远程内存，以及缓存 prefetch、store、detach 操作如何暴露给用户。图中同时展示了显式 API 调用与基于 JIT 的静态图注解两种方式，说明分层内存管理的接口既灵活又统一。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S047",
+   "page": 9,
+   "type": "paragraph",
+   "role": null,
+   "order": 28,
+   "original_text": "A main design goal of the HyperOffload Framework is to add hierarchical memory management without adding programming effort for users. The framework integrates into existing MindSpore workflows so that users can keep their current scripts and preserve both productivity and model portability. Figure 5 shows three ways to use hierarchical memory in MindSpore. As shown in Figure 5(a), a standard MindSpore model can run with unmodified user scripts. Users do not write any code for memory placement, offloading, or prefetching. In this default mode, they only see the usual MindSpore abstractions, and hierarchical memory is completely transparent at the programming level. In this automatic mode, hierarchical memory operations such as cache prefetching, offloading, and device detachment are inferred and inserted during JIT compilation. The compiler analyzes the computation graph, tensor lifetimes, and execution dependencies, then inserts cache operators and chooses their execution order. From the user’s point of view, remote memory behaves like an extension of device memory, and model definitions as well as training and inference scripts remain unchanged. For workloads that need more control, SuperNode also provides optional interfaces for expert users, as shown in Figure 5(b). Through explicit cache management APIs, expert users can mark selected parameters to reside in remote memory and insert cache *Load *, *Store *, or *Detach *operations by hand. These interfaces let domain experts tune prefetch distance, keep critical tensors in device memory, and adjust cache behavior in performance-sensitive regions, while preserving the original computation semantics. To balance flexibility and ease of programming, the framework further supports a unified programming model based on JIT annotations, shown in Figure 5(c). In this mode, users attach high-level memory hints to computation nodes, and the compiler turns these hints into static graph transformations and cache operators. This model unifies dynamic and static graph programming styles, and it allows expert tuning without direct manipulation of low-level memory operations. Overall, this non-intrusive design lets users adopt hierarchical memory in a gradual and safe way in production environments. General users gain higher memory efficiency and stable performance without rewriting models. Expert users can still tune memory behavior when needed. By separating memory management from model logic, the HyperOffload Framework provides both ease of use and room for optimization.",
+   "translation": "HyperOffload 框架的一个主要设计目标是：在不给用户增加编程负担的前提下加入分层内存管理。框架集成进现有 MindSpore 工作流，用户可以保持现有脚本，兼顾生产效率与模型可移植性。Figure 5 展示了在 MindSpore 中使用分层内存的三种方式。如 Figure 5(a) 所示，标准的 MindSpore 模型可以在不做任何修改的用户脚本上运行：用户不需要为内存放置、卸载或预取编写任何代码。在这个默认模式下，用户看到的仍是通常的 MindSpore 抽象，分层内存在编程层面完全透明。在该自动模式下，缓存预取、卸载、设备驻留释放等分层内存操作在 JIT 编译期间被推断并插入。编译器分析计算图、张量生存期与执行依赖，继而插入缓存算子并选定其执行顺序。在用户视角下，远程内存就像设备内存的延伸，模型定义与训练/推理脚本保持不变。对于需要更强控制力的负载，SuperNode 还为专家用户提供可选接口，如 Figure 5(b) 所示。通过显式缓存管理 API，专家用户可以指定将哪些参数驻留远程内存，并手工插入缓存 *Load*、*Store* 或 *Detach* 操作。这些接口允许领域专家调节预取距离、让关键张量留在设备内存、在性能敏感区域调整缓存行为，同时保持原有计算语义。为了在灵活性与易用性之间取得平衡，框架还支持基于 JIT 注解的统一编程模型，如 Figure 5(c) 所示。在该模式下，用户为计算节点附加高层内存提示，编译器把这些提示转换为静态图变换与缓存算子。这",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S049",
+   "page": 9,
+   "type": "paragraph",
+   "role": null,
+   "order": 29,
+   "original_text": "This section presents two case studies to demonstrate how the HyperOffload Framework improves memory efficiency and performance on practical workloads. These memory-intensive scenarios show the limitations of runtime-based memory management and the benefits of our graph-based approach.",
+   "translation": "本节给出两个案例研究，展示 HyperOffload 框架在实际负载上如何提升内存效率与性能。这些内存密集型场景既暴露了基于运行时的内存管理的局限，也体现了我们图驱动方法的优势。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S051",
+   "page": 10,
+   "type": "paragraph",
+   "role": null,
+   "order": 30,
+   "original_text": "Training workloads show complex memory usage patterns across different execution phases. Beyond model parameters, a large portion of device memory is used by forward activations and optimizer states. These tensors have different lifetimes and access patterns, which makes them good targets for hierarchical memory management. **Activation Tensors in Forward and Backward Propagation.**During forward propagation, activation tensors are produced one by one and kept in memory until they are needed by the corresponding backward operators. In deep networks, especially those with large hidden dimensions or long sequences, these activations account for most of the peak device memory usage. In conventional runtime-driven systems, activation tensors stay in device memory until backward computation starts, or they are offloaded only when memory runs out. These reactive approaches lack global knowledge of future access, so data transfers often happen too late and stall backward computation. The SuperNode AI Framework analyzes activation tensor lifetimes at compile time and uses cache operators in the computation graph to control their movement. Activations that are not needed immediately are offloaded to remote memory using Store operators. Prefetch operators are inserted before the backward operators that will consume them. Note that activations with very short lifetimes or fine-grained access patterns are not good candidates for remote caching, because transfer overhead can outweigh the memory savings. The scheduling algorithm in Algorithm 1 detects such cases at compile time and avoids offloading them. Execution order optimization schedules prefetches inside computation-heavy regions of the backward pass, so data transfer finishes before the data is used. Such an approach reduces peak activation memory by tens of percent for representative transformer training workloads, while end-to-end iteration time stays the same. **Optimizer State Management.**Optimizer states, such as momentum and variance buffers, present a different problem. These tensors persist across training iterations, but they are accessed only during parameter update phases and sit idle for most of the iteration. Traditional training pipelines keep optimizer states in device memory to avoid repeated transfer overhead. This leads to high steady-state memory consumption, especially for large models with multiple optimizer states per parameter. SuperNode treats optimizer states as long-lived but infrequently accessed tensors. After each update phase, optimizer states are offloaded to remote memory and prefetched back before the next update. Because parameter updates are usually preceded by a computation-heavy backward pass, execution order orchestration allows optimizer state prefetching to overlap fully with gradient computation. As a result, optimizer states contribute very little to peak device memory usage while preserving update throughput. However, when update phases are short or mixed with light computation, the framework may choose to keep optimizer states in device memory to avoid unnecessary transfers.",
+   "translation": "训练负载在不同执行阶段呈现出复杂的内存使用模式。除模型参数外，设备内存的很大一部分被前向激活和优化器状态占用。这些张量具有不同的生命周期和访问模式，因而是分层内存管理的理想目标。**前向与反向传播中的激活张量。**前向传播过程中，激活张量被逐一生成并保存在内存中，直到相应的反向算子需要它们为止。在深层网络中，尤其是隐藏维度较大或序列较长的网络，这些激活占据了设备峰值内存占用的大部分。在传统运行时驱动系统中，激活张量会一直留在设备内存中直到反向计算开始，或者只有在内存耗尽时才被卸载。这类被动式方法缺乏对未来访问的全局认知，数据传输往往启动过晚，从而阻塞反向计算。超节点 AI 框架在编译期分析激活张量的生命周期，并利用计算图中的缓存算子控制其移动。无需立即使用的激活通过 Store 算子卸载到远端内存。预取算子则被插入到将要消费这些激活的反向算子之前。值得注意的是，生命周期极短或访问模式高度细粒度的激活并不适合远端缓存，因为传输开销可能超过节省的内存收益。Algorithm 1 中的调度算法在编译期即可检测出此类情况并避免对其进行卸载。执行序优化将预取调度到反向传播中计算密集的区域内部，使数据传输在数据被使用之前完成。对于典型的 transformer 训练负载，这种方法可将激活峰值内存降低数十个百分点，同时端到端迭代时间保持不变。**优化器状态管理。**优化器状态（如动量与方差缓冲区）则呈现出另一类问题。这些张量在整个训练迭代间持续存在，但仅在参数更新阶段被访问，在迭代的大部分时间内处于闲置状态。传统训练流水线将优化器状态保留在设备内存中，以避免反复传输的开销。这会导致较高的稳态内存消耗，对于每个参数带有多个优化器状态的大模型尤为明显。超节点将优化器状态视为生命周期长但访问频率低的张量。每轮更新阶段结束后，优化器状态被卸载到远端内存，并在下一次更新前预取回来。由于参数更新之前通常是计算密集的反向传播，执行序编排可以让优化器状态的预取与梯度计算完全重叠。因此，优化器状态对设备峰值内存占用的贡献微乎其微，同时保持了更新吞吐。不过，当更新阶段很短或与轻量计算混杂时，框架可能会选择将优化器状态保留在设备内存中，以避免不必要的传输。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S053",
+   "page": 10,
+   "type": "paragraph",
+   "role": null,
+   "order": 31,
+   "original_text": "Inference workloads, especially for LLMs, show different memory patterns compared to training. Instead of temporary activations, memory usage is driven by the accumulation and reuse of KV cache tensors during autoregressive decoding. **KV Cache Offloading in Autoregressive Inference.**In autoregressive inference, KV caches grow as the sequence length or batch size increases. These caches can quickly exceed device memory capacity, which limits throughput or prevents the model from handling long sequences. Current systems often manage KV caches using runtime eviction. When memory is full, the system swaps blocks to remote memory. This approach has two main problems. First, eviction and reload decisions are made locally without a global view of future access. Second, reloading KV cache blocks often happens on the critical path of token generation, which exposes the high latency of remote memory. The SuperNode AI Framework solves these issues by representing KV cache movement as explicit operators in the computation graph. Because KV cache access across decoding steps is highly regular, the compiler can predict future usage and insert Prefetch operators before the attention computation. The framework then schedules these transfers to overlap with other operations in the decoding pipeline, such as embedding lookups and projections. Through this graph-driven execution-order optimization, KV cache offloading becomes proactive rather than reactive. Remote memory latency is effectively hidden. This design allows the system to support longer context lengths and larger batch sizes while maintaining high inference throughput.",
+   "translation": "推理负载（尤其是 LLM 推理）呈现出与训练不同的内存模式。内存使用不再由临时激活主导，而是由自回归解码过程中 KV 缓存张量的积累与复用所驱动。**自回归推理中的 KV 缓存卸载。**在自回归推理中，KV 缓存随序列长度或批大小的增长而不断增大。这些缓存可能迅速超出设备内存容量，从而限制吞吐，或使模型无法处理长序列。现有系统通常采用运行时驱逐机制管理 KV 缓存：当内存被填满时，系统将数据块换出到远端内存。这种方式存在两个主要问题。其一，驱逐与重载决策是在局部做出的，缺乏对未来访问的全局视野。其二，KV 缓存块的重载往往发生在 token 生成的关键路径上，使远端内存的高时延直接暴露出来。超节点 AI 框架通过将 KV 缓存的移动表示为计算图中的显式算子来解决这些问题。由于各解码步之间的 KV 缓存访问高度规律，编译器能够预测其未来使用情况，并在注意力计算之前插入预取算子。随后，框架调度这些传输，使其与解码流水线中的其他操作（如 embedding 查找和投影）重叠执行。借助这种图驱动的执行序优化，KV 缓存卸载从被动应对转变为主动规划，远端内存时延因此被有效隐藏。该设计使系统在保持高推理吞吐的同时，能够支持更长的上下文长度和更大的批大小。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S055",
+   "page": 11,
+   "type": "paragraph",
+   "role": null,
+   "order": 32,
+   "original_text": "The proposed HyperOffload Framework integrates hierarchical memory management into MindSpore [24] by extending its memory abstraction, operator interfaces, and compilation flow. By operatorizing heterogeneous memory operations and exposing them via automatic and explicit mechanisms, this design enables graph-level memory optimization while strictly preserving compatibility with existing execution semantics. **Remote Memory Management.**The implementation introduces a remote memory pool logically distinct from host memory and device HBM. This pool is directly accessible by NPUs via DMA-capable links and acts as persistent storage for large states, including weights, optimizer states, gradients, and activations. Crucially, introducing remote memory allows for direct Remote-to-Device (R2D) and Device-to-Remote (D2R) transfers, bypassing necessary data staging through the host. **Unified Memory Primitives.**To manage the extended hierarchy, core memory operations are abstracted into a set of explicit data movement primitives: Host-to-Remote (H2R), Remote-to-Host (R2H), R2D, D2R, and Device-to- Device (D2D) transfers. These primitives are lowered to asynchronous DMA operations and are synchronized using MindSpore’s native stream model. Collective operations, such as AllReduce, are adapted to aggregate device-local updates before committing results back to the remote pool. **Cache Operators in MindIR.**Cache-related interactions are exposed as native operators within the MindIR graph representation. Operations like cache loading, storing, and detachment are compiled into graph nodes and executed using the unified memory primitives. This design ensures that remote memory scheduling and synchronization are managed within the existing graph execution framework, eliminating the need for special-case runtime logic. **User Programming Model.**The framework supports both explicit and implicit usage. In the explicit mode, expert users can annotate parameters or tensors for remote residency and invoke cache operations programmatically. These annotations are captured during graph construction, resulting in corresponding cache operators in the final compiled graph, facilitating fine-grained control and debugging. For standard workloads, the automatic mode requires zero modification to user scripts. By enabling hierarchical memory support at the graph level, the compiler automatically identifies eligible tensors (e.g., large model weights) and inserts necessary load/store operations during static compilation. This grants existing models transparent access to remote memory benefits without altering training or inference logic. Overall, the implementation demonstrates that extending existing compiler and operator abstractions is sufficient to integrate hierarchical memory into a production deep learning framework. By aligning memory operations directly with MindSpore’s graph execution model, the HyperOffload Framework achieves practical deployability on SuperNode systems while maintaining a clean and extensible software architecture.",
+   "translation": "所提出的 HyperOffload 框架通过扩展 MindSpore [24] 的内存抽象、算子接口与编译流程，将分层内存管理集成其中。通过将异构内存操作算子化，并以自动与显式两种机制将其暴露出来，该设计在实现图级内存优化的同时，严格保持与现有执行语义的兼容。**远端内存管理。**实现中引入了一个在逻辑上独立于主机内存和设备 HBM 的远端内存池。该内存池可由 NPU 通过具备 DMA 能力的链路直接访问，并作为大状态（包括权重、优化器状态、梯度和激活）的持久存储。关键在于，引入远端内存后可以实现远端到设备（R2D）与设备到远端（D2R）的直接传输，从而绕开了原本必须经由主机进行的数据中转。**统一内存原语。**为管理这一扩展的内存层级，核心内存操作被抽象为一组显式的数据移动原语：主机到远端（H2R）、远端到主机（R2H）、R2D、D2R 以及设备到设备（D2D）传输。这些原语会被 lowering 为异步 DMA 操作，并使用 MindSpore 原生的流模型进行同步。AllReduce 等集合操作也做了适配，先聚合设备本地的更新，再将结果写回远端内存池。**MindIR 中的缓存算子。**与缓存相关的交互以原生算子的形式暴露在 MindIR 图表示中。缓存加载、存储与分离等操作被编译为图节点，并使用统一内存原语执行。该设计确保远端内存的调度与同步都在现有图执行框架内管理，无需引入特例化的运行时逻辑。**用户编程模型。**该框架同时支持显式与隐式两种使用方式。显式模式下，专家用户可以对参数或张量标注远端驻留属性，并以编程方式调用缓存操作。这些标注在构图阶段被捕获，最终在编译产物中生成相应的缓存算子，便于细粒度控制与调试。对于标准负载，自动模式无需对用户脚本做任何修改：通过在图级别启用分层内存支持，编译器会在静态编译期间自动识别符合条件的张量（如大模型权重），并插入必要的加载/存储操作。这使现有模型无需改动训练或推理逻辑，即可透明地获得远端内存带来的收益。总体而言，该实现表明，只需对现有编译器和算子抽象进行扩展，就足以将分层内存集成到生产级深度学习框架中。通过让内存操作与 MindSpore 的图执行模型直接对齐，HyperOffload 框架在保持软件架构简洁、可扩展的同时，实现了在超节点系统上的实际可部署性。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S058",
+   "page": 11,
+   "type": "paragraph",
+   "role": null,
+   "order": 33,
+   "original_text": "**Platform.**The experiments are conducted on the Ascend 910C NPU platform using a single-node multi-card con-figuration, with a typical setup of one node equipped with eight NPUs. Both training and inference are performed in MindSpore static graph mode, with hierarchical memory–related compilation and runtime options enabled. In different experiments, varying D2H/H2D bandwidth conditions are emulated through configuration to analyze the impact of communication bandwidth on overall performance. **Networks and Tasks.**We evaluate the proposed approach using representative large-scale models, covering both training and inference scenarios: a) Training: LLaMA-8B [23] and DeepSeek-V3 [25] models. b) Inference: DeepSeek- V3 integrated with the NSA (sparse attention) algorithm, with a focus on KV cache offloading and long-sequence capability. **Baseline.**All baselines are implemented using the native MindSpore framework without enabling hierarchical memory or execution-order optimization: a) In the training scenario, baseline models rely on parallelism strategies and activation recomputation to satisfy memory constraints, without heterogeneous offloading or communication–computation overlap. b) In the inference scenario, all KV caches reside entirely in device memory, and remote memory pools are disabled. c) In the high-availability scenario, traditional checkpoint-based mechanisms are used for model backup and recovery.",
+   "translation": "**平台。**实验在昇腾（Ascend）910C NPU 平台上进行，采用单节点多卡配置，典型设置为每个节点配备八张 NPU。训练与推理均在 MindSpore 静态图模式下执行，并启用分层内存相关的编译与运行时选项。不同实验中通过配置模拟不同的 D2H/H2D 带宽条件，以分析通信带宽对整体性能的影响。**网络与任务。**我们使用具有代表性的大规模模型评估所提方法，覆盖训练与推理两类场景：a) 训练：LLaMA-8B [23] 与 DeepSeek-V3 [25] 模型；b) 推理：集成 NSA（稀疏注意力）算法的 DeepSeek-V3，重点关注 KV 缓存卸载与长序列能力。**基线。**所有基线均使用原生 MindSpore 框架实现，不启用分层内存与执行序优化：a) 训练场景中，基线模型依靠并行策略与激活重计算满足内存约束，不使用异构卸载，也不做通信与计算重叠；b) 推理场景中，所有 KV 缓存完全驻留在设备内存中，且禁用远端内存池；c) 高可用场景中，采用传统的基于 checkpoint 的机制进行模型备份与恢复。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S059",
+   "page": 12,
+   "type": "paragraph",
+   "role": null,
+   "order": 34,
+   "original_text": "per-step execution time into exposed D2H communication, overlapped D2H communication, and computation/other overheads. Results are shown for (a) LLaMA-8B [23] and (b) DeepSeek-V3 [25]. As the D2H bandwidth increases, exposed communication is progressively eliminated through execution-order optimization.",
+   "translation": "每步执行时间分解为暴露的 D2H 通信、已重叠的 D2H 通信以及计算/其他开销。结果分别针对 (a) LLaMA-8B [23] 和 (b) DeepSeek-V3 [25] 给出。随着 D2H 带宽增大，暴露的通信通过执行序优化被逐步消除。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S061",
+   "page": 12,
+   "type": "paragraph",
+   "role": null,
+   "order": 35,
+   "original_text": "The training experiments evaluate the performance and memory benefits of hierarchical memory in large-scale model training. Our goal is to significantly reduce end-to-end training latency, while achieving additional performance gains when sufficient Host–Device bandwidth is available. We analyze the effectiveness of the proposed approach by examining performance trends under varying bandwidth conditions and comparing end-to-end training latency across different models.",
+   "translation": "训练实验评估分层内存在大规模模型训练中的性能与内存收益。我们的目标是显著降低端到端训练时延，并在可用主机–设备带宽充足时进一步获得额外性能提升。我们通过考察不同带宽条件下的性能趋势，并跨模型比较端到端训练时延，来分析所提方法的有效性。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S063",
+   "page": 12,
+   "type": "paragraph",
+   "role": null,
+   "order": 36,
+   "original_text": "We first evaluate the training performance of LLaMA-8B under baseline configurations, as summarized in Table 1. Due to limited device memory capacity, baseline Config No.1 frequently triggers memory defragmentation during training, resulting in substantially increased end-to-end step time. Therefore, all subsequent comparisons are conducted against baseline Config No.2, which exhibits more stable performance. After enabling hierarchical memory, LLaMA-8B is trained with a data parallelism / tensor parallelism / pipeline parallelism configuration of 8/1/1, a batch size of 2, and a global batch size (GBS) of 16. Figure 6(a) shows the end-to-end step time breakdown and relative performance of LLaMA-8B under different D2H bandwidths. By offloading activations and a subset of parameters to remote memory and applying execution-order optimization to overlap communication with computation, the hierarchical memory approach significantly reduces end-to-end training latency. Under the measured D2H bandwidth of 33.6 GB/s, the hierarchical memory configuration achieves performance comparable to the baseline. As the bandwidth increases to the range of 40–70 GB/s, the end-to-end training performance improves by approximately 5.7%–21.5% over the baseline. These results indicate that execution-order optimization effectively prevents performance degradation under bandwidth-constrained conditions, while additional bandwidth enables further hiding of communication overhead and unlocks greater performance improvements.",
+   "translation": "我们首先评估 LLaMA-8B 在基线配置下的训练性能，结果汇总于 Table 1。受设备内存容量所限，基线配置 1（Config No.1）在训练期间频繁触发内存碎片整理，导致端到端步时间显著增加。因此，后续所有对比均以性能更稳定的基线配置 2（Config No.2）为参照。启用分层内存后，LLaMA-8B 采用数据并行/张量并行/流水线并行（DP/TP/PP）为 8/1/1 的配置训练，批大小为 2，全局批大小（GBS）为 16。Figure 6(a) 展示了 LLaMA-8B 在不同 D2H 带宽下的端到端步时间分解与相对性能。分层内存方法通过将激活和一部分参数卸载到远端内存，并利用执行序优化使通信与计算重叠，显著降低了端到端训练时延。在实测 33.6 GB/s 的 D2H 带宽下，分层内存配置取得了与基线相当的性能。当带宽提升至 40–70 GB/s 区间时，端到端训练性能较基线提升约 5.7%–21.5%。这些结果表明：执行序优化在带宽受限条件下有效避免了性能下降，而更充裕的带宽则能进一步隐藏通信开销，释放更大的性能提升空间。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S065",
+   "page": 12,
+   "type": "paragraph",
+   "role": null,
+   "order": 37,
+   "original_text": "We then evaluate the training performance of the larger DeepSeek-V3 model. Its baseline configuration and performance are reported in Table 2, with an end-to-end step time of approximately 2500 ms.",
+   "translation": "随后我们评估规模更大的 DeepSeek-V3 模型的训练性能。其基线配置与性能见 Table 2，端到端步时间约为 2500 ms。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S066",
+   "page": 13,
+   "type": "paragraph",
+   "role": null,
+   "order": 38,
+   "original_text": "With hierarchical memory enabled, DeepSeek-V3 is trained using a DP / TP / PP / EP configuration of 8/1/1/4, a batch size of 2, and a global batch size of 16. Figure 6(b) presents the end-to-end training performance of DeepSeek-V3 under varying D2H bandwidths. Compared to LLaMA-8B, DeepSeek-V3 has a larger parameter count and higher computational intensity. In this setting, hierarchical memory consistently delivers stable and scalable performance benefits, reducing end-to-end training latency by approximately 2%–12.3% across different bandwidth configurations. Owing to the higher compute density, communication overhead is more easily hidden by computation, enabling noticeable performance gains even under moderate bandwidth conditions. Overall, the training results demonstrate that hierarchical memory combined with execution-order optimization ef-fectively alleviates device memory pressure during large-model training while preserving numerical correctness and execution stability. Moreover, the proposed approach significantly improves the robustness of training performance to Host–Device bandwidth variations, allowing the system to scale efficiently across diverse hardware interconnect capabilities.",
+   "translation": "启用分层内存后，DeepSeek-V3 采用 DP/TP/PP/EP 为 8/1/1/4 的配置训练，批大小为 2，全局批大小为 16。Figure 6(b) 给出了 DeepSeek-V3 在不同 D2H 带宽下的端到端训练性能。与 LLaMA-8B 相比，DeepSeek-V3 参数量更大、计算强度更高。在该设置下，分层内存始终带来稳定且可扩展的性能收益，在不同带宽配置下将端到端训练时延降低约 2%–12.3%。得益于更高的计算密度，通信开销更容易被计算掩盖，即使在中等带宽条件下也能获得明显的性能提升。总体来看，训练结果表明分层内存与执行序优化相结合，能够在保持数值正确性与执行稳定性的同时，有效缓解大模型训练期间的设备内存压力。此外，所提方法显著提升了训练性能对主机–设备带宽变化的鲁棒性，使系统能够在多样的硬件互连能力之间高效扩展。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S068",
+   "page": 13,
+   "type": "paragraph",
+   "role": null,
+   "order": 39,
+   "original_text": "The inference experiments focus on evaluating the impact of hierarchical memory on KV cache management and long-context inference capability. We primarily examine GPU memory footprint, the maximum supported sequence length, and end-to-end inference latency.",
+   "translation": "推理实验重点评估分层内存对 KV 缓存管理与长上下文推理能力的影响。我们主要考察 GPU 内存占用、可支持的最大序列长度以及端到端推理时延。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S070",
+   "page": 13,
+   "type": "paragraph",
+   "role": null,
+   "order": 40,
+   "original_text": "In the DeepSeek-V3 + NSA setting, offloading the entire KV cache to remote memory reduces peak device memory usage by approximately 26%, which closely matches the KV cache size itself. As a result, under the same hardware configuration, the maximum supported sequence length increases from around 71k tokens to 123k tokens, substantially enhancing long-context inference capability. As summarized in Table 3, the reduction in peak device memory closely corresponds to the KV cache size, confirming that KV cache offloading is the primary contributor to memory savings and long-context capability expansion.",
+   "translation": "在 DeepSeek-V3 + NSA 设置下，将全部 KV 缓存卸载到远端内存可使设备峰值内存占用降低约 26%，与 KV 缓存本身的规模高度吻合。因此，在相同硬件配置下，可支持的最大序列长度从约 71k tokens 提升到 123k tokens，显著增强了长上下文推理能力。如 Table 3 所汇总，设备峰值内存的降幅与 KV 缓存规模密切对应，证实 KV 缓存卸载是内存节省与长上下文能力扩展的主要来源。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S072",
+   "page": 13,
+   "type": "paragraph",
+   "role": null,
+   "order": 41,
+   "original_text": "In long-sequence inference scenarios where device memory utilization approaches its capacity limit, the baseline implementation—where the KV cache fully resides in device memory—frequently triggers memory defragmentation, leading to significant performance degradation during the prefill phase. In contrast, the hierarchical memory approach eliminates the conditions that cause defragmentation by offloading the KV cache to remote memory. As shown in Table 4, the number of defragmentation events is reduced from dozens to zero, resulting in a prefill latency reduction of approximately 23% and an overall end-to-end inference latency reduction of about 13.8%. These results indicate that, under severe memory pressure in long-sequence inference, hierarchical memory substantially improves system stability and effectively avoids performance degradation induced by memory management overheads.",
+   "translation": "在设备内存利用率逼近容量上限的长序列推理场景中，KV 缓存完全驻留设备内存的基线实现会频繁触发内存碎片整理，导致 prefill 阶段性能显著下降。相比之下，分层内存方法通过将 KV 缓存卸载到远端内存，从根本上消除了引发碎片整理的条件。如 Table 4 所示，碎片整理次数从数十次降为零，prefill 时延降低约 23%，端到端整体推理时延降低约 13.8%。这些结果表明，在长序列推理的严苛内存压力下，分层内存能显著提升系统稳定性，有效避免内存管理开销引发的性能劣化。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S074",
+   "page": 13,
+   "type": "paragraph",
+   "role": null,
+   "order": 42,
+   "original_text": "For typical short-sequence inference workloads with relatively low memory pressure, the baseline and hierarchical memory approaches exhibit comparable performance during the prefill stage, indicating that KV cache offloading does not introduce noticeable overhead along the forward computation path. As shown in Table 5, the prefill latency",
+   "translation": "对于内存压力相对较低的典型短序列推理负载，基线与分层内存方法在 prefill 阶段性能相当，表明 KV 缓存卸载并未在前向计算路径上引入可察觉的开销。如 Table 5 所示，prefill 时延",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S075",
+   "page": 14,
+   "type": "paragraph",
+   "role": null,
+   "order": 43,
+   "original_text": "differs by less than 1% between the two configurations. However, during the decode stage, the hierarchical memory scheme incurs a more pronounced performance slowdown when sparse block granularity is increased. Specifically, the decode latency increases from 0.117 s to 0.146 s, corresponding to a relative slowdown of approximately 25.5%. This overhead primarily stems from CPU-side execution of partial KV cache updates and sparse block processing. Despite the increased decode latency, the impact on end-to-end inference performance remains minimal: the overall end-to-end latency differs by only 0.15% between the baseline and hierarchical memory configurations. This result suggests that, even under unfavorable block-size settings, the additional decode overhead accounts for only a small fraction of the total inference time and is therefore acceptable given the substantial memory savings and long-context capability gains enabled by hierarchical memory.",
+   "translation": "在两种配置之间的差异小于 1%。但在 decode 阶段，当稀疏块粒度增大时，分层内存方案出现了更明显的性能下降。具体而言，decode 时延从 0.117 s 增加到 0.146 s，相对变慢约 25.5%。该开销主要源于部分 KV 缓存更新与稀疏块处理在 CPU 侧执行。尽管 decode 时延有所增加，其对端到端推理性能的影响仍然很小：基线与分层内存配置的端到端整体时延仅相差 0.15%。这一结果表明，即便在不利的块大小设置下，额外的 decode 开销也只占总推理时间的一小部分；考虑到分层内存带来的可观内存节省与长上下文能力收益，这一开销是可以接受的。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S077",
+   "page": 14,
+   "type": "paragraph",
+   "role": null,
+   "order": 44,
+   "original_text": "When the size of sparse blocks (e.g., selection or sliding blocks) increases significantly, CPU computation and memory copy overheads during the decode stage rise noticeably, leading to further performance degradation. This observation suggests that inference performance under hierarchical memory is closely tied to the granularity of sparse structures. Future optimizations may further mitigate this overhead through data parallelism or finer-grained scheduling strategies.",
+   "translation": "当稀疏块（如 selection 块或 sliding 块）的尺寸显著增大时，decode 阶段的 CPU 计算与内存拷贝开销明显上升，导致性能进一步下降。这一观察表明，分层内存下的推理性能与稀疏结构的粒度密切相关。未来的优化可通过数据并行或更细粒度的调度策略进一步缓解该开销。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S079",
+   "page": 14,
+   "type": "paragraph",
+   "role": null,
+   "order": 45,
+   "original_text": "Hierarchical memory management and memory optimization for large-scale deep learning workloads have been extensively studied across both training and inference scenarios [26, 27]. Existing approaches can be broadly categorized into runtime-driven memory offloading [28], graph-level optimization frameworks [29], and KV cache–specific techniques for large language models [30]. **Runtime-driven memory offloading and parallelism.**A large body of prior work focuses on reducing device memory pressure through runtime mechanisms such as parameter and activation offloading, recomputation, and distributed parallelism. Techniques including ZeRO [9], activation checkpointing [31, 32], pipeline parallelism [14], and hybrid parallel strategies [33] aim to trade communication or computation overhead for reduced memory footprint. These methods are effective in practice but fundamentally operate at the runtime level, relying on reactive decisions based on instantaneous memory usage. As a result, they lack global visibility into future computation and data access patterns, often leading to suboptimal communication overlap, memory fragmentation, and unstable performance under tight memory constraints. **Graph-level and compiler-based memory optimization.**Recent research has explored compiler-assisted memory planning, where tensor lifetimes and memory allocation are analyzed statically to reduce peak memory usage [31, 34]. Systems such as static memory planners and graph schedulers leverage compile-time information to reuse buffers, reorder operators, or insert recomputation points [31]. While these approaches provide stronger determinism than runtime-only methods, most existing designs assume a single-level device memory model and do not explicitly incorporate heterogeneous or remote memory tiers into the computation graph. Consequently, communication with remote memory remains opaque to the compiler and cannot be systematically optimized or overlapped with computation. **KV cache optimization for LLM inference.**For inference workloads, especially large language models, a growing line of work targets the KV cache bottleneck. Techniques such as grouped-query attention (GQA) [35], multi-query attention (MQA) [36], KV cache compression [37], eviction policies (e.g., H2O) [38], and sparse attention mechanisms",
+   "translation": "面向大规模深度学习负载的分层内存管理与内存优化，已在训练和推理两类场景中得到广泛研究 [26, 27]。现有方法大致可分为运行时驱动的内存卸载 [28]、图级优化框架 [29] 以及面向大语言模型的 KV 缓存专用技术 [30]。**运行时驱动的内存卸载与并行。**大量已有工作致力于通过运行时机制降低设备内存压力，包括参数与激活卸载、重计算以及分布式并行。ZeRO [9]、激活检查点 [31, 32]、流水线并行 [14] 以及混合并行策略 [33] 等技术，均以通信或计算开销换取更低的内存占用。这些方法在实践中行之有效，但本质上仍工作在运行时层面，依赖基于瞬时内存使用状况的被动决策。因此，它们对未来计算与数据访问模式缺乏全局可见性，往往导致通信重叠不充分、内存碎片化，以及内存约束紧张时的性能不稳定。**图级与基于编译器的内存优化。**近期研究探索了编译器辅助的内存规划，通过静态分析张量生命周期与内存分配来降低峰值内存占用 [31, 34]。静态内存规划器和图调度器等系统利用编译期信息复用缓冲区、重排算子或插入重计算点 [31]。虽然这些方法比纯运行时方法具有更强的确定性，但多数现有设计假设单层设备内存模型，并未将异构或远端内存层级显式纳入计算图。因此，与远端内存的通信对编译器而言仍不透明，无法被系统性地优化或与计算重叠。**LLM 推理的 KV 缓存优化。**对于推理负载（尤其是大语言模型），越来越多的工作聚焦于 KV 缓存瓶颈。分组查询注意力（GQA）[35]、多查询注意力（MQA）[36]、KV 缓存压缩 [37]、驱逐策略（如 H2O）[38] 以及稀疏注意力机制等技术",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S080",
+   "page": 15,
+   "type": "paragraph",
+   "role": null,
+   "order": 46,
+   "original_text": "(e.g., NSA) aim to reduce KV cache size or attention computation cost. These methods primarily focus on reducing memory capacity requirements or compute complexity, but they typically assume that KV caches reside in device memory or are managed by runtime eviction policies. When offloading is employed, KV cache transfers are often triggered on demand and lie directly on the critical path of decoding, exposing remote memory latency. **Comparison with our approach.**In contrast, HyperOffload explicitly incorporates remote memory operations as operators within the computation graph. By representing cache load, store, and detach actions as graph nodes, the framework enables global lifetime analysis and deterministic memory planning. This approach allows for the systematic overlap of communication and computation through execution-order refinement. Unlike techniques that reduce KV cache size or rely on reactive eviction policies, our approach focuses on the precise scheduling of model states and intermediate tensors across memory tiers. Consequently, remote memory accesses are proactively planned and overlapped with computation, rather than being triggered by runtime memory pressure. Furthermore, HyperOffload is orthogonal to model compression methods [39, 5]. While compression reduces the data footprint, our framework focuses on optimizing hierarchical memory interactions at the graph level.",
+   "translation": "（如 NSA）旨在缩减 KV 缓存规模或注意力计算开销。这些方法主要着眼于降低内存容量需求与计算复杂度，但它们通常假设 KV 缓存驻留在设备内存中，或由运行时淘汰策略管理。即便采用卸载，KV 缓存的搬运也往往是按需触发的，直接落在解码的关键路径上，从而暴露远程内存时延。**与本文方法的对比。**相反，HyperOffload 把远程内存操作显式地纳入计算图作为算子。通过把缓存 load、store、detach 动作表示为图节点，框架得以进行全局生存期分析与确定性的内存规划，并可通过执行序精化系统性地重叠通信与计算。与压缩 KV 缓存规模或依赖被动淘汰策略的技术不同，本文方法聚焦于跨内存层精确调度模型状态与中间张量。因此，远程内存访问是被主动规划并与计算重叠的，而非由运行时内存压力触发。此外，HyperOffload 与模型压缩方法 [39, 5] 正交：压缩缩减数据占用，本文框架则专注于在图层面优化分层内存交互。",
+   "confidence": "high",
+   "refs": []
+  },
+  {
+   "id": "S082",
+   "page": 15,
+   "type": "paragraph",
+   "role": null,
+   "order": 47,
+   "original_text": "This paper presents**HyperOffload**, a compiler-assisted hierarchical memory management framework that elevates remote memory operations to first-class operators in the computation graph. By operatorizing cache load and store actions and refining execution order at compile time, the framework enables deterministic memory planning and effective overlap of communication and computation. Experimental results show that the proposed approach substantially reduces device memory consumption, improves long-context inference capability, and delivers stable performance across training and inference workloads without requiring changes to user models. These results demonstrate that graph-level, compiler-aware memory management is a practical and effective foundation for fully exploiting emerging supernode architectures.",
+   "translation": "本文提出 **HyperOffload**——一个编译器辅助的分层内存管理框架，它把远程内存操作提升为计算图中的一等算子。通过算子化缓存 load/store 动作并在编译期精化执行序，框架实现了确定性的内存规划与有效的通信-计算重叠。实验结果表明：该方法显著降低设备内存消耗、提升长上下文推理能力，并在训练与推理负载上提供稳定性能，且无需修改用户模型。这些结果证明，图级的、编译器感知的内存管理是充分释放新兴超节点架构潜力的实用且有效的基础。",
+   "confidence": "high",
+   "refs": []
+  }
+ ],
+ "pages": [],
+ "figures": [
+  {
+   "id": "F001",
+   "page": 3,
+   "caption_id": "C001",
+   "image_path": "assets/fig01.png",
+   "placement_hint": "near_first_mention",
+   "placed_after": "S007",
+   "alt_text": "Figure 1: Motivation of graph-level remote memory scheduling. Runtime-driven dat"
+  },
+  {
+   "id": "F002",
+   "page": 4,
+   "caption_id": "C002",
+   "image_path": "assets/fig02.png",
+   "placement_hint": "near_first_mention",
+   "placed_after": "S016",
+   "alt_text": "Figure 2: SuperNode Hardware Architecture. Compared to (a) traditional SIMT-base"
+  },
+  {
+   "id": "F003",
+   "page": 5,
+   "caption_id": "C003",
+   "image_path": "assets/fig03.png",
+   "placement_hint": "near_first_mention",
+   "placed_after": "S025",
+   "alt_text": "Figure 3: Comparison of execution timelines under different compute–communicatio"
+  },
+  {
+   "id": "F004",
+   "page": 6,
+   "caption_id": "C004",
+   "image_path": "assets/fig04.png",
+   "placement_hint": "near_first_mention",
+   "placed_after": "S030",
+   "alt_text": "Figure 4: Comparison of Communication Overlap Strategies in Heterogeneous Offloa"
+  },
+  {
+   "id": "F005",
+   "page": 9,
+   "caption_id": "C005",
+   "image_path": "assets/fig05.png",
+   "placement_hint": "near_first_mention",
+   "placed_after": "S047",
+   "alt_text": "Figure 5: Hierarchical memory interface usage example. The figure demonstrates h"
+  },
+  {
+   "id": "F006",
+   "page": 12,
+   "caption_id": "C006",
+   "image_path": "assets/fig06.png",
+   "placement_hint": "near_first_mention",
+   "placed_after": "S063",
+   "alt_text": "Figure 6: End-to-end training step time breakdown under different D2H bandwidths"
+  }
+ ],
+ "equations": [],
+ "glossary": [
+  {
+   "term": "Unified Bus (UB)",
+   "translation": "统一总线（UB，灵衢）",
+   "note": "华为超节点统一互连总线"
+  },
+  {
+   "term": "supernode",
+   "translation": "超节点",
+   "note": ""
+  },
+  {
+   "term": "prefill",
+   "translation": "预填充",
+   "note": "保留英文"
+  },
+  {
+   "term": "decode",
+   "translation": "解码",
+   "note": ""
+  },
+  {
+   "term": "PDC disaggregation",
+   "translation": "prefill-解码-缓存分离",
+   "note": ""
+  },
+  {
+   "term": "expert parallelism",
+   "translation": "专家并行",
+   "note": ""
+  },
+  {
+   "term": "KV cache",
+   "translation": "KV 缓存",
+   "note": ""
+  },
+  {
+   "term": "MLA",
+   "translation": "多头潜在注意力",
+   "note": ""
+  },
+  {
+   "term": "MTP",
+   "translation": "多 token 预测",
+   "note": ""
+  },
+  {
+   "term": "TPOT",
+   "translation": "每 token 输出时间",
+   "note": ""
+  },
+  {
+   "term": "TTFT",
+   "translation": "首 token 时间",
+   "note": ""
+  },
+  {
+   "term": "microbatch",
+   "translation": "微批次",
+   "note": ""
+  },
+  {
+   "term": "AIV-direct",
+   "translation": "AIV 直连通信",
+   "note": ""
+  },
+  {
+   "term": "SDMA",
+   "translation": "SDMA（系统 DMA）",
+   "note": ""
+  },
+  {
+   "term": "FusedDispatch/FusedCombine",
+   "translation": "不译",
+   "note": "融合分发/合并算子"
+  },
+  {
+   "term": "EMS",
+   "translation": "弹性内存服务",
+   "note": ""
+  },
+  {
+   "term": "die",
+   "translation": "芯粒",
+   "note": ""
+  },
+  {
+   "term": "scale-up",
+   "translation": "纵向扩展",
+   "note": ""
+  },
+  {
+   "term": "UB plane",
+   "translation": "UB 平面",
+   "note": ""
+  },
+  {
+   "term": "operator",
+   "translation": "算子",
+   "note": ""
+  }
+ ]
+}

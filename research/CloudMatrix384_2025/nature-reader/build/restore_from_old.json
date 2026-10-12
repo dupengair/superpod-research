@@ -1,0 +1,161 @@
+[
+ {
+  "id": "S510",
+  "page": 4,
+  "type": "heading",
+  "role": null,
+  "order": 8,
+  "text": "1 Introduction",
+  "bbox": [
+   45.8,
+   87.0,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S008",
+  "page": 4,
+  "type": "paragraph",
+  "role": null,
+  "order": 8,
+  "text": "The landscape of large language models (LLMs) has undergone a dramatic transformation in recent years, driven by several defining trends: the exponential growth of parameter scales, the widespread adoption of mixture-of-experts (MoE) architectures, and the substantial extension of context lengths [33]. Modern LLMs such as DeepSeek-R1 [13], LLaMA-4 [39], and Qwen-3 [49] routinely scale to hundreds of billions or even trillions of parameters, placing unprecedented demands on compute power and memory capabilities. MoE models introduce structural sparsity by selectively activating a small subset of experts per token, enabling greater efficiency at scale while introducing new system-level challenges in expert routing and synchronization [18, 30, 34]. Simultaneously, context windows have expanded from tens of thousands to over a million tokens [21, 45], imposing immense strain on attention computation and key-value (KV) cache storage. The total KV cache capacity grows linearly with the number of concurrent users, placing significant constraints on how KV cache is distributed, placed, and accessed across the system to support efficient inference. These trends collectively cause intense pressure on AI infrastructure, requiring massive compute power, high memory capacity and bandwidth, intensive inter-chip communication, and stringent latency constraints, ultimately pushing conventional AI clusters to their scalability limits.",
+  "bbox": [
+   45.8,
+   87.0,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S512",
+  "page": 6,
+  "type": "heading",
+  "role": null,
+  "order": 19,
+  "text": "2 LLM Trends and Their Challenges for Datacenter Infrastructure",
+  "bbox": [
+   55.8,
+   146.8,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S515",
+  "page": 6,
+  "type": "paragraph",
+  "role": null,
+  "order": 0,
+  "text": "In this section, we first discuss recent trends in large language model (LLM) design that are shaping the landscape of AI computing (§2.1). We then present the corresponding system-level challenges these trends impose on conventional datacenter infrastructure (§2.2).",
+  "bbox": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S513",
+  "page": 8,
+  "type": "heading",
+  "role": null,
+  "order": 29,
+  "text": "3 Huawei CloudMatrix",
+  "bbox": [
+   45.8,
+   361.0,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S516",
+  "page": 8,
+  "type": "paragraph",
+  "role": null,
+  "order": 0,
+  "text": "To address these emerging challenges in AI workloads, Huawei proposes CloudMatrix, a next- generation AI datacenter architecture designed to reshape the foundation of AI infrastructure. This architectural vision centers on constructing a unified, tightly-coupled compute fabric that can efficiently support the scale, heterogeneity, and communication demands of modern AI applications. CloudMatrix384 represents the first production-grade realization of this vision, delivering a purpose- built platform optimized for large-scale AI workloads. This section begins by outlining the CloudMatrix vision (§3.1). We then provide an overview of the fully peer-to-peer hardware architecture of CloudMatrix384 (§3.2), followed by a breakdown of its core hardware components (§3.3). Next, we present the software stack that enables CloudMatrix deployment in Huawei Cloud (§3.4). Finally, we analyze its suitability for efficiently serving large- scale MoE models like DeepSeek-R1 (§3.5).",
+  "bbox": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S514",
+  "page": 17,
+  "type": "heading",
+  "role": null,
+  "order": 80,
+  "text": "4 DeepSeek Serving on Huawei CloudMatrix384",
+  "bbox": [
+   55.8,
+   283.2,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S500",
+  "page": 38,
+  "type": "heading",
+  "text": "5 Evaluations"
+ },
+ {
+  "id": "S501",
+  "page": 38,
+  "type": "paragraph",
+  "text": "In this section, we present a comprehensive performance evaluation for our proposed serving system CloudMatrix-Infer, previously detailed in §4, when deployed on the CloudMatrix384. We begin by outlining the common experimental setup used for our evaluation (§5.1). Subsequently, we analyze several key aspects of performance and efficacy: this includes the overall system performance (§5.2); the inference accuracy achieved with our INT8 quantization scheme (§5.3); an ablation study that"
+ },
+ {
+  "id": "S502",
+  "page": 48,
+  "type": "heading",
+  "text": "6 Discussions on Future Directions"
+ },
+ {
+  "id": "S503",
+  "page": 48,
+  "type": "paragraph",
+  "text": "The rapid evolution of AI models and their pervasive application continue to impose increasingly stringent demands on AI infrastructure. While CloudMatrix384 represents a major architectural milestone in scaling tightly-coupled AI computation, further evolution is necessary to meet the needs of emerging workloads. In this section, we discuss potential future directions for both the CloudMatrix architecture and the LLM serving systems built upon it, aiming to further enhance scalability, flexibility, efficiency, and performance."
+ },
+ {
+  "id": "S511",
+  "page": 53,
+  "type": "heading",
+  "role": null,
+  "order": 274,
+  "text": "7 Conclusion",
+  "bbox": [
+   45.8,
+   367.0,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S270",
+  "page": 53,
+  "type": "paragraph",
+  "role": null,
+  "order": 274,
+  "text": "In this paper, we introduce Huawei CloudMatrix, a next-generation AI datacenter architecture that embodies Huawei’s vision for advanced AI infrastructure. We specifically highlight Huawei CloudMatrix384, the first production-grade implementation of this innovative architectural concept. CloudMatrix384 is an AI supernode engineered to efficiently support large-scale AI workloads, featuring a fully peer-to-peer interconnected hardware design. It integrates 384 Ascend 910 NPUs and 192 Kunpeng CPUs interconnected via an ultra-high-bandwidth, low-latency Unified Bus (UB) network. This unique architecture facilitates dynamic resource pooling, streamlined memory management, and exceptional inter-node communication, effectively addressing the scalability and efficiency challenges common in traditional datacenter architecture.",
+  "bbox": [
+   45.8,
+   367.0,
+   0,
+   0
+  ],
+  "confidence": "high"
+ }
+]

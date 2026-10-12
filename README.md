@@ -35,6 +35,13 @@ AI 基础设施**超节点（Supernode / SuperPod）**方向的论文调研仓�
 │   │   ├── nature-paper-card/         #   16 节精读卡（paper-card + source_bundle + audit）
 │   │   ├── nature-paper-trans/        #   中文全文 PDF（文本排版替代产物 + 构建脚本）
 │   │   └── nature-paper-xray/         #   透视精读长文（研究路径/承重判断/公式微例/证据边界）
+│   ├── HyperOffload_2026/             # 第二篇论文（超节点图驱动分层内存管理）
+│   │   ├── nature-reader/             #   中英对照 reader（times 模板提取）
+│   │   ├── nature-paper-card/         #   16 节精读卡（E1-E6 证据链 + 5 个候选方向）
+│   │   └── nature-paper-xray/         #   透视精读长文（执行序微例/承重判断/证据边界）
+│   └── UBEP_2026/                     # 第三篇论文（SIGCOMM'26 超节点专家并行通信库）
+│       ├── nature-reader/             #   中英对照 reader（sigconf 双栏模板提取）
+│       └── nature-paper-card/         #   16 节精读卡（E1-E6 证据链 + 5 个候选方向）
 │   └── tmp/                           # 检索中间产物（superpod_search/ 等，可清理）
 └── tools/                             # skill/command 工具与经验资产（单层，按 skill 名分目录）
     ├── README.md                      # 管理规范（先查后用、经验登记规则）
@@ -68,6 +75,10 @@ AI 基础设施**超节点（Supernode / SuperPod）**方向的论文调研仓�
 | [nature-paper-card](research/CloudMatrix384_2025/nature-paper-card/paper-card.md) | 16 节精读卡 | 8 模块拆解、E1–E10 证据链（支持/不支持结论）、5 个候选研究方向，audit errors=0 |
 | [nature-paper-trans](research/CloudMatrix384_2025/nature-paper-trans/CloudMatrix384_中文全文.pdf) | 中文全文 PDF（45 页） | 文本排版替代产物（环境缺 image_gen，已在首页声明）；译文源自 reader |
 | [nature-paper-xray](research/CloudMatrix384_2025/nature-paper-xray/paper-xray.md) | 透视精读长文 | 研究路径重构、承重三级判断、公式微例对账、证据边界分级 |
+
+第二篇论文 HyperOffload（[arXiv:2602.00748](https://arxiv.org/abs/2602.00748)，超节点图驱动分层内存管理，上海交大 & 华为）已产出 [中英对照 reader](research/HyperOffload_2026/nature-reader/paper.md)、[16 节精读卡](research/HyperOffload_2026/nature-paper-card/paper-card.md)（audit errors=0）与[透视精读长文](research/HyperOffload_2026/nature-paper-xray/paper-xray.md)；其与 CloudMatrix384 互引，构成"硬件拉平带宽 + 软件拉平可见性"的超节点两层图景。
+
+第三篇论文 UBEP（[arXiv:2607.06202](https://arxiv.org/abs/2607.06202)，SIGCOMM '26，CM384 上的专家并行通信库）已产出 [中英对照 reader](research/UBEP_2026/nature-reader/paper.md)（sigconf 双栏模板，19 图表全覆盖）与 [16 节精读卡](research/UBEP_2026/nature-paper-card/paper-card.md)（audit errors=0）。
 
 ## 检索方法与工具链
 

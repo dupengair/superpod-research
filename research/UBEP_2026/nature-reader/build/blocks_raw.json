@@ -1,0 +1,2033 @@
+[
+ {
+  "id": "S001",
+  "page": 1,
+  "type": "paragraph",
+  "role": "title",
+  "order": 1,
+  "text": "UBEP: Re-architecting Expert Library for Production",
+  "bbox": [
+   79.3,
+   82.5,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S002",
+  "page": 1,
+  "type": "paragraph",
+  "role": "authors",
+  "order": 2,
+  "text": "Yipeng Liu 1, ∗, Chang Liu 1, ∗, Si Shen 1, ∗, Jiaqi Zheng 1 1 2,† Yuquan Zhang, Yimeng Xu, Zhongzhe Hu, Zhiyuan 2 2 Wenkai Ling, Baochuan Yang, Xianzhi Yu",
+  "bbox": [
+   74.4,
+   129.0,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S003",
+  "page": 1,
+  "type": "paragraph",
+  "role": "front",
+  "order": 3,
+  "text": "1 State Key Laboratory for Novel Software Technology, Nanjing University 2 Huawei Technologies Co., Ltd.",
+  "bbox": [
+   86.4,
+   171.0,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S004",
+  "page": 1,
+  "type": "paragraph",
+  "role": "authors",
+  "order": 4,
+  "text": "ABSTRACT",
+  "bbox": [
+   53.8,
+   193.5,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S005",
+  "page": 1,
+  "type": "paragraph",
+  "role": "abstract",
+  "order": 5,
+  "text": "The deployment of Mixture-of-Experts (MoE) models on produc-tion high-bandwidth superpods, such as NVIDIA’s NVL72/576 and Huawei’s CloudMatrix384, introduces critical challenges beyond raw interconnect bandwidth. While these systems provide uni-fied global address spaces and high-bandwidth fabrics, their full potential for sparse MoE communication is hindered by three fun-damental bottlenecks: (1) Strict execution serialization imposed by coarse-grained Bulk Synchronous Parallel (BSP) orchestration of interdependent communication phases; (2) Prohibitive synchro-nization overhead that fails to scale alongside high interconnect bandwidth; and (3) Severe load imbalance resulting from distance-agnostic scheduling of irregular token traffic. To eliminate these bottlenecks, we introduce UBEP (Unified-Bus Expert Parallelism), a production-ready communication library that rethinks MoE’s All-to-All primitives for modern superpod architectures. Through large-scale experiments, UBEP reduces All-to-All latency by up to 52.4% and MoE inference Time Per Output Token (TPOT) by up to 11.1%.",
+  "bbox": [
+   53.5,
+   206.6,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S006",
+  "page": 1,
+  "type": "paragraph",
+  "role": "front",
+  "order": 6,
+  "text": "CCS CONCEPTS",
+  "bbox": [
+   53.8,
+   415.4,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S007",
+  "page": 1,
+  "type": "paragraph",
+  "role": "abstract",
+  "order": 7,
+  "text": "• →; • Networks Data center networks Computing method- →; ologies Parallel computing methodologies",
+  "bbox": [
+   53.8,
+   428.6,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S008",
+  "page": 1,
+  "type": "paragraph",
+  "role": "front",
+  "order": 8,
+  "text": "KEYWORDS",
+  "bbox": [
+   53.8,
+   462.0,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S009",
+  "page": 1,
+  "type": "paragraph",
+  "role": "abstract",
+  "order": 9,
+  "text": "Mixture-of-Experts, Expert parallelism, All-to-All communication, Communication library, Superpod, Data center networks",
+  "bbox": [
+   53.8,
+   475.2,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S010",
+  "page": 1,
+  "type": "paragraph",
+  "role": "abstract",
+  "order": 10,
+  "text": "ACM Reference Format: Yipeng Liu, Chang Liu, Si Shen, Jiaqi Zheng, Mingfan Li, Yuyang Yang, Guanhua Li, Yuquan Zhang, Yimeng Xu, Zhongzhe Hu, Zhiyuan Huang, Qihang Duan, Junsong Wang, Wenkai Ling, Baochuan Yang, Xianzhi Yu, Han Bao, Yijie Chen, and Guihai Chen. 2026. UBEP: Re-architecting Expert Parallelism Communication Library for Production Superpods. In ACM SIGCOMM 2026 Conference (SIGCOMM ’26), August 17–21, 2026, Denver, CO, ∗ Equal contribution.",
+  "bbox": [
+   53.5,
+   504.2,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S011",
+  "page": 1,
+  "type": "paragraph",
+  "role": "footnote",
+  "order": 11,
+  "text": "† Corresponding author. Permission to make digital or hard copies of all or part of this work for personal or classroom use is granted without fee provided that copies are not made or distributed for profit or commercial advantage and that copies bear this notice and the full citation on the first page. Copyrights for components of this work owned by others than the author(s) must be honored. Abstracting with credit is permitted. To copy otherwise, or republish,topostonserversortoredistributetolists,requirespriorspecificpermission and/or a fee. Request permissions from permissions@acm.org. SIGCOMM ’26, August 17–21, 2026, Denver, CO, USA © 2026 Copyright held by the owner/author(s). Publication rights licensed to the Association for Computing Machinery. ACM ISBN 979-8-4007-2467-1/26/08. https://doi.org/10.1145/3789240.3829183",
+  "bbox": [
+   53.8,
+   590.9,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S012",
+  "page": 1,
+  "type": "paragraph",
+  "role": "title",
+  "order": 12,
+  "text": "Parallelism Communication Superpods",
+  "bbox": [
+   313.7,
+   82.5,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S013",
+  "page": 1,
+  "type": "paragraph",
+  "role": "authors",
+  "order": 13,
+  "text": "1,†, Mingfan Li 2, Yuyang Yang 1, Guanhua Li 1, 2 2 2 Huang, Qihang Duan, Junsong Wang, 2 2 2 1, Han Bao, Yijie Chen, Guihai Chen",
+  "bbox": [
+   319.6,
+   129.0,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S014",
+  "page": 1,
+  "type": "paragraph",
+  "role": "abstract",
+  "order": 14,
+  "text": "USA. ACM, New York, NY, USA, 18 pages. https://doi.org/10.1145/3789240. 3829183",
+  "bbox": [
+   318.0,
+   193.9,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S015",
+  "page": 1,
+  "type": "paragraph",
+  "role": "authors",
+  "order": 15,
+  "text": "1 INTRODUCTION",
+  "bbox": [
+   318.0,
+   224.9,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S016",
+  "page": 1,
+  "type": "paragraph",
+  "role": "abstract",
+  "order": 16,
+  "text": "The rapid evolution of Large Language Models (LLMs) has estab-lished the Mixture-of-Experts (MoE) architecture as the standard for balancing massive parameter scales with inference efficiency [7]. To support these communication-intensive workloads, datacen-ter infrastructure is shifting from traditional commodity clus-ters toward specialized superpod architectures, such as NVIDIA’s NVL72/576 [31] and Huawei’s CloudMatrix384 (CM384) [57]. Un-like traditional clusters that rely on scale-out networks such as InfiniBand (IB)/RoCE with high tail-latency and explicit message passing, superpods integrate hundreds of accelerators via scale-up interconnects such as NVLink/Unified-Bus (UB), forming a unified, high-bandwidth, load/store-accessible domain. Despite the unprecedented raw capabilities of superpods, effi-ciently harnessing these capabilities for the irregular and sparse communication patterns inherent to MoE models remains a critical system challenge. Central to this challenge is the Expert Parallelism Communication Library (EPCL), the system layer responsible for orchestrating fine-grained token exchange. Unlike generic Collec-tive Communication Libraries (CCLs) such as NCCL, EPCLs like DeepEP [51] implement the All-to-All primitive through narrow dispatch/combine APIs tailored to modern MoE systems. As summarized in Table 1, existing EPCLs are not designed for modern multi-tier superpods. DeepEP [51] and UCCL-EP [28] adopt the Bulk Synchronous Parallel (BSP) model for non-superpod architectures with hybrid interconnects (e.g., IB and NVLink) and coarse-grained kernel-level scheduling, where long transmission time dominates and hides software overhead. CANN EP [57] runs on a superpod fabric but retains BSP with intra-only pipelines and global barriers, leaving software overhead exposed on a low-latency fabric. Hybrid-EP [32] adopts Asynchronous Parallel (ASP) model and supports single-tier superpods with finer warp-level scheduling, but it does not account for hierarchical communication constraints. In modern multi-tier superpods, drastically reduced link",
+  "bbox": [
+   317.7,
+   238.0,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S017",
+  "page": 1,
+  "type": "paragraph",
+  "role": "footnote",
+  "order": 17,
+  "text": "latency exposes the software overhead of BSP-style serialization and kernel scheduling, resulting in severe underutilization of the high-bandwidth fabric. In this work, we identify three fundamental bottlenecks in re-architecting EPCL for modern superpods: (1) BSP-style Serial-ization. MoE communication inherently involves interdependent phases like routing and reordering; existing BSP implementations rely on strict global barriers for consistency — a design that se-rializes execution in low-latency superpods [51, 57]. This previ-ously overlooked “stop-and-wait” behavior prevents overlapping",
+  "bbox": [
+   318.0,
+   599.7,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S018",
+  "page": 2,
+  "type": "paragraph",
+  "role": null,
+  "order": 18,
+  "text": "independent communication phases and leaves high-bandwidth",
+  "bbox": [
+   53.8,
+   84.7,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S019",
+  "page": 2,
+  "type": "paragraph",
+  "role": null,
+  "order": 19,
+  "text": "Although superpods provide a logically unified address space, we demonstrate that physical latency non-uniformity across switching tiers remains a critical yet neglected factor. Current EPCLs treat the fabric as flat and schedule workloads based solely on token counts, ignoring heterogeneous access costs in multi-tier fabrics. We show that this topology-agnostic approach leads to severe stragglers and degraded tail latency — a mismatch between logical abstraction and physical reality that has not been systematically addressed in prior EPCL designs. To address these bottlenecks, we introduce UBEP, a production-ready EPCL designed specifically for modern superpods. Departing from the traditional BSP model, UBEP adopts a dependency-driven execution model (§3.2) that decomposes the monolithic All-to-All primitive into fine-grained tasks scheduled by data availability in-stead of global barriers. This enables aggressive overlap of metadata exchange, token dispatch, and reordering. To mitigate the synchro-nization tax, we propose Data-as-Flag (§3.4), a novel mechanism that embeds synchronization signals directly into data payloads via atomic instructions. This allows implicit, near-zero-overhead co-ordination at the token level, effectively eliminating control-plane overhead. Finally, to overcome the limitations of topology-agnostic scheduling, UBEP employs a hierarchical token-level scheduler (§3.3) that jointly optimizes token-to-core mapping by considering both load balance and physical fabric distance across switching tiers, thereby minimizing stragglers and tail latency. We implemented UBEP on the Huawei CANN stack and evalu-ated it on up to 256 NPU dies allocated from a production CM384 superpod. The evaluation results demonstrate that UBEP reduces All-to-All latency by 52.4% compared to the baseline CANN EP, translating to an 11.1% improvement in end-to-end Time Per Out-put Token (TPOT) for models at the scale of DeepSeek-R1. **Contributions.**Our primary contributions are as follows. • We characterize bottlenecks in BSP-based EPCLs deployed on",
+  "bbox": [
+   53.5,
+   194.3,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S020",
+  "page": 2,
+  "type": "paragraph",
+  "role": null,
+  "order": 20,
+  "text": "superpods, highlighting how synchronization overhead and seri-",
+  "bbox": [
+   62.2,
+   558.5,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S021",
+  "page": 2,
+  "type": "paragraph",
+  "role": null,
+  "order": 21,
+  "text": "alization limit bandwidth utilization.",
+  "bbox": [
+   62.2,
+   569.5,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S022",
+  "page": 2,
+  "type": "paragraph",
+  "role": null,
+  "order": 22,
+  "text": "We design and implement UBEP, an EPCL natively for mod- •",
+  "bbox": [
+   61.8,
+   580.4,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S023",
+  "page": 2,
+  "type": "paragraph",
+  "role": null,
+  "order": 23,
+  "text": "ern multi-tier superpods, featuring three core innovations: (1)",
+  "bbox": [
+   62.2,
+   591.4,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S024",
+  "page": 2,
+  "type": "paragraph",
+  "role": null,
+  "order": 24,
+  "text": "token-level kernel decomposition to maximize parallelism, (2)",
+  "bbox": [
+   62.2,
+   602.4,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S025",
+  "page": 2,
+  "type": "paragraph",
+  "role": null,
+  "order": 25,
+  "text": "a hierarchical scheduler that mitigates tail latency from fabric",
+  "bbox": [
+   62.2,
+   613.3,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S026",
+  "page": 2,
+  "type": "paragraph",
+  "role": null,
+  "order": 26,
+  "text": "heterogeneity, and (3) the Data-as-Flag mechanism to minimize",
+  "bbox": [
+   62.2,
+   624.3,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S027",
+  "page": 2,
+  "type": "paragraph",
+  "role": null,
+  "order": 27,
+  "text": "synchronization overhead. • We evaluate UBEP on a production-scale CM384 superpod,",
+  "bbox": [
+   62.2,
+   635.2,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S028",
+  "page": 2,
+  "type": "paragraph",
+  "role": null,
+  "order": 28,
+  "text": "demonstrating significant latency reduction and end-to-end per-",
+  "bbox": [
+   62.2,
+   657.2,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S029",
+  "page": 2,
+  "type": "paragraph",
+  "role": null,
+  "order": 29,
+  "text": "formance gains for MoE inference. 1 It supports running on heterogeneous GPUs and NICs. 2 UB enables a large-scale superpod execution without inter-node communication.",
+  "bbox": [
+   62.2,
+   668.1,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S030",
+  "page": 2,
+  "type": "heading",
+  "order": 30,
+  "text": "2 BACKGROUND",
+  "bbox": [
+   318.0,
+   206.5,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S031",
+  "page": 2,
+  "type": "heading",
+  "order": 31,
+  "text": "2.1 Model Evolution",
+  "bbox": [
+   318.0,
+   222.2,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S032",
+  "page": 2,
+  "type": "paragraph",
+  "role": null,
+  "order": 32,
+  "text": "The MoE paradigm has**From Dense Model to Sparse Model.** emerged as a dominant strategy for scaling large models effectively. By activating only a small, input-specific subset of its total parame-ters (called), MoE architectures enable a dramatic increase *experts * in model size without a proportional increase in computational cost, thereby improving overall capacity and performance. Con-sequently, many state-of-the-art models have adopted this sparse approach [7, 43, 48]. This architectural shift, however, introduces a fundamental change in communication patterns. Unlike the pre-dictable, structured communication in dense model parallelism, MoE layers generate highly irregular and dynamic inter-GPU com-munication. During inference or training, tokens are dynamically routed to experts via a learned gating function, with each GPU hosting only a subset of the total expert pool. This necessitates a two-step redistribution: first, token activations must be dispatched across the fabric to reach their assigned experts, and later, the pro-cessed outputs must be combined and returned to their original GPUs. The result is a sparse, runtime-dependent all-to-all exchange that forms the core communication bottleneck of MoE models [50], with such communication consuming ∼ 47% of the total execution time on average [24, 49].",
+  "bbox": [
+   470.4,
+   235.3,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S033",
+  "page": 2,
+  "type": "heading",
+  "order": 33,
+  "text": "2.2 Architectural Evolution",
+  "bbox": [
+   318.0,
+   476.8,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S034",
+  "page": 2,
+  "type": "paragraph",
+  "role": null,
+  "order": 34,
+  "text": "**Beyond Traditional Clusters: The Era of Modern Superpods.** Platforms like NVIDIA’s NVL72 [31] and Huawei’s CM384 [57] illustrate the progression from traditional clusters with multi-node 8-accelerator systems to modern superpods featuring 72- or 384- accelerator integrated fabrics. As illustrated in Figure 1(a), tradi-tional clusters typically employ a hybrid interconnect strategy: NVLink for intra-node GPU-to-GPU communication, and IB/RoCE for inter-node networking. While this architecture supports cluster-scale communication through RDMA, its network bandwidth and topology are primarily optimized for data or pipeline parallelism (DP/PP), which generate relatively modest inter-node traffic [57]. In contrast, tensor parallelism (TP) and expert parallelism (EP) demand frequent, fine-grained, and low-latency communication, a require-ment that is difficult to satisfy efficiently across traditional cluster nodes [57]. Consequently, many deployments are forced to confine TP/EP groups within a single compute node, constraining the scal-ability of the model. Modern superpods, such as those realized by NVL72 and CM384, address this bottleneck by integrating hundreds of accelerators into a single, coherent fabric. These systems exhibit three defining characteristics that are crucial for enabling efficient",
+  "bbox": [
+   318.0,
+   492.0,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S035",
+  "page": 3,
+  "type": "paragraph",
+  "role": null,
+  "order": 35,
+  "text": "**terconnects (a) with modern superpod utilizing the UB (b).** communication for MoE: (1) Modern superpods adopt advanced interconnect protocols, including NVLink [34], UB [14], Infinity Fabric [3], UALink [44], and SUE [4], which provide high bandwidth and low latency. For example, Huawei’s UB protocol in CM384 re-moves redundant network layers (Figure 1(b)) and creates a direct connection between the GPU I/O Die and the on-chip Network-on- Chip (NoC), delivering bandwidth nearing 400 GB/s with latencies in the range of hundreds of nanoseconds. Furthermore, these fab-rics employ scalable topologies (e.g., Mesh or CLOS) to aggregate multiple ports, ensuring non-blocking, high-bandwidth connectiv-ity across the entire system [25]. (2) Unified Global Address Space (UGAS): superpod provides a unified memory address space with coherent load/store semantics, where all interconnected devices are mapped into a single, globally unique address domain. This archi-tectural feature enables direct, universal memory access, which is essential for the software synchronization required by fine-grained parallel strategies. (3) Multi-Level, Pooled Resource Management: the superpod implements multi-level resource pooling, abstracting distributed compute, memory, and network resources into a cohe-sive logical pool. This allows for dynamic and flexible scheduling tailored to workload demands.",
+  "bbox": [
+   53.8,
+   281.6,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S036",
+  "page": 3,
+  "type": "heading",
+  "order": 36,
+  "text": "2.3 Deploying MoE on CM384: Key Insights",
+  "bbox": [
+   53.8,
+   552.9,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S037",
+  "page": 3,
+  "type": "paragraph",
+  "role": null,
+  "order": 37,
+  "text": "Modern superpods offer significant architectural advantages over traditional clusters; however, the direct deployment of MoE models onto these systems often exposes new challenges. **Terminology.**CM384 is built from a two-tier switching fabric: NPUs on the same baseboard connect through first-tier switches, while multiple baseboards connect through second-tier switches. We classify memory accesses by whether they stay within the local NPU or traverse the switching fabric. Since each NPU contains two compute dies, *Intra-NPU *refers to cross-die HBM access within the local NPU. We do not model same-die HBM access as a sepa-rate class, as its latency is negligible compared with accesses that traverse the switching fabric. *One-Hop *and *Two-Hop *denote NPU-to- NPU accesses that traverse one and two switch layers, respectively.",
+  "bbox": [
+   53.8,
+   566.0,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S038",
+  "page": 3,
+  "type": "paragraph",
+  "role": null,
+  "order": 38,
+  "text": "Orthogonal to this topology terminology, we use AIC and AIV to describe the execution hierarchy within each NPU. Each NPU con-tains multiple AI Cores (AICs), and each AIC follows a decoupled 1-to-N design: one Cube Unit for matrix multiplication and multiple Vector Cores (AIVs) for parallel vector processing are orchestrated by a Scalar Unit that manages instruction dispatch and control flow. Typically, MoE layer involves two**Deploying MoE on CM384.** tightly coupled communication stages: (1) a dispatch stage, which routes tokens to remote GPUs hosting the target experts, and (2) a combine stage, which gathers expert outputs and restores the original token order. Figure 2 details the typical execution flow of the dispatch operation on CM384. Prior to execution, each rank allocates a global shared memory region partitioned by source rank and expert. Leveraging the UGAS, the destination rank determines specific memory ranges based solely on per-expert token counts from each source rank. The specific execution steps for the dispatch operation are as follows: (1) Initialization (Phase 1): Tokens are stored in the local Unified Buffer (UBuf) of each AIV. (2) Transmis-sion (Phase 2): Each AIV sends all locally owned tokens to their designated expert locations. A single token may be dispatched to multiple experts, while each expert receives tokens from multiple AIVs. (3) Global Synchronization and Completion Signaling (Phase 3): A SyncAll operation ensures all token data has been written to global memory. AIVs responsible for signaling transmit per-expert flags and token counts to indicate processing readiness. (4) Flag Verification (Phase 4): Verification is performed in parallel; each AIV polls a subset of flag entries in global memory, followed by an-other SyncAll to confirm global completion. (5) Offset Calculation & Reordering (Phase 5): Based on the finalized token counts, the sys-tem computes reordered token offsets and performs a contiguous reordering of tokens in global memory. This intricate process high-lights how the transition from dense to sparse modeling not only changes computational patterns but also demands synchronization-heavy communication protocols to manage the resulting irregular data movement efficiently. **Our Key Insights.**In our effort to optimize communication for MoE models on modern superpods, we have re-architected the EPCL. Through this reconstruction, we derived three key insights that guided our architectural decisions and implementation.",
+  "bbox": [
+   318.0,
+   280.3,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S039",
+  "page": 4,
+  "type": "paragraph",
+  "role": null,
+  "order": 39,
+  "text": "**Insight 1: The BSP model’s implicit synchronization incurs** **explicit barriers, creating a critical bottleneck for superpod.** **Unlocking their potential requires fine-grained task decom-** **position to maximize parallelism.**The BSP model organizes MoE communication into a sequence of distinct phases, where each phase is guarded by a global synchronization barrier. While this design ensures correctness, it enforces strict ordering constraints and requires every AIV to perform the exact same type of work within a phase. This approach offers little flexibility in scheduling work across AIVs, resulting in a rigid execution path for the current dispatch. As shown in Figure 2, phases such as SetFlagAndCount and Token-Reordering occur in a strict sequence, and a new phase can only begin once every AIV has reached the synchronization point. Since computation is assigned statically, faster AIVs often sit idle to wait for slower ones, leading to underutilized resources. Figure 3(a) shows that this inefficiency becomes much more visi-ble on modern superpods. In traditional clusters, where scale-out bandwidth was limited (50 GB/s for IB/RoCE v2), the extended time required for data transfer meant that synchronization overhead was simply less pressing compared to the transfer costs. On the CM384 architecture, however, the bandwidth increases by over an order of magnitude to 392 GB/s. As a result, token dispatch reaches bandwidth saturation very quickly, leaving phase-level synchro-nization as the dominant constraint. We observe that only a subset of AIVs is sufficient to saturate the available bandwidth during dispatch, and adding more AIVs beyond this point provides little latency benefit. As illustrated in Figure 3(b), scaling communication cores from 24 to 48 offers minimal benefit, because the extra cores spend most of their time waiting at barriers rather than doing useful work. This suggests an opportunity to re-evaluate the BSP-style execution. Since we do not need every AIV to participate uniformly in every phase, it is possible to break down these rigid boundaries and assign sub-tasks at a finer granularity. This would relax the strict dependencies and allow for more flexible scheduling. **Insight 2: The explicit synchronization overhead on mod-** **ern superpod architectures can dominate execution time.** **Leveraging hardware-guaranteed atomic operations enables**",
+  "bbox": [
+   53.8,
+   302.5,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S040",
+  "page": 4,
+  "type": "paragraph",
+  "role": null,
+  "order": 40,
+  "text": "**ers with memory-level consistency and forming the foun-** **dation for fine-grained, low-overhead parallel communica-** While decomposing sub-task dependencies improves task**tion.** parallelism, explicit synchronization primitives limit overall effi-ciency due to their overhead. On modern superpod architectures, this is exemplified by operations such as, whose intrin- SyncAll sic cost can account for approximately 15% of total execution time. To address this, we leverage hardware-guaranteed atomic operations—specifically the 512B atomic Load/Store capability sup-ported by the Ascend NPU within the superpod across scale-up and NoC domains. Crucially, the UB Fabric ensures atomicity of these writes and serializes subsequent reads, enabling *implicit synchro- *. This approach replaces costly explicit software barriers *nization * with memory-level consistency, forming the foundation for truly fine-grained, low-overhead parallel communication primitives. **Insight 3: In the hierarchical network of a modern superpod,** **load-balancing tokens without considering the significant la-** **tency gap between one-hop and two-hop memory accesses is** **counterproductive, resulting in stragglers that degrade over-** **all MoE performance.**Modern superpod architectures are rapidly evolving from scales of hundreds of accelerators (e.g., NVL72) to thousands (e.g., CM384, NVL576). To support this massive scale, the interconnect fabric inevitably expands from a single-tier switch to a multi-tier switching architecture. Consequently, while these superpods continue to provide a unified global address space, the underlying physical topology re-introduces distinct Non-Uniform Memory Access (NUMA) characteristics at the cluster level. How-ever, existing implementations remain oblivious to this shift: they are either tailored for single-tier architectures (e.g., NVL72) [32] or focus exclusively on balancing token counts [57], failing to account for the heterogeneous access costs in multi-tier fabrics. This mis-match leads to severe stragglers in phase because, Token-Sending in such hierarchical architectures, NPU-to-NPU memory access falls into three distinct distance categories with markedly differ-ent latencies: (1) *Intra-NPU *access to cross-die HBM within the local NPU (e.g., Rank 0 writing to HBM on another die of its local NPU); (2) *One-Hop *access across a single switch layer (e.g., Rank 0 to Rank 1); and (3) *Two-Hop *access traversing two switch layers. As shown in Table 2, the latency gap is profound, with Two-Hop access reaching up to 11.5 × that of local access, necessitating a scheduling approach that optimizes for both workload distribution and hierarchical memory access distances.",
+  "bbox": [
+   318.0,
+   246.9,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S041",
+  "page": 5,
+  "type": "heading",
+  "order": 41,
+  "text": "3 UBEP",
+  "bbox": [
+   53.8,
+   260.5,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S042",
+  "page": 5,
+  "type": "heading",
+  "order": 42,
+  "text": "3.1 Overview",
+  "bbox": [
+   53.8,
+   276.2,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S043",
+  "page": 5,
+  "type": "paragraph",
+  "role": null,
+  "order": 43,
+  "text": "UBEP (Unified-Bus Expert Parallelism) is a communication library for low-latency MoE inference. We build UBEP on three key designs (Figure 4): First, we introduce**Kernel Decomposition**(§3.2) to break the sequential constraint of traditional BSP models by parti-tioning AIVs into distinct groups to execute independent tasks in parallel and replace global barriers with lightweight point-to-point synchronization. Second, to handle the complex latency differences in superpods, we implement a**Hierarchical Token-level Schedul-** (§3.3). This component utilizes a hardware-accelerated mapper**ing** to generate optimal allocation schedules within 1 $μs$. Finally, to eliminate expensive inter-NPU synchronization, we propose**Data-** **as-Flag**(§3.4). This mechanism leverages the hardware’s native 512-byte atomic load/store support. By embedding control flags di-rectly within the data payload, UBEP achieves implicit consistency without separate control messages. These three mechanisms are synergistic: kernel decomposition exposes the fine-grained tasks that the scheduler must balance across cores and that Data-as-Flag can synchronize without global barriers; without decomposition there would be no fine-grained work to overlap, without sched-uling the workload would become unbalanced across the fabric, and without Data-as-Flag global barriers would reintroduce the synchronization tax. In principle, the proposed techniques of UBEP’s fine-grained par-allelism can be adapted to any BSP-kernel, including both dispatch and combine routines. Since the challenges of global synchroniza-tion overhead and load imbalance are predominantly concentrated in the earlier dispatch phase, which fundamentally limits the overall scalability. In this context, the following sections will take dispatch as an illustrative example, without elaborating on trivial yet intri-cate details in combine.",
+  "bbox": [
+   53.8,
+   289.4,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S044",
+  "page": 5,
+  "type": "heading",
+  "order": 44,
+  "text": "3.2 Kernel Decomposition",
+  "bbox": [
+   53.8,
+   629.9,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S045",
+  "page": 5,
+  "type": "paragraph",
+  "role": null,
+  "order": 45,
+  "text": "Current MoE dispatch primitive organize communication and data reordering as BSP-style kernel executed. As illustrated in Fig-ure 5(a), the traditional implementation simply divides the com-munication workflow into task phases executed in parallel across multiple AIVs. This simplifies programming and synchronization across AIVs by employing global barriers (*i.e., *SyncAll) to satisfy",
+  "bbox": [
+   53.8,
+   643.1,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S046",
+  "page": 5,
+  "type": "paragraph",
+  "role": null,
+  "order": 46,
+  "text": "the task decomposition for the entire communication workflow. In this approach, rather than requiring all AIVs to execute the same task sequence, we design a fine-grained partitioning mechanism that assigns independent tasks, such as token transmission and metadata process, to distinct AIVs for execution in parallel. Further-more, we employ lightweight asynchronous signals to handle the synchronization across different AIVs. Specifically, in Figure 5(b), each NPU decomposes and token counts sending Token-Sending () tasks into two distinct AIV groups: most *i.e., *TokenCnt-Sending AIVs send tokens, while other AIVs calculate and send token counts. Once all TokenCnt metadata become available, the latter AIVs com-pute prefix sums to determine HBM offsets for per-expert tokens used in Token-Reordering. This decomposition allows us to over-lap the processing latency of TokenCnt without compromising the bandwidth for token transmission. Further, maximizing overlap and minimizing communication latency poses a constrained problem: given a fixed total number of AIVs, we must determine the optimal allocation ratio between these two groups. In general, the number of AIVs allocated to process token counts is proportional to the number of experts (calculating token counts for more destinations). Meanwhile, the number of AIVs assigned to token transmission is proportional to the product of the batch size and the Top- $k$ (handling larger communication volume). Detailed cost modeling and the derivation of this optimal allocation appear in Appendix A. We also evaluate and verify the model’s impact in Appendix C.3. A data dependency exists within the entire workflow: relies on the addresses calculated by Token-Reordering CalCumSum. Rather than employing global synchronization via SyncAll, we implement point-to-point synchronization based on asynchronous data signals. Specifically, the AIVs tasked with CalCumSum write the calculated addresses into global shared memory and other AIVs poll for corresponding memory offset and execute Token-Reordering immediately upon detecting the update.",
+  "bbox": [
+   318.0,
+   227.2,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S047",
+  "page": 5,
+  "type": "heading",
+  "order": 47,
+  "text": "3.3 Hierarchical Token-level Scheduling",
+  "bbox": [
+   318.0,
+   627.5,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S048",
+  "page": 5,
+  "type": "paragraph",
+  "role": null,
+  "order": 48,
+  "text": "As highlighted in Insight 3, the structural disparity across multiple tiers induces latency asymmetry. In practical scheduling, this asym-metry manifests primarily between one-hop access and two-hop access traversing multiple switch layers; consequently, we omit the negligible impact of intra-NPU access. Furthermore, employing naive load balancing strategies in token dispatch often exacerbates",
+  "bbox": [
+   317.6,
+   640.6,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S049",
+  "page": 6,
+  "type": "paragraph",
+  "role": null,
+  "order": 49,
+  "text": "the straggler problem (as detailed in §5.4). Consequently, we must rethink token scheduling by establishing a unified model that con-siders the impact of load balancing and hierarchy. Consider a specific NPU**Formulation and Hardness Analysis.** within a superpod that outputs $m$ tokens, denoted by the set T = { 1,...,$m$ }, which must be dispatched to $n$ AIVs, represented by C = { 1,...,$n$ }. The goal is to determine an optimal assignment of tokens to AIVs such that the overall communication and processing latency is minimized, subject to satisfy load-balancing and assignment constraints. Denote by ℓ the transmission latency of the token $i$ and $i$ by $RTT$ the round-trip time between the token $i$ and its destination $i$ (relevant when network delays are considered). Binary variables",
+  "bbox": [
+   53.8,
+   303.1,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S050",
+  "page": 6,
+  "type": "paragraph",
+  "role": null,
+  "order": 50,
+  "text": "$xi$, $j$ indicate the assignment between tokens and { $ij$ | ∈ T ∈ C} AIVs; $xij$ = 1 if and only if token $i$ is assigned to AIV $j$; and the set of tokens assigned to AIV $j$ is defined as M $j$ = { $i$ | $xij$ = 1 }. The objective is to minimize the maximum completion time across all AIVs, which consists of the cumulative transmission latency of assigned tokens and the worst-case network delay within each AIV’s token set. minimize max ∑︁ ℓ max RTT (1) (cid:169) $i$ + { $i$ } (cid:170) $j$ ∈{ 1,...,$n$ } (cid:173) $i$ ∈M $j$ (cid:174) $i$ ∈M $j$ (cid:171) (cid:172) $n$ ∑︁ subject to $xij$ = 1, ∀ $i$ ∈ { 1,...,$m$ } (1a) $j$ = 1 $mm$ ∑︁ (cid:108) (cid:109) $xij$ ≤, ∀ $j$ ∈ { 1,...,$n$ } (1b) $ni$ = 1 $xij$ ∈ { 0, 1 }, ∀ $i$, $j$ (1c) The constraint (1a) characterizes that each token is assigned to exactly one AIV. The binary decision variable $x$ indicates whether $ij$ the token $i$ is assigned to AIV $j$. Load balancing is enforced by the constraint (1b) so that no AIV receives more than a fair share of to-kens. This formulation captures both the communication overhead (via ℓ $i$) and the network heterogeneity (via $RTTi$), while ensuring that the workload distribution remains balanced across AIVs—a key requirement for scalable and low-latency token dispatch in",
+  "bbox": [
+   57.7,
+   434.6,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S051",
+  "page": 6,
+  "type": "paragraph",
+  "role": null,
+  "order": 51,
+  "text": "**and kernel decomposition for token dispatch.** MoE-based architectures. We formally prove that the program (1) is NP-hard and the detailed proof is provided in Appendix B. Directly solving this NP-hard opti-**Latency Homogenization.** mization problem to optimality is prohibitively expensive in the context of our sub-microsecond latency budget. Even state-of-the-art integer programming solvers would require much more time to compute a solution, which would itself become the dominant bot-tleneck, utterly negating the performance gains sought from an op-timized schedule. We propose that the objective can be heuristically solved through latency homogenization: making the latency com-position of each AIV similar, thereby avoiding bottlenecks caused by some AIVs processing too many high latency tokens. To approx-imate the NP-hard objective, our heuristic algorithm decomposes the problem based on the two additive terms in the program (1). First, we consider the transmission time. We note two key obser-vations: (1) in LLMs, tokens generally have uniform sizes across the model, which are much smaller than the bandwidth. Therefore, the transmission time per token (ℓ $i$) can be approximately treated as the same; (2) in modern high-bandwidth superpods, the transmission time for a single token (typically at the KB level) is much shorter than the network propagation latency. Based on these observations, we can propose that (cid:205) ℓ (cid:205) $mx$. Therefore, this aspect $i$ ∈M $ji$ ∝ $i$ = 1 $ij$ can be satisfied together with constraint (1b). What’s more, the second observation justifies why our subsequent optimization can focus primarily on the network propagation term in the objective function, as it becomes the dominant source of latency variance. Second, we consider the RTT. We categorize tokens by hop count and aim to equalize the hop-count distribution across AIVs. Let $vj$ be the hop distribution vectors of the AIV $j$ and let Σ be the their covariance matrix. Minimizing the variance of each hop-count component across AIVs is equivalent to minimizing $tr$ Σ. This () reduces the heuristic to the simple per-hop capacity bound $vj$,ℎ ⩽ ⌈ $V$ ℎ / $n$ ⌉, where $V$ ℎ is the total number of ℎ -hop tokens. **Hardware-Accelerated Mapper.**The theoretical formulation of the token scheduling problem provides a foundation for optimizing token assignments. Practical deployment, however, requires a mech-anism that operates efficiently under hardware constraints. In this",
+  "bbox": [
+   332.3,
+   281.4,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S052",
+  "page": 7,
+  "type": "paragraph",
+  "role": null,
+  "order": 52,
+  "text": "**Algorithm 1**Quaternary Search **Input:**Reordered Expert List E (tensor), Target Global Token Index $Ttarget$, Total Number of Experts $Nexp$ **Output:**Target Expert ID $Exp$, Local Token Offset $Offsetidx$",
+  "bbox": [
+   53.5,
+   83.9,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S053",
+  "page": 7,
+  "type": "paragraph",
+  "role": null,
+  "order": 53,
+  "text": "1: ⊲ Initialization",
+  "bbox": [
+   59.7,
+   131.4,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S054",
+  "page": 7,
+  "type": "paragraph",
+  "role": null,
+  "order": 54,
+  "text": "2: $L$,$R$ 0, $N$; $C$ 0; $GapRL$ 4 [ ] ← [ $exp$ ] $L$ ← ← ⌈(−)/ ⌉ $Gap$ 1 3:**while**≥**do** ⊲ Step 1: Define Pivots 4:",
+  "bbox": [
+   59.7,
+   142.4,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S055",
+  "page": 7,
+  "type": "paragraph",
+  "role": null,
+  "order": 55,
+  "text": "5: $Pi$ ← $L$ + $i$ · $Gap$ ∀ $i$ ∈ { 1, 2, 3 }",
+  "bbox": [
+   59.7,
+   175.3,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S056",
+  "page": 7,
+  "type": "paragraph",
+  "role": null,
+  "order": 56,
+  "text": "6: ⊲ Step 2: SIMD Parallel Counting",
+  "bbox": [
+   59.7,
+   186.2,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S057",
+  "page": 7,
+  "type": "paragraph",
+  "role": null,
+  "order": 57,
+  "text": "7: $Ci$ ← VectorCount (E < $Pi$) ∀ $i$ ∈ { 1, 2, 3 }",
+  "bbox": [
+   59.7,
+   197.2,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S058",
+  "page": 7,
+  "type": "paragraph",
+  "role": null,
+  "order": 58,
+  "text": "8: ⊲ Step 3: Narrow down (Find target quadrant $q$)",
+  "bbox": [
+   59.7,
+   208.2,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S059",
+  "page": 7,
+  "type": "paragraph",
+  "role": null,
+  "order": 59,
+  "text": "9:**Define**$P$ 0 ← $L$, $P$ 4 ← $R$, $C$ 0 ← $CL$",
+  "bbox": [
+   59.7,
+   219.2,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S060",
+  "page": 7,
+  "type": "paragraph",
+  "role": null,
+  "order": 60,
+  "text": "10: Find smallest $q$ ∈ { 1, 2, 3 } such that $T$ < $Ctargetq$",
+  "bbox": [
+   56.4,
+   230.1,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S061",
+  "page": 7,
+  "type": "paragraph",
+  "role": null,
+  "order": 61,
+  "text": "11: no such $q$ exists $q$ ← 4**if then** $LP$; $RP$; $CC$ 12:**Update:**← $q$ − 1 ← $qL$ ← $q$ − 1 $GapRL$ 4 13: ← ⌈(−)/ ⌉",
+  "bbox": [
+   56.4,
+   241.0,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S062",
+  "page": 7,
+  "type": "paragraph",
+  "role": null,
+  "order": 62,
+  "text": "14:**if**$R$ ≤ $L$**or**$Gap$ = 0**then**",
+  "bbox": [
+   56.4,
+   273.9,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S063",
+  "page": 7,
+  "type": "paragraph",
+  "role": null,
+  "order": 63,
+  "text": "15:**break**",
+  "bbox": [
+   56.4,
+   286.9,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S064",
+  "page": 7,
+  "type": "paragraph",
+  "role": null,
+  "order": 64,
+  "text": "16: ⊲ Finalization",
+  "bbox": [
+   56.4,
+   295.9,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S065",
+  "page": 7,
+  "type": "paragraph",
+  "role": null,
+  "order": 65,
+  "text": "17: $Expidx$ ← $L$",
+  "bbox": [
+   56.4,
+   307.0,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S066",
+  "page": 7,
+  "type": "paragraph",
+  "role": null,
+  "order": 66,
+  "text": "18: $C$ ← VectorCount (E < $Exp$) $finalidx$",
+  "bbox": [
+   56.4,
+   317.9,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S067",
+  "page": 7,
+  "type": "paragraph",
+  "role": null,
+  "order": 67,
+  "text": "19: $Offset$ ← $T$ − $Ctargetfinal$",
+  "bbox": [
+   56.4,
+   328.9,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S068",
+  "page": 7,
+  "type": "paragraph",
+  "role": null,
+  "order": 68,
+  "text": "20: $Exp$,$Offset$**return**$idx$ work, we propose a hardware-accelerated algorithm design that ensures load balancing over all tokens and maintains balance across categories. The design comprises two tightly coupled components: (1) Expert Remapping via Logical Matrix Transposition: We con-struct a virtual matrix where rows correspond to AIVs and columns to experts. By reading this matrix in column-major order, we gen-erate a remapped expert sequence for each AIV. Using efficient vec-torized matrix operations, we change the original token sequence that AIVs were responsible for sending, thereby ensuring that each AIV accesses a balanced mix of one-hop and two-hop experts, ho-mogenizing the expected communication latency. (2) Token-level Load Partition: The global token sequence is partitioned into con-tiguous slices of equal size, and each AIV is assigned one slice. This guarantees that the maximum load difference between any two AIVs is at most one token. Since the remapped expert sequence produces non-uniform per-expert token counts, this is a prefix-sum search: given a target token index $Ttarget$, find the expert whose cu-mulative token range covers it. Each AIV performs this lookup via quaternary search (Algorithm 1), which maintains a search window [ $L$,$R$ ] over the expert space and evaluates three equidistant pivots per iteration. The cumulative token counts at all three pivots are computed in parallel via a single SIMD VectorCount instruction. The algorithm then narrows the window to the quadrant containing $T$.Upon convergence, the left boundary $L$ gives the expert ID, $target$ and a final VectorCount yields the local offset within that expert’s buffer. The search converges in 4–5 steps for typical expert counts and stays within 1 $μ$ s. **Generalization Beyond Two Tiers.**While we evaluate CM384’s two-tier topology, the scheduler readily extends to an arbitrary number of hop classes $H$ by applying the same per-hop capacity",
+  "bbox": [
+   56.4,
+   339.9,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S069",
+  "page": 7,
+  "type": "paragraph",
+  "role": null,
+  "order": 69,
+  "text": "constraint, ⌈ $V$ / $n$ ⌉. Provided the topology exhibits distinguishable ℎ latency between different hops, the scheduler effectively balances tokens across AIVs. On fabrics like CM384, where per-hop latency variance is large, the benefits of the scheduling strategy are most pronounced.",
+  "bbox": [
+   318.0,
+   84.7,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S070",
+  "page": 7,
+  "type": "heading",
+  "order": 70,
+  "text": "3.4 Data-as-Flag Synchronization",
+  "bbox": [
+   318.0,
+   163.5,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S071",
+  "page": 7,
+  "type": "paragraph",
+  "role": null,
+  "order": 71,
+  "text": "Unlike strictly ordered systems, data transfer with memory seman-tic within the modern superpod necessitate explicit memory barri-ers to enforce visibility ordering between payload and flags, causing hardware pipeline stalls. To alleviate this, we propose Data-as-Flag, a lightweight synchronization scheme that ensures correctness through verification at a smaller scale by leveraging the 512 bytes atomic memory access capability of the CM384. As illustrated in Figure 6(a), Token-Flag Fusion (TFF) encap-sulates the payload and the synchronization flag within a single 512 bytes DataBlock, where the 32 bytes leading serves as the flag field and utilizing only the remaining 480 bytes for payload. Mem-ory semantic enables direct load/store from the local memory of a source NPU to the HBM of a destination NPU. This mechanism necessitates the movement of token data from the HBM to the local memory, where a leading flag is naturally embedded to construct a 512 bytes DataBlock. Subsequently, each DataBlock is written atom-ically into the HBM of the receiver. Verification of the flag alone is sufficient to ensure entire data transmission has been completed. This approach eliminates the barrier on the sender side, thereby achieving barrier-free communication. However, embedding the flag within the DataBlock introduces an additional transmission overhead, which leads to a reduction in effective bandwidth. To further reduce the overhead introduced by embedded flags, Data-for-Checksum (DC) completely eliminate explicit flags and instead leverage the token data itself for verification. Specifically, as illustrated in Figure 6(b), the leading 32 bytes of each DataBlock is utilized as a verification marker. Upon completing the token trans-mission, the sender calculates an accumulated checksum of these data markers and transmits it as a separate packet. The receiver then uses this checksum to verify data integrity and confirm the completion of transmission. However, while this approach improves bandwidth utilization, it necessitates waiting for the checksum of an entire batch, which hinders fine-grained, token-level pipelining. Sentinel Polling (SP) further mitigates the overhead of flag gen-eration and verification by shifting both operations entirely to the receiver, as illustrated in Figure 6(c). Before communication, the receiver initializes the receive buffer with a specific initial value, while the sender transmits raw payload without any pre-processing. The receiver then determines data arrival by verifying whether the designated bytes (*e.g., *32 B) within DataBlocks differ from the initial value. Although this approach eliminates the need for flag transmis-sion and theoretically achieves 100% effective bandwidth utilization, it necessitates active resetting of the receive buffer after data con-sumption. More critically, a synchronization deadlock occurs if the transmitted data is identical to the initial value. While increasing the number of comparison bytes can mitigate the collision proba-bility, it escalates the computational overhead, and this probability theoretically never reaches zero.",
+  "bbox": [
+   318.0,
+   176.7,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S072",
+  "page": 8,
+  "type": "paragraph",
+  "role": null,
+  "order": 72,
+  "text": "Data-as-Flag relies on**Correctness and safety assumptions.**",
+  "bbox": [
+   210.7,
+   236.8,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S073",
+  "page": 8,
+  "type": "paragraph",
+  "role": null,
+  "order": 73,
+  "text": "To eliminate SP’s theoretical deadlock when payload matches the sentinel, we reserve a sentinel encoding that cannot be produced by normal computation (e.g., an unused bit pattern in BF16/FP16) and verify at model initialization that the MoE weights and activations never emit it. With a 32B (256 bits) sentinel, the probability of 256 accidental collision under a uniform value distribution is 2 −; in practice the bound is far lower because valid activations occupy a narrow subset of the value space.",
+  "bbox": [
+   63.8,
+   423.1,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S074",
+  "page": 8,
+  "type": "heading",
+  "order": 74,
+  "text": "4 IMPLEMENTATION",
+  "bbox": [
+   53.8,
+   528.4,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S075",
+  "page": 8,
+  "type": "paragraph",
+  "role": null,
+  "order": 75,
+  "text": "We implemented UBEP based on the CANN software stack [15], developing an optimized EPCL in approximately 10K lines of As-cend C. The implementation builds on UB primitives to leverage the available high-bandwidth, low-latency interconnect. We leverage the vector instruc-**SIMD Vectorized Operation.** tion set of Ascend NPU throughout UBEP’s communication ker-nels to avoid scalar per-token loops. For the hierarchical map-per, VectorCount performs parallel prefix-sum lookups in a single instruction (Algorithm 1). For the Token-Sending path, we use CompareScalar for masking and validation, and FindFirstValue to locate token indices. This structure lets the kernel handle small batches efficiently while keeping the control flow straightforward. To**Global Load/Store for Point-to-Point Synchronization.** support kernel decomposition, we replace BSP-based barriers with fine-grained point-to-point synchronization (§3.2). On conventional",
+  "bbox": [
+   53.4,
+   541.5,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S076",
+  "page": 8,
+  "type": "paragraph",
+  "role": null,
+  "order": 76,
+  "text": "**synchronization mechanisms across NPUs.**",
+  "bbox": [
+   321.2,
+   215.2,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S077",
+  "page": 8,
+  "type": "paragraph",
+  "role": null,
+  "order": 77,
+  "text": "**and shared experts.**",
+  "bbox": [
+   318.0,
+   247.5,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S078",
+  "page": 8,
+  "type": "heading",
+  "order": 78,
+  "text": "5 EVALUATION",
+  "bbox": [
+   318.0,
+   439.2,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S079",
+  "page": 8,
+  "type": "paragraph",
+  "role": null,
+  "order": 79,
+  "text": "In this section, we first examine UBEP’s operator-level performance gains by focusing on core communication improvements (§5.2). We then demonstrate AIV-level pipelining enabled by UBEP’s kernel decomposition (§5.3). Next, we analyze the hierarchical token-level scheduling and the synchronization mechanism (§5.4) through ab-lation studies. Finally, we demonstrate UBEP’s end-to-end perfor-mance improvements across different models and verify the gains under various MoE model configurations (§5.5).",
+  "bbox": [
+   318.0,
+   452.4,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S080",
+  "page": 8,
+  "type": "heading",
+  "order": 80,
+  "text": "5.1 Setup",
+  "bbox": [
+   318.0,
+   552.8,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S081",
+  "page": 8,
+  "type": "paragraph",
+  "role": null,
+  "order": 81,
+  "text": "**Testbed.**We evaluate UBEP on a production-scale Huawei CM384 superpod. Our deployment consists of 16 Ascend servers allocated from this superpod, interconnected via a high-bandwidth, low-latency unified fabric, totaling 256 NPU Dies. To demonstrate the versatility and robust-**Models and workload.** ness of UBEP across a wide spectrum of model architectures, we evaluate our system using a diverse suite of four state-of-the-art LLMs, ranging from 30B to 685B parameters. Detailed specifications for all evaluated models are summarized in Table 3. We deploy these models on the CM384 cluster, adjusting the parallelism strategies (TP, DP, EP) according to each model’s scale to ensure optimal hardware utilization. **Baseline.**We evaluate UBEP against the following baselines:",
+  "bbox": [
+   317.7,
+   565.9,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S082",
+  "page": 9,
+  "type": "paragraph",
+  "role": null,
+  "order": 82,
+  "text": "**as a protocol-capability reference on H800.**",
+  "bbox": [
+   53.8,
+   95.4,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S083",
+  "page": 9,
+  "type": "heading",
+  "order": 83,
+  "text": "5.2 Performance Evaluation",
+  "bbox": [
+   53.8,
+   454.6,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S084",
+  "page": 9,
+  "type": "paragraph",
+  "role": null,
+  "order": 84,
+  "text": "**EP Performance Comparison.**We first evaluate the commu-nication latency and effective bandwidth of UBEP in large-scale clusters. Table 4 details the results. UBEP improves performance by implementing kernel decomposition to increase parallelism, using Data-as-Flag mechanism to remove global synchronization barri-ers, and applying fine-grained AIV-level scheduling. Compared to CANN EP on identical hardware and topology, UBEP improves bandwidth by 35.3%–40.8%, isolating the algorithmic gains of our design. **Sensitivity to Workload Parameters.**To analyze the perfor-mance characteristics of UBEP in more detail, we evaluate it under different batch sizes, cluster scales, and expert counts. Unless oth-erwise stated, experiments use 128 ranks, a batch size of 64, and 1 expert per NPU. A more comprehensive analysis across differ-ent parameters is deferred to Appendix C.1 and C.2 due to space constraints. Figure 7(a) shows that UBEP demonstrates consistent improve-ments across BS ranging from 8 to 64. By replacing the base-line mechanism with fine-grained, token-level pipelining, UBEP achieves an average gain of approximately 46.4%. However, at $BS$ = 128, the gain decreases to 35.9%. This decline is primarily due to the increased communication volume associated with larger",
+  "bbox": [
+   53.8,
+   467.7,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S085",
+  "page": 9,
+  "type": "paragraph",
+  "role": null,
+  "order": 85,
+  "text": "batch sizes. Although we minimize the kernel resources for the",
+  "bbox": [
+   318.0,
+   84.7,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S086",
+  "page": 9,
+  "type": "heading",
+  "order": 86,
+  "text": "5.3 Latency Breakdown",
+  "bbox": [
+   318.0,
+   459.4,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S087",
+  "page": 9,
+  "type": "paragraph",
+  "role": null,
+  "order": 87,
+  "text": "To evaluate the effect of Kernel Decomposition, we conducted the tests with a fixed EP scale of 64 NPUs, using a configuration of one expert per NPU. Figure 8 illustrates the detailed latency breakdown of the dispatch operator for three specific batch sizes. In CANN EP, execution proceeds through five stages: Init, Token-Sending,, and. SendFlag & Verification CalCumSum Token-Reordering Global barriers need to be inserted between the two phases where data dependencies exist, causing stragglers to increase the latency of the entire operator. UBEP removes these global barriers by com-bining Kernel Decomposition with Data-as-Flag synchronization, reducing the idle tome of AIVs. Furthermore, fine-grained kernel decomposition enables parallel execution of Token-Sending and CalCumSum. Since the number of AIVs assigned to token transmis-sion scales in proportion to the sending volume, the AIVs available for decrease as the batch size increases. The experi- CalCumSum ment results indicate that UBEP overlap the processing latency of with the communication latency of CalCumSum Token-Sending across different batch sizes, resulting in a performance improve-ment from 34.7% to 52.4% over CANN EP. We also evaluated optimal decomposition strategies under different EP scales, and the detailed experimental results are provided in the Appendix C.3.",
+  "bbox": [
+   317.7,
+   472.6,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S088",
+  "page": 10,
+  "type": "heading",
+  "order": 88,
+  "text": "5.4 Ablation Study",
+  "bbox": [
+   53.8,
+   367.1,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S089",
+  "page": 10,
+  "type": "paragraph",
+  "role": null,
+  "order": 89,
+  "text": "EP with these variants. Across different granularities and rank num-bers, all Data-as-Flag methods reduce latency up to 31.0%–57.1% relative to CANN EP, mainly by removing the stop-and-wait execu-tion pattern and reducing cross-AIV synchronization overhead. On",
+  "bbox": [
+   53.8,
+   654.3,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S090",
+  "page": 10,
+  "type": "paragraph",
+  "role": null,
+  "order": 90,
+  "text": "**the CANN EP across varying synchronization granularity** **and ranks.**",
+  "bbox": [
+   318.0,
+   667.1,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S091",
+  "page": 11,
+  "type": "paragraph",
+  "role": null,
+  "order": 91,
+  "text": "**UBEP** the other hand, The benefit decreases as synchronization granular-ity increases. At a typical dispatch granularity of around 10 KB, the gain stays at about 1 $μs$. This occurs because as the synchronization granularity increases, the communication time accounts for a larger proportion of the total time, which gradually reduces the relative gain obtained from optimizing synchronization. Furthermore, as the number of ranks increases, the synchronization overhead grows. Consequently, the absolute performance gain of TFF, DC, and SP reaches 3.7–4.6 $μs$ when the data volume is small. Among the three variants, DC shows higher latency under small granularity or fewer NPUs because it waits for token batches, which weakens token-level pipelining. SP better balances bandwidth utilization and pipelining, and delivers lower latency across most settings, although it may encounter a rare deadlock if the sentinel value matches actual data.",
+  "bbox": [
+   53.8,
+   217.2,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S092",
+  "page": 11,
+  "type": "heading",
+  "order": 92,
+  "text": "5.5 End-to-End Inference Performance",
+  "bbox": [
+   53.8,
+   400.2,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S093",
+  "page": 11,
+  "type": "paragraph",
+  "role": null,
+  "order": 93,
+  "text": "In this section, based on the vLLM-Ascend v0.14.0 [45] (a hardware plugin for vLLM [21] on Ascend NPU), we evaluate the end-to-end inference performance of UBEP on Mixture-of-Experts (MoE) large language models across varying scales, including Qwen3, GLM and DeepSeek. For Qwen3-30B model, we deploy it on 16 ranks. GLM-4.7 are deployed on 128 and 160 ranks respectively, adopting one-expert-per-rank mapping. DeepSeek-R1 and DeepSeek-V3.2 are evaluated on 128 ranks with a configuration of two experts per rank. Figure 11 reports the normalized end-to-end TPOT distribution across MoE models, with each per-token latency sample normal-ized to the corresponding CANN EP baseline. UBEP reduces P99 end-to-end latency by up to 11.1%, shifting the distribution down-ward, though the gain is smaller than the operator-level speedup because MoE All-to-All communication is only one component of the decoding step. Profiling further shows that MoE communication accounts for roughly 50% of per-token latency (consistent with prior work [49]) but only about 20% of actual hardware execution time, suggesting substantial dependency stalls and runtime overhead. The remaining time is spent on FFN computation, attention, frame-work scheduling, kernel launch, and memory movement. These findings motivate future work to extend the same fine-grained dependency-driven machinery to other collective communication operations and computation. Because model configurations lead to different operator-level characteristics, the normalized gains vary across models. Each box is collected from at least 100 decoding steps.",
+  "bbox": [
+   53.8,
+   413.3,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S094",
+  "page": 11,
+  "type": "heading",
+  "order": 94,
+  "text": "6 DISCUSSION",
+  "bbox": [
+   318.0,
+   85.3,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S095",
+  "page": 11,
+  "type": "paragraph",
+  "role": null,
+  "order": 95,
+  "text": "hop-distance mix. These ideas apply whenever the fabric provides a unified global address space with remote load/store and enough fine-grained concurrency units to exploit the exposed parallelism. Three assumptions are currently tuned to CM384, summarized in Table 5: (1) Data-as-Flag uses the 512B atomic write granu-larity provided by the UB fabric. On fabrics with smaller atomic units, UBEP can use smaller DataBlocks at lower payload efficiency; without atomic writes, it falls back to DC or explicit fences/acks; (2) UBEP uses AIV-level concurrency for fine-grained decompo-sition and overlap. On GPU-like architectures, this role maps to warp-or thread-block-level specialization, including NVIDIA-style persistent kernels. Unlike fused persistent kernels that often rely on rigid resource allocation and software-managed completion polling, UBEP uses receiver-driven data signals and instruction-level atomics to interleave communication and computation at sub-microsecond granularity; (3) the hierarchical scheduler assumes a multi-tier fabric with uniform bandwidth but hop-dependent la-tency. On flatter fabrics, it reduces to token-level load balancing with weaker straggler mitigation. **Attention-FFN Disaggregation (AFD).**To address the resource di-chotomy between memory-intensive Attention layers and compute-heavy FFN experts, recent architectures [42, 55] propose AFD to physically decouple these components onto specialized clusters. This paradigm fundamentally alters the communication topology from symmetric All-to-All to a bipartite Many-to-Many (M2N) pat-tern, where nodes assume distinct sender or receiver roles. Crucially, our design philosophy remains invariant under this shift. Within the superpod context, UBEP’s fine-grained, dependency-driven or-chestration is topology-agnostic; it effectively overlaps the latency of M2N data transfers by decoupling synchronization from payload movement, regardless of the underlying traffic asymmetry. **Next-Generation Fabric Semantics.**We demonstrated the effi-ciency of AIV-level parallelism in UBEP on the CM384 superpod. As inference kernels enter the microsecond regime, breaking the global synchronous barriers of BSP becomes critical. While UBEP leverages UGAS to optimize bandwidth and hierarchical access, software overheads like Data-as-Flag (§3.4) still limit fine-grained scaling. Offloading these control signals to dedicated hardware units represents a more promising mechanism—notable examples include the Scatter-Gather Engine within the SparseCore of TPUs (e.g., TPUv7 [10]) or the CC-Core in AWS Trainium [2]. Meanwhile, enforcing receiver-side ordering capabilities, like *Write-with-Notify * or semantics, can immediately trigger down- *Remote-Sync-Write * stream computation pipelines. Representing the key evolutionary direction for UB, these capabilities would reduce programming",
+  "bbox": [
+   318.0,
+   197.0,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S096",
+  "page": 12,
+  "type": "heading",
+  "order": 96,
+  "text": "7 RELATED WORK",
+  "bbox": [
+   53.8,
+   223.4,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S097",
+  "page": 12,
+  "type": "paragraph",
+  "role": null,
+  "order": 97,
+  "text": "Efficient All-to-All communica-**Communication Optimization.** tion is pivotal for MoE scalability [8, 20, 30, 37]. A large body of work has optimized this primitive through specialized EPCLs or general-purpose communication runtimes. EPCLs such as DeepEP [51] and UCCL-EP [28] target traditional IB/NVLink clusters with coarse-grained, BSP-style kernels. Hybrid-EP [32] adopts asynchronous parallelism for single-tier superpods but does not address hierar-chical topologies. FUSCO [56] reduces overhead by fusing layout handling, yet it does not target the superpod. More general run-times such as NVSHMEM [33] and MSCCL++ [16] support flexible data movement but rely on explicit ordering between data move-ment and notification (e.g., software fences, work-queue entries, or separate flag updates). These designs—whether MoE-specific or generic—target traditional scale-up/scale-out pipelines or flat single-tier superpods; they do not exploit the unified memory se-mantics and hierarchical topology of modern multi-tier superpods, where traffic patterns and latency non-uniformity render existing adaptation techniques ineffective [18, 41]. Hiding latency**Computation-Communication Overlapping.** via concurrency is a standard optimization in MoE systems [1, 12, 13, 17, 19, 23, 26, 29, 39, 40, 49, 52, 53]. One line of work schedules decomposed All-to-All operations alongside expert computation, as in FasterMoE [12], PipeMoE [39], and Comet [49]. Another line relies on persistent or fused kernels to blur the boundary between communication and computation. FlashDMoE [1] uses persistent kernels for device-initiated asynchronous communication and fine-grained pipelining, while UniEP [53] integrates dispatch, grouped GEMM, and combine within MoE megakernels. System-level frame-works such as Tutel [17], Lancet [19], and HierMoE [26] optimize scheduling and communication, but target conventional GPU clus-ters with NVLink+IB interconnects rather than unified-memory superpods. These overlap strategies, whether based on data slic-ing, persistent kernels, or megakernels, require resolving complex data dependencies and allocating runtime resources precisely. The resulting contention and synchronization overheads can negate the intended speedups [35, 36, 46]. Unlike prior work that overlaps EP communication with expert computation, UBEP hides latency within the EP communication primitive itself by decomposing it into data-dependency-aware sub-tasks, such as overlapping address calculation with token transmission. **Load Balance.**Prior works primarily address straggler effects at the *algorithm-level *[5, 6, 9, 11, 17, 22, 24, 27, 38, 47, 54]. Ap-proaches include dynamic routing optimization [5, 6, 27], expert",
+  "bbox": [
+   180.5,
+   236.5,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S098",
+  "page": 12,
+  "type": "paragraph",
+  "role": null,
+  "order": 98,
+  "text": "**for UBEP components.**",
+  "bbox": [
+   318.9,
+   84.5,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S099",
+  "page": 12,
+  "type": "paragraph",
+  "role": null,
+  "order": 99,
+  "text": "For instance, EPLB [6] and LPLB [5] mitigate skew by dynamically altering token assignments based on global statistics, effectively reshaping the traffic pattern at the application layer. In contrast, UBEP targets orchestration. We accept the irregular *system-level * traffic patterns generated by these upper-layer strategies and op-timize the underlying dataflow and synchronization mechanisms to maximize effective bandwidth utilization on high-performance superpods without altering model semantics.",
+  "bbox": [
+   318.0,
+   209.4,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S100",
+  "page": 12,
+  "type": "heading",
+  "order": 100,
+  "text": "8 CONCLUSION",
+  "bbox": [
+   318.0,
+   310.7,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S101",
+  "page": 12,
+  "type": "paragraph",
+  "role": null,
+  "order": 101,
+  "text": "In this paper, we presented UBEP, a production-ready communica-tion library re-architected for the era of superpods. UBEP disman-tles the rigid BSP execution model by decomposing the monolithic All-to-All primitive into dependency-driven tasks. To eliminate explicit software barriers, we propose the Data-as-Flag synchro-nization protocol that leverages hardware-native atomic semantics. Furthermore, our hierarchical token-level scheduling mechanism neutralizes the load imbalance among AIVs and the straggler ef-fects caused by hierarchical network latencies. Deployed on the Huawei’s CM384 superpod, UBEP demonstrates significant per-formance gains, reducing All-to-All latency by up to 52.4% and improving end-to-end MoE inference TPOT by up to 11.1%. These results validate that to fully unleash the potential of next-generation AI superpods, communication software should evolve from coarse-grained orchestration to fine-grained parallelism. **ACKNOWLEDGMENTS** We sincerely thank all the anonymous reviewers and our shepherd for their helpful comments on drafts of this paper. The work is partly supported by the Fundamental and Interdisciplinary Disci-plines Breakthrough Plan of the Ministry of Education of China (JYB2025XDXM901) and the NSF of China (62422207). **REFERENCES**",
+  "bbox": [
+   318.0,
+   323.8,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S102",
+  "page": 12,
+  "type": "paragraph",
+  "role": null,
+  "order": 102,
+  "text": "[1] OsayamenJonathanAimuyo,ByungsooOh,andRacheeSingh.2025. FlashDMoE: Fast Distributed MoE in a Single Kernel. (2025). arXiv:cs.DC/2506.04667 https: //arxiv.org/abs/2506.04667v2",
+  "bbox": [
+   321.2,
+   595.4,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S103",
+  "page": 12,
+  "type": "paragraph",
+  "role": null,
+  "order": 103,
+  "text": "[2] Amazon Web Services. 2025. Trainium2 Architecture — AWS Neuron Docu-mentation. (2025). https://awsdocs-neuron.readthedocs-hosted.com/en/latest/ about-neuron/arch/neuron-hardware/trainium2.html Official AWS documenta-tion. Trainium2 includes 16 CC-Cores for collective communication. Accessed June 2026.",
+  "bbox": [
+   321.2,
+   619.3,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S104",
+  "page": 12,
+  "type": "paragraph",
+  "role": null,
+  "order": 104,
+  "text": "[3] AMD. 2021. Introducing AMD CDNA 2 Architecture. (2021). https: //www.amd.com/content/dam/amd/en/documents/instinct-business-docs/ white-papers/amd-cdna2-white-paper.pdf",
+  "bbox": [
+   321.2,
+   659.1,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S105",
+  "page": 12,
+  "type": "paragraph",
+  "role": null,
+  "order": 105,
+  "text": "[4] Broadcom Inc. 2024. *Scale-Up Ethernet Framework (SUE) *. Technical Report. Broadcom Inc. https://docs.broadcom.com/doc/scale-up-ethernet-framework White Paper.",
+  "bbox": [
+   321.2,
+   683.1,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S106",
+  "page": 13,
+  "type": "paragraph",
+  "role": null,
+  "order": 106,
+  "text": "[5] DeepSeek-AI. 2025. An early research stage expert-parallel load balancer for MoEmodelsbasedonlinearprogramming. https://github.com/deepseek-ai/LPLB. (2025).",
+  "bbox": [
+   57.0,
+   86.7,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S107",
+  "page": 13,
+  "type": "paragraph",
+  "role": null,
+  "order": 107,
+  "text": "[6] DeepSeek-AI. 2025. Expert Parallelism Load Balancer. https://github.com/ deepseek-ai/eplb. (2025).",
+  "bbox": [
+   57.0,
+   110.6,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S108",
+  "page": 13,
+  "type": "paragraph",
+  "role": null,
+  "order": 108,
+  "text": "[7] DeepSeek-AI, Aixin Liu, Bei Feng, Bing Xue, Bingxuan Wang, Bochao Wu, Chengda Lu, Chenggang Zhao, Chengqi Deng, Chenyu Zhang, Chong Ruan, Damai Dai, Daya Guo, Dejian Yang, Deli Chen, Dongjie Ji, Erhang Li, Fangyun Lin, Fucong Dai, Fuli Luo, Guangbo Hao, Guanting Chen, Guowei Li, H. Zhang, Han Bao, Hanwei Xu, Haocheng Wang, Haowei Zhang, Honghui Ding, Huajian Xin, Huazuo Gao, Hui Li, Hui Qu, J. L. Cai, Jian Liang, Jianzhong Guo, Jiaqi Ni, Jiashi Li, Jiawei Wang, Jin Chen, Jingchang Chen, Jingyang Yuan, Junjie Qiu, Junlong Li, Junxiao Song, Kai Dong, Kai Hu, Kaige Gao, Kang Guan, Kexin Huang, Kuai Yu, Lean Wang, Lecong Zhang, Lei Xu, Leyi Xia, Liang Zhao, Litong Wang,LiyueZhang,MengLi,MiaojunWang,MingchuanZhang,MinghuaZhang, MinghuiTang,MingmingLi,NingTian,PanpanHuang,PeiyiWang,PengZhang, Qiancheng Wang, Qihao Zhu, Qinyu Chen, Qiushi Du, R. J. Chen, R. L. Jin, Ruiqi Ge, Ruisong Zhang, Ruizhe Pan, Runji Wang, Runxin Xu, Ruoyu Zhang, Ruyi Chen, S. S. Li, Shanghao Lu, Shangyan Zhou, Shanhuang Chen, Shaoqing Wu, Shengfeng Ye, Shengfeng Ye, Shirong Ma, Shiyu Wang, Shuang Zhou, Shuiping Yu, Shunfeng Zhou, Shuting Pan, T. Wang, Tao Yun, Tian Pei, Tianyu Sun, W. L. Xiao, Wangding Zeng, Wanjia Zhao, Wei An, Wen Liu, Wenfeng Liang, Wenjun Gao, Wenqin Yu, Wentao Zhang, X. Q. Li, Xiangyue Jin, Xianzu Wang, Xiao Bi, Xiaodong Liu, Xiaohan Wang, Xiaojin Shen, Xiaokang Chen, Xiaokang Zhang, Xiaosha Chen, Xiaotao Nie, Xiaowen Sun, Xiaoxiang Wang, Xin Cheng, Xin Liu, XinXie,XingchaoLiu,XingkaiYu,XinnanSong,XinxiaShan,XinyiZhou,Xinyu Yang, Xinyuan Li, Xuecheng Su, Xuheng Lin, Y. K. Li, Y. Q. Wang, Y. X. Wei, Y. X. Zhu, Yang Zhang, Yanhong Xu, Yanhong Xu, Yanping Huang, Yao Li, Yao Zhao, Yaofeng Sun, Yaohui Li, Yaohui Wang, Yi Yu, Yi Zheng, Yichao Zhang, Yifan Shi, Yiliang Xiong, Ying He, Ying Tang, Yishi Piao, Yisong Wang, Yixuan Tan, Yiyang Ma, Yiyuan Liu, Yongqiang Guo, Yu Wu, Yuan Ou, Yuchen Zhu, Yuduan Wang, Yue Gong, Yuheng Zou, Yujia He, Yukun Zha, Yunfan Xiong, Yunxian Ma, Yuting Yan, Yuxiang Luo, Yuxiang You, Yuxuan Liu, Yuyang Zhou, Z. F. Wu, Z. Z. Ren, Zehui Ren, Zhangli Sha, Zhe Fu, Zhean Xu, Zhen Huang, Zhen Zhang, Zhenda Xie, Zhengyan Zhang, Zhewen Hao, Zhibin Gou, Zhicheng Ma, Zhigang Yan, Zhihong Shao, Zhipeng Xu, Zhiyu Wu, Zhongyu Zhang, Zhuoshu Li, Zihui Gu, Zijia Zhu, Zijun Liu, Zilin Li, Ziwei Xie, Ziyang Song, Ziyi Gao, and Zizheng Pan. 2025. DeepSeek-V3 Technical Report. (2025). arXiv:cs.CL/2412.19437 https://arxiv.org/abs/2412.19437",
+  "bbox": [
+   57.0,
+   126.5,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S109",
+  "page": 13,
+  "type": "paragraph",
+  "role": null,
+  "order": 109,
+  "text": "[8] Nan Du, Yanping Huang, Andrew M Dai, Simon Tong, Dmitry Lepikhin, Yuanzhong Xu, Maxim Krikun, Yanqi Zhou, Adams Wei Yu, Orhan Firat, Barret Zoph, Liam Fedus, Maarten P Bosma, Zongwei Zhou, Tao Wang, Emma Wang, Kellie Webster, Marie Pellat, Kevin Robinson, Kathleen Meier-Hellstern, Toju Duke, Lucas Dixon, Kun Zhang, Quoc Le, Yonghui Wu, Zhifeng Chen, and Claire Cui. 2022. GLaM: Efficient Scaling of Language Models with Mixture-of-Experts. In *Proceedings of the 39th International Conference on Machine Learning (Pro- * *ceedings of Machine Learning Research) *, Kamalika Chaudhuri, Stefanie Jegelka, Le Song, Csaba Szepesvari, Gang Niu, and Sivan Sabato (Eds.), Vol. 162. PMLR, 5547–5569. https://proceedings.mlr.press/v162/du22c.html",
+  "bbox": [
+   57.0,
+   397.5,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S110",
+  "page": 13,
+  "type": "paragraph",
+  "role": null,
+  "order": 110,
+  "text": "[9] William Fedus, Barret Zoph, and Noam Shazeer. 2022. Switch Transformers: Scaling to Trillion Parameter Models with Simple and Efficient Sparsity. *Journal * *of Machine Learning Research *23, 120 (2022), 1–39. http://jmlr.org/papers/v23/ 21-0998.html [10] Google Cloud. 2025. TPU7x (Ironwood). (2025). https://docs.cloud.google.com/ tpu/docs/tpu7x Google Cloud official documentation. Accessed June 2026. [11] Yu Han, Lehan Pan, Jie Peng, Ziyang Tao, Wuyang Zhang, and Yanyong Zhang. 2025. GRACE-MoE: Grouping and Replication with Locality-Aware Routing for Efficient Distributed MoE Inference. *arXiv preprint arXiv:2509.25041 *(2025). [12] Jiaao He, Jidong Zhai, Tiago Antunes, Haojie Wang, Fuwen Luo, Shangfeng Shi, and Qin Li. 2022. FasterMoE: modeling and optimizing training of large-scale dynamicpre-trainedmodels.In *Proceedingsofthe27thACMSIGPLANSymposium * *on Principles and Practice of Parallel Programming (PPoPP ’22) *. Association for Computing Machinery, New York, NY, USA, 120–134. https://doi.org/10.1145/ 3503221.3508418 [13] Yanping Huang, Youlong Cheng, Ankur Bapna, Orhan Firat, Dehao Chen, Mia Chen, HyoukJoong Lee, Jiquan Ngiam, Quoc V Le, Yonghui Wu, and zhifeng Chen. 2019. GPipe: Efficient Training of Giant Neural Networks using Pipeline Parallelism. In *Advances in Neural Information Processing Systems *, H. Wallach, H.Larochelle,A.Beygelzimer,F.d'Alché-Buc,E.Fox,andR.Garnett(Eds.),Vol.32. Curran Associates, Inc. https://proceedings.neurips.cc/paper_files/paper/2019/ file/093f65e080a295f8076b1c5722a46aa2-Paper.pdf [14] Huawei. 2025. unifiedbus 2.0 Specification. (2025). https://www.unifiedbus.com/ [15] Huawei Technologies Co., Ltd. 2025. CANN: Compute Architecture for Neural Networks. (2025). https://www.hiascend.com/en/software/cann [16] Changho Hwang, Peng Cheng, Roshan Dathathri, Abhinav Jangda, Saeed Maleki, Madan Musuvathi, Olli Saarikivi, Aashaka Shah, Ziyue Yang, Binyang Li, Caio Rocha, Qinghua Zhou, Mahdieh Ghazimirsaeed, Sreevatsa Anantharamu, and JithinJose.2026. MSCCL++:RethinkingGPUCommunicationAbstractionsforAI",
+  "bbox": [
+   57.0,
+   477.2,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S111",
+  "page": 13,
+  "type": "paragraph",
+  "role": null,
+  "order": 111,
+  "text": "Inference.In *Proceedingsofthe31stACMInternationalConferenceonArchitectural * *Support for Programming Languages and Operating Systems, Volume 2 *. ACM, 1201–1215. https://doi.org/10.1145/3779212.3790188 [17] Changho Hwang, Wei Cui, Yifan Xiong, Ziyue Yang, Ze Liu, Han Hu, Zilong Wang, Rafael Salas, Jithin Jose, Prabhat Ram, HoYuen Chau, Peng Cheng, Fan Yang, Mao Yang, and Yongqiang Xiong. 2023. Tutel: Adaptive Mixture-of-Experts at Scale. In *Proceedings of Machine Learning and Systems *, D. Song, M. Carbin, and T. Chen (Eds.), Vol. 5. Curan, 269–287. https://proceedings.mlsys.org/paper_files/ paper/2023/file/5616d34cf8ff73942cfd5aa922842556-Paper-mlsys2023.pdf [18] Alexander Ishii and Ryan Wells. 2022. The NVLink-Network Switch: NVIDIA’s Switch Chip for High Communication-Bandwidth Superpods. In *2022 IEEE Hot *. https://doi.org/10.1109/HCS55958.2022.9895480 *Chips 34 Symposium (HCS) * [19] Chenyu Jiang, Ye Tian, Zhen Jia, Shuai Zheng, Chuan Wu, and Yida Wang. 2024. Lancet: Accelerating Mixture-of-Experts Training via Whole Graph Computation-Communication Overlapping. In *Proceedings of Ma- *, P. Gibbons, G. Pekhimenko, and C. De Sa *chine Learning and Systems * (Eds.), Vol. 6. 74–86. https://proceedings.mlsys.org/paper_files/paper/2024/file/ 339caf45a6fa281cae8adc6465343464-Paper-Conference.pdf [20] Chao Jin, Ziheng Jiang, Zhihao Bai, Zheng Zhong, Juncai Liu, Xiang Li, Ningxin Zheng, Xi Wang, Cong Xie, Qi Huang, Wen Heng, Yiyuan Ma, Wenlei Bao, Size Zheng, Yanghua Peng, Haibin Lin, Xuanzhe Liu, Xin Jin, and Xin Liu. 2025. MegaScale-MoE: Large-Scale Communication-Efficient Training of Mixture-of- Experts Models in Production. (2025). arXiv:cs.LG/2505.11432 https://arxiv.org/ abs/2505.11432 [21] Woosuk Kwon, Zhuohan Li, Siyuan Zhuang, Ying Sheng, Lianmin Zheng, Cody Hao Yu, Joseph Gonzalez, Hao Zhang, and Ion Stoica. 2023. Efficient memory management for large language model serving with pagedattention. In *Proceedings of the 29th symposium on operating systems principles *. 611–626. [22] Dmitry Lepikhin, HyoukJoong Lee, Yuanzhong Xu, Dehao Chen, Orhan Firat, Yanping Huang, Maxim Krikun, Noam Shazeer, and Zhifeng Chen. 2020. Gshard: Scalinggiantmodelswithconditionalcomputationandautomaticsharding. *arXiv * *preprint arXiv:2006.16668 *(2020). [23] Jiamin Li, Yimin Jiang, Yibo Zhu, Cong Wang, and Hong Xu. 2023. Accelerating Distributed MoE Training and Inference with Lina. In *2023 USENIX Annual *. USENIX Association, Boston, MA, 945– *Technical Conference (USENIX ATC 23) * 959. https://www.usenix.org/conference/atc23/presentation/li-jiamin [24] Yan Li, Pengfei Zheng, Shuang Chen, Zewei Xu, Yuanhao Lai, Yunfei Du, and Zhengang Wang. 2025. Speculative MoE: Communication Efficient Parallel MoE Inference with Speculative Token and Expert Pre-scheduling. (2025). arXiv:cs.LG/2503.04398 https://arxiv.org/abs/2503.04398 [25] Heng Liao, Bingyang Liu, Xianping Chen, Zhigang Guo, Chuanning Cheng, Jianbing Wang, Xiangyu Chen, Peng Dong, Rui Meng, Wenjie Liu, Zhe Zhou, Ziyang Zhang, Yuhang Gai, Cunle Qian, Yi Xiong, Zhongwu Cheng, Jing Xia, Yuli Ma, Xi Chen, Wenhua Du, Shizhong Xiao, Chungang Li, Yong Qin, Liudong Xiong, Zhou Yu, Lv Chen, Lei Chen, Buyun Wang, Pei Wu, Junen Gao, Xiaochu Li, Jian He, Shizhuan Yan, and Bill McColl. 2025. UB-Mesh: A Hierarchically Localized nD-FullMesh Data Center Network Architecture. *IEEE Micro *45, 5 (2025), 20–29. https://doi.org/10.1109/MM.2025.3592688 [26] Wenxiang Lin, Xinglin Pan, Lin Zhang, Shaohuai Shi, Xuan Wang, and Xi-aowen Chu. 2025. HierMoE: Accelerating MoE Training with Hierarchical Token Deduplication and Expert Swap. (2025). arXiv:cs.DC/2508.09591 https: //arxiv.org/abs/2508.09591 [27] Xinyi Liu, Yujie Wang, Fangcheng Fu, Xupeng Miao, Shenhan Zhu, Xiao-nan Nie, and Bin Cui. 2025. NetMoE: Accelerating MoE Training through Dynamic Sample Placement. In *The Thirteenth International Conference on * *Learning Representations *. https://proceedings.iclr.cc/paper_files/paper/2025/file/ e0c256700465c158de71081b4cf5e8c3-Paper-Conference.pdf [28] Ziming Mao, Yihan Zhang, Chihan Cui, Kaichao You, Zhongjie Chen, Zhiying Xu, Scott Shenker, Costin Raiciu, Yang Zhou, and Ion Stoica. 2025. UCCL-EP: Portable Expert-Parallel Communication. (2025). arXiv:cs.DC/2512.19849 https: //arxiv.org/abs/2512.19849 [29] Deepak Narayanan, Aaron Harlap, Amar Phanishayee, Vivek Seshadri, Nikhil R. Devanur, Gregory R. Ganger, Phillip B. Gibbons, and Matei Zaharia. 2019. PipeDream: generalized pipeline parallelism for DNN training. In *Proceedings of *. Association *the 27th ACM Symposium on Operating Systems Principles (SOSP ’19) * for Computing Machinery, New York, NY, USA, 1–15. https://doi.org/10.1145/ 3341301.3359646 [30] Xiaonan Nie, Qibin Liu, Fangcheng Fu, Shenhan Zhu, Xupeng Miao, Xiaoyang Li, Yang Zhang, Shouda Liu, and Bin Cui. 2024. LSH-MoE: Communication-efficient MoE Training via Locality-Sensitive Hashing. In *Advances in Neural Information * *Processing Systems *, A. Globerson, L. Mackey, D. Belgrave, A. Fan, U. Paquet, J. Tomczak, and C. Zhang (Eds.), Vol. 37. Curran Associates, Inc., 54161–54182. https://doi.org/10.52202/079017-1716 [31] NVIDIA. 2024. NVIDIA GB200 NVL72. (2024). https://www.nvidia.com/en-us/ data-center/gb200-nvl72/ [32] NVIDIA. 2025. Hybrid-EP. https://github.com/deepseek-ai/DeepEP/tree/ hybrid-ep. (2025).",
+  "bbox": [
+   333.4,
+   86.7,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S112",
+  "page": 14,
+  "type": "paragraph",
+  "role": null,
+  "order": 112,
+  "text": "[33] NVIDIA. 2026. NVSHMEM Memory Ordering. https://docs.nvidia.com/ nvshmem/api/gen/api/ordering.html. (2026). [34] NVIDIA Corporation. 2024. NVIDIA NVLink. (2024). https://www.nvidia.com/ en-us/products/workstations/nvlink-bridges/ [35] Yanghua Peng, Yibo Zhu, Yangrui Chen, Yixin Bao, Bairen Yi, Chang Lan, Chuan Wu, and Chuanxiong Guo. 2019. A generic communication scheduler for dis-tributedDNNtrainingacceleration.In *Proceedingsofthe27thACMSymposiumon * *Operating Systems Principles (SOSP ’19) *. Association for Computing Machinery, New York, NY, USA, 16–29. https://doi.org/10.1145/3341301.3359642 [36] Kishore Punniyamurthy, Khaled Hamidouche, and Bradford M. Beckmann. 2024. Optimizing Distributed ML Communication with Fused Computation-Collective Operations. In *SC24: International Conference for High Performance Computing, * *Networking, Storage and Analysis *. 1–17. https://doi.org/10.1109/SC41406.2024. 00094 [37] Samyam Rajbhandari, Conglong Li, Zhewei Yao, Minjia Zhang, {Reza Yazdani} Aminabadi,{AmmarAhmad}Awan,JeffRasley,andYuxiongHe.2022. DeepSpeed- MoE: Advancing Mixture-of-Experts Inference and Training to Power Next- Generation AI Scale. 162 (2022), 18332– *Proceedings of Machine Learning Research * 18346. PublisherCopyright:Copyright©2022bytheauthor(s);39thInternational Conference on Machine Learning, ICML 2022; Conference date: 17-07-2022 Through 23-07-2022. [38] Noam Shazeer, Azalia Mirhoseini, Krzysztof Maziarz, Andy Davis, Quoc Le, Geoffrey Hinton, and Jeff Dean. 2017. Outrageously Large Neural Networks: The Sparsely-GatedMixture-of-ExpertsLayer.In *InternationalConferenceonLearning * *Representations *. https://arxiv.org/abs/1701.06538 [39] Shaohuai Shi, Xinglin Pan, Xiaowen Chu, and Bo Li. 2023. PipeMoE: Acceler-ating Mixture-of-Experts through Adaptive Pipelining. In *IEEE INFOCOM 2023 * *- IEEE Conference on Computer Communications *. 1–10. https://doi.org/10.1109/ INFOCOM53939.2023.10228874 [40] Shaohuai Shi, Xinglin Pan, Qiang Wang, Chengjian Liu, Xiaozhe Ren, Zhongzhe Hu, Yu Yang, Bo Li, and Xiaowen Chu. 2024. ScheMoE: An Extensible Mixture-of- Experts Distributed Training System with Tasks Scheduling. In *Proceedings of the *. Association *Nineteenth European Conference on Computer Systems (EuroSys ’24) * for Computing Machinery, New York, NY, USA, 236–249. https://doi.org/10.1145/ 3627703.3650083 [41] Xiaoyong Song, Danyuan Zhou, Kai Li, Jiayuan Chen, Hao Zhang, Xiaoguang Zhang, and Xuxia Zhong. 2025. Survey of Intra-Node GPU Interconnection in Scale-Up Network: Challenges, Status, Insights, and Future Directions. *Future * *Internet *17, 12 (2025). https://doi.org/10.3390/fi17120537 [42] StepFun, Bin Wang, Bojun Wang, Changyi Wan, Guanzhe Huang, Hanpeng Hu, Haonan Jia, Hao Nie, Mingliang Li, Nuo Chen, Siyu Chen, Song Yuan, Wuxun Xie, Xiaoniu Song, Xing Chen, Xingping Yang, Xuelin Zhang, Yanbo Yu, Yaoyu Wang, Yibo Zhu, Yimin Jiang, Yu Zhou, Yuanwei Lu, Houyi Li, Jingcheng Hu, Ka Man Lo, Ailin Huang, Binxing Jiao, Bo Li, Boyu Chen, Changxin Miao, Chang Lou, Chen Hu, Chen Xu, Chenfeng Yu, Chengyuan Yao, Daokuan Lv, Dapeng Shi, Deshan Sun, Ding Huang, Dingyuan Hu, Dongqing Pang, Enle Liu, Fajie Zhang, Fanqi Wan, Gulin Yan, Han Zhang, Han Zhou, Hanghao Wu, Hangyu Guo, Hanqi Chen, Hanshan Zhang, Hao Wu, Haocheng Zhang, Haolong Yan, Haoran Lv, Haoran Wei, Hebin Zhou, Heng Wang, Heng Wang, Hongxin Li, Hongyu Zhou, Hongyuan Wang, Huiyong Guo, Jia Wang, Jiahao Gong, Jialing Xie, Jian Zhou, Jianjian Sun, Jiaoren Wu, Jiaran Zhang, Jiayu Liu, Jie Cheng, Jie Luo, Jie Yan, Jie Yang, Jieyi Hou, Jinguang Zhang, Jinlan Cao, Jisheng Yin, Junfeng Liu, Junhao Huang,JunzheLin,KaijunTan,KaixiangLi,KangAn,KanghengLin,KenkunLiu, Lei Yang, Liang Zhao, Liangyu Chen, Lieyu Shi, Liguo Tan, Lin Lin, Lin Zhang, Lina Chen, Liwen Huang, Liying Shi, Longlong Gu, Mei Chen, Mengqiang Ren, Ming Li, Mingzhe Chen, Na Wang, Nan Wu, Qi Han, Qian Zhao, Qiang Zhang, Qianni Liu, Qiaohui Chen, Qiling Wu, Qinglin He, Qinyuan Tan, Qiufeng Wang, Qiuping Wu, Qiuyan Liang, Quan Sun, Rui Li, Ruihang Miao, Ruosi Wan, Ruyan Guo, Shangwu Zhong, Shaoliang Pang, Shengjie Fan, Shijie Shang, Shilei Jiang, Shiliang Yang, Shiming Hao, Shuli Gao, Siming Huang, Siqi Liu, Tiancheng Cao, Tianhao Cheng, Tianhao Peng, Wang You, Wei Ji, Wen Sun, Wenjin Deng, Wenqing He, Wenzhen Zheng, Xi Chen, Xiangwen Kong, Xianzhen Luo, Xiaobo Yang, Xiaojia Liu, Xiaoxiao Ren, Xin Han, Xin Li, Xin Wu, Xu Zhao, Yanan Wei, Yang Li, Yangguang Li, Yangshijie Xu, Yanming Xu, Yaqiang Shi, Yeqing Shen, Yi Yang,YifeiYang,YifengGong,YihanChen,YijingYang,YinminZhang,Yizhuang Zhou, Yuanhao Ding, Yuantao Fan, Yuanzhen Yang, Yuchu Luo, Yue Peng, Yufan Lu, Yuhang Deng, Yuhe Yin, Yujie Liu, Yukun Chen, Yuling Zhao, Yun Mou, Yunlong Li, Yunzhou Ju, Yusheng Li, Yuxiang Yang, Yuxiang Zhang, Yuyang Chen, Zejia Weng, Zhe Xie, Zheng Ge, Zheng Gong, Zhenyi Lu, Zhewei Huang, ZhichaoChang,ZhiguoHuang,ZhiruiWang,ZidongYang,ZiliWang,ZiqiWang, Zixin Zhang, Binxing Jiao, Daxin Jiang, Heung-Yeung Shum, and Xiangyu Zhang. 2025. Step-3 is Large yet Affordable: Model-system Co-design for Cost-effective Decoding. (2025). arXiv:cs.LG/2507.19427 https://arxiv.org/abs/2507.19427 [43] GLM Team, Aohan Zeng, Xin Lv, Qinkai Zheng, Zhenyu Hou, Bin Chen, Chengx-ing Xie, Cunxiang Wang, Da Yin, Hao Zeng, Jiajie Zhang, Kedong Wang, Lucen Zhong, Mingdao Liu, Rui Lu, Shulin Cao, Xiaohan Zhang, Xuancheng Huang, Yao Wei, Yean Cheng, Yifan An, Yilin Niu, Yuanhao Wen, Yushi Bai, Zhengxiao Du, Zihan Wang, Zilin Zhu, Bohan Zhang, Bosi Wen, Bowen Wu, Bowen Xu, Can",
+  "bbox": [
+   53.8,
+   86.7,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S113",
+  "page": 14,
+  "type": "paragraph",
+  "role": null,
+  "order": 113,
+  "text": "Huang, Casey Zhao, Changpeng Cai, Chao Yu, Chen Li, Chendi Ge, Chenghua Huang, Chenhui Zhang, Chenxi Xu, Chenzheng Zhu, Chuang Li, Congfeng Yin, Daoyan Lin, Dayong Yang, Dazhi Jiang, Ding Ai, Erle Zhu, Fei Wang, Gengzheng Pan, Guo Wang, Hailong Sun, Haitao Li, Haiyang Li, Haiyi Hu, Hanyu Zhang, Hao Peng, Hao Tai, Haoke Zhang, Haoran Wang, Haoyu Yang, He Liu, He Zhao, Hongwei Liu, Hongxi Yan, Huan Liu, Huilong Chen, Ji Li, Jiajing Zhao, Jiamin Ren,JianJiao,JianiZhao,JianyangYan,JiaqiWang,JiayiGui,JiayueZhao,JieLiu, Jijie Li, Jing Li, Jing Lu, Jingsen Wang, Jingwei Yuan, Jingxuan Li, Jingzhao Du, JinhuaDu,JinxinLiu,JunkaiZhi,JunliGao,KeWang,LekangYang,LiangXu,Lin Fan, Lindong Wu, Lintao Ding, Lu Wang, Man Zhang, Minghao Li, Minghuan Xu, MingmingZhao,MingshuZhai,PengfanDu,QianDong,ShangdeLei,Shangqing Tu, Shangtong Yang, Shaoyou Lu, Shijie Li, Shuang Li, Shuang-Li, Shuxun Yang, Sibo Yi, Tianshu Yu, Wei Tian, Weihan Wang, Wenbo Yu, Weng Lam Tam, Wenjie Liang,WentaoLiu,XiaoWang,XiaohanJia,XiaotaoGu,XiaoyingLing,XinWang, Xing Fan, Xingru Pan, Xinyuan Zhang, Xinze Zhang, Xiuqing Fu, Xunkai Zhang, Yabo Xu, Yandong Wu, Yida Lu, Yidong Wang, Yilin Zhou, Yiming Pan, Ying Zhang, Yingli Wang, Yingru Li, Yinpei Su, Yipeng Geng, Yitong Zhu, Yongkun Yang, Yuhang Li, Yuhao Wu, Yujiang Li, Yunan Liu, Yunqing Wang, Yuntao Li, Yuxuan Zhang, Zezhen Liu, Zhen Yang, Zhengda Zhou, Zhongpei Qiao, Zhuoer Feng, Zhuorui Liu, Zichen Zhang, Zihan Wang, Zijun Yao, Zikang Wang, Ziqiang Liu, Ziwei Chai, Zixuan Li, Zuodong Zhao, Wenguang Chen, Jidong Zhai, Bin Xu, Minlie Huang, Hongning Wang, Juanzi Li, Yuxiao Dong, and Jie Tang. 2025. GLM-4.5: Agentic, Reasoning, and Coding (ARC) Foundation Models. (2025). arXiv:cs.CL/2508.06471 https://arxiv.org/abs/2508.06471 [44] ULTRA ACCELERATOR LINK CONSORTIUM. 2025. *Introducing UALink 200G * *1.0 Specification *. Technical Report. ULTRA ACCELERATOR LINK CONSOR- TIUM. https://ualinkconsortium.org/wp-content/uploads/2025/04/UALink-1. 0-White_Paper_FINAL.pdf White Paper. [45] vllm-project.2025. CommunitymaintainedhardwarepluginforvLLMonAscend. https://github.com/vllm-project/vllm-ascend. (2025). [46] Hulin Wang, Yaqi Xia, Donglin Yang, Xiaobo Zhou, and Dazhao Cheng. 2025. Harnessing Inter-GPU Shared Memory for Seamless MoE Communication- ComputationFusion.In *Proceedingsofthe30thACMSIGPLANAnnualSymposium * *on Principles and Practice of Parallel Programming, PPoPP 2025, Las Vegas, NV, *. ACM, 170–182. https://doi.org/10.1145/3710848.3710868 *USA, March 1-5, 2025 * [47] Tian Wu, Liming Wang, Zijian Wen, Xiaoxi Zhang, Jingpu Duan, Xianwei Zhang, and Jinhang Zuo. 2025. Accelerating Edge Inference for Distributed MoE Mod-els with Latency-Optimized Expert Placement. *arXiv preprint arXiv:2508.12851 * (2025). [48] An Yang, Anfeng Li, Baosong Yang, Beichen Zhang, Binyuan Hui, Bo Zheng, Bowen Yu, Chang Gao, Chengen Huang, Chenxu Lv, Chujie Zheng, Dayiheng Liu, Fan Zhou, Fei Huang, Feng Hu, Hao Ge, Haoran Wei, Huan Lin, Jialong Tang, Jian Yang, Jianhong Tu, Jianwei Zhang, Jianxin Yang, Jiaxi Yang, Jing Zhou, Jingren Zhou, Junyang Lin, Kai Dang, Keqin Bao, Kexin Yang, Le Yu, Lianghao Deng, Mei Li, Mingfeng Xue, Mingze Li, Pei Zhang, Peng Wang, Qin Zhu, Rui Men, Ruize Gao, Shixuan Liu, Shuang Luo, Tianhao Li, Tianyi Tang, Wenbiao Yin, Xingzhang Ren, Xinyu Wang, Xinyu Zhang, Xuancheng Ren, Yang Fan, Yang Su, Yichang Zhang, Yinger Zhang, Yu Wan, Yuqiong Liu, Zekun Wang, Zeyu Cui, Zhenru Zhang, Zhipeng Zhou, and Zihan Qiu. 2025. Qwen3 Technical Report. (2025). arXiv:cs.CL/2505.09388 https://arxiv.org/abs/2505.09388 [49] Shulai Zhang, Ningxin Zheng, Haibin Lin, Ziheng Jiang, Wenlei Bao, Chengquan Jiang, Qi Hou, Weihao Cui, Size Zheng, Li-Wen Chang, Quan Chen, and Xin Liu. 2025. Comet: Fine-grained Computation-communication Overlapping for Mixture-of-Experts. (2025). arXiv:cs.DC/2502.19811 https://arxiv.org/abs/2502. 19811 [50] Chenggang Zhao, Chengqi Deng, Chong Ruan, Damai Dai, Huazuo Gao, Jiashi Li, Liyue Zhang, Panpan Huang, Shangyan Zhou, Shirong Ma, Wenfeng Liang, Ying He, Yuqing Wang, Yuxuan Liu, and Y.X. Wei. 2025. Insights into DeepSeek- V3: Scaling Challenges and Reflections on Hardware for AI Architectures. In *Proceedingsofthe52ndAnnualInternationalSymposiumonComputerArchitecture *.AssociationforComputingMachinery,NewYork,NY,USA,1731–1745. *(ISCA’25) * https://doi.org/10.1145/3695053.3731412 [51] Chenggang Zhao, Shangyan Zhou, Liyue Zhang, Chengqi Deng, Zhean Xu, Yuxuan Liu, Kuai Yu, Jiashi Li, and Liang Zhao. 2025. DeepEP: an efficient expert-parallel communication library. https://github.com/deepseek-ai/DeepEP. (2025). [52] Lianmin Zheng, Zhuohan Li, Hao Zhang, Yonghao Zhuang, Zhifeng Chen, Yan-ping Huang, Yida Wang, Yuanzhong Xu, Danyang Zhuo, Eric P. Xing, Joseph E. Gonzalez, and Ion Stoica. 2022. Alpa: Automating Inter-and Intra-Operator Parallelism for Distributed Deep Learning. In *16th USENIX Symposium on Op- * *erating Systems Design and Implementation (OSDI 22) *. USENIX Association, Carlsbad, CA, 559–578. https://www.usenix.org/conference/osdi22/presentation/ zheng-lianmin [53] Size Zheng, Xuegui Zheng, Li wen Chang, and Jidong Zhai. 2026. UniEP: Unified Expert-Parallel MoE MegaKernel for LLM Training. (2026). arXiv:cs.DC/2604.19241 https://arxiv.org/abs/2604.19241 [54] Yanqi Zhou, Tao Lei, Hanxiao Liu, Nan Du, Yanping Huang, Vincent Y. Zhao, AndrewDai,ZhifengChen,QuocLe,andJamesLaudon.2022. Mixture-of-experts",
+  "bbox": [
+   333.4,
+   86.7,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S114",
+  "page": 15,
+  "type": "paragraph",
+  "role": null,
+  "order": 114,
+  "text": "with expert choice routing. In *Proceedings of the 36th International Conference * *on Neural Information Processing Systems (NIPS ’22) *. Curran Associates Inc., Red Hook, NY, USA, Article 515, 12 pages. [55] Ruidong Zhu, Ziheng Jiang, Chao Jin, Peng Wu, Cesar A. Stuardo, Dongyang Wang, Xinlei Zhang, Huaping Zhou, Haoran Wei, Yang Cheng, Jianzhe Xiao, XinyiZhang,LingjunLiu,HaibinLin,Li-WenChang,JianxiYe,XiaoYu,Xuanzhe Liu, Xin Jin, and Xin Liu. 2025. MegaScale-Infer: Serving Mixture-of-Experts at Scale with Disaggregated Expert Parallelism. (2025). arXiv:cs.DC/2504.02263 https://arxiv.org/abs/2504.02263 [56] Zhuoran Zhu, Chunyang Zhu, Hao Lin, Xu Fu, Yiming Zhou, Quanlu Zhang, Zhenhua Li, Feng Qian, Chao Yu, Boxun Li, Guohao Dai, and Yu Wang. 2025. FUSCO: High-Performance Distributed Data Shuffling via Transformation- Communication Fusion. *arXiv preprint arXiv:2512.22036 *(2025). [57] Pengfei Zuo, Huimin Lin, Junbo Deng, Nan Zou, Xingkun Yang, Yingyu Diao, Weifeng Gao, Ke Xu, Zhangyu Chen, Shirui Lu, Zhao Qiu, Peiyang Li, Xianyu Chang, Zhengzhong Yu, Fangzheng Miao, Jia Zheng, Ying Li, Yuan Feng, Bei Wang, Zaijian Zong, Mosong Zhou, Wenli Zhou, Houjiang Chen, Xingyu Liao, Yipeng Li, Wenxiao Zhang, Ping Zhu, Yinggang Wang, Chuanjie Xiao, Depeng Liang,DongCao,JunchengLiu,YongqiangYang,XiaolongBai,YiLi,HuaguoXie, Huatao Wu, Zhibin Yu, Lv Chen, Hu Liu, Yujun Ding, Haipei Zhu, Jing Xia, Yi Xiong,ZhouYu,andHengLiao.2025. ServingLargeLanguageModelsonHuawei CloudMatrix384. (2025). arXiv:cs.DC/2506.12708https://arxiv.org/abs/2506.12708",
+  "bbox": [
+   69.0,
+   86.7,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S115",
+  "page": 16,
+  "type": "paragraph",
+  "role": null,
+  "order": 115,
+  "text": "**APPENDICES** Appendices are supporting material that has not been peer-reviewed. **A ANALYTICAL MODELING OF DISPATCH** **LATENCY** We model the MoE dispatch process as two parallel groups execut-ing on partitioned hardware resources:**token count processing** and. To minimize the total latency, we aim to**token dispatching** find the optimal resource partitioning that balances the execution time of these two groups. **Cost Models.**Let $n$ denote the total number of available AIVs. We partition these resources into $ncount$ AIVs for processing to-ken counts and $ntoken$ cores for dispatching token data, such that $n$ = $n$ − $n$. We define the time cost functions for both $tokencount$ groups as follows: •**Token Count Processing (**$Tcount$**):**The latency is propor-tional to the number of experts ($Nexp$) and inversely propor-tional to the allocated compute resources ($ncount$). (cid:18) (cid:19) $NexpTcount$ = $G$ + $bcount$ (2) $ncount$ •**Token Dispatching (**$Ttoken$**):**The latency is proportional to the total token load, defined by the product of the Top- $k$ value ($Ktop$) and the batch size ($Bsz$), and inversely proportional to the allocated communication resources ($n$ − $n$). $count$ (cid:18) $Ktop$ × $Bsz$ (cid:19) $T$ = $F$ + $b$ (3) $tokenn$ − $ntokencount$ Here, $F$ (·) and $G$ (·) represent the linear scaling functions of com-munication and computation, respectively. $b$ and $b$ denote $tokencount$ the constant hardware overheads (e.g., kernel launch latency). Since the two AIV groups execute in**Optimization Objective.** parallel, the total dispatch latency $T$ is determined by the $dispatc$ℎ slower group (the bottleneck). Our objective is to solve the Min-Max problem: (cid:16) (cid:17) min max ($Tcount$,$Ttoken$) (4) $ncount$ According to the pipeline parallelism principle, the optimal la-tency is achieved when the two groups are perfectly overlapped, $TT$. Substituting the cost models, we get: *i.e., *$count$ = $token$ (cid:18) $N$ (cid:19) (cid:18) $K$ × $B$ (cid:19) $GexpbFtopszb$ (5) + $count$ = + $tokenncountn$ − $ncount$ **Approximation and Solution.**To derive an analytical relation-ship for optimal resource allocation, we introduce two practical assumptions based on the workload characteristics of large-scale MoE models: (1)**Communication Dominance:**The token dispatching group is significantly more resource-intensive than token count processing. Consequently, the majority of cores are allocated to communication ($n$ ≫ $n$), implying: $tokencountn$ − $n$ ≈ $n$ (6) $count$ (2)**Negligible Constant Overhead:**Under high-load scenarios (large batch size and Top- $k$), the variable processing time",
+  "bbox": [
+   53.8,
+   85.3,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S116",
+  "page": 16,
+  "type": "paragraph",
+  "role": null,
+  "order": 116,
+  "text": "dominates the constant overheads. Thus, we approximate $b$ 0 and $b$ 0. $count$ ≈ $token$ ≈ Assuming $F$ ($x$) = $αx$ and $G$ ($x$) = $βx$ are linear functions, Eq. 5 simplifies to: $NKBexptop$ × $szβ$ · ≈ $α$ · (7) $ncountn$ Solving for $ncount$, we obtain: $Nβexpncount$ ≈ · $n$ · (8) $αKtop$ × $Bsz$ The derivation leads to the following proportionality: $Nexpn$ ∝ (9) $countKBtop$ × $sz$ This result indicates that to maintain optimal pipeline overlap, the number of cores allocated to token count processing ($n$) $count$ should be $N$**directly proportional to the number of experts (**$exp$**)** and $KB$. As**inversely proportional to the token load (**$top$ × $sz$**)** the communication load increases, resources must be shifted from calculation to communication to prevent the dispatch group from becoming the bottleneck. **B HARDNESS ANALYSIS** (1)**Theorem 1.***Program is NP-Hard. * Proof. We analyze the hardness by reducing from the**Subset** **Sum Problem (SSP)**. Consider a Subset Sum Problem Instance $k$ 1 I 2 = { $a$ 0,$a$ 1,...,$ak$ 1 }, where (cid:205) − $ai$ = 2 $B$. − $i$ = 0 We construct an instance I of the original scheduling problem $n$ consisting of a set of $k$ · $n$ tokens: ($a$ 0, 0),..., ($ak$ − 1, 0),  $B$, 0,..., $B$, 0, 0, 0,..., 0, 0  I $n$ = () () () () (10) (cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32) (cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32) (cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32) (cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)  (cid:124) (cid:123)(cid:122) (cid:125) (cid:124) (cid:123)(cid:122) (cid:125)  ($n$ − 2)×($B$, 0) ’s (($k$ − 1)($n$ − 1)+ 1)×(0, 0) ’s   Consider the following decision problem: Does there exist an assignment { $xij$ } such that: min max ∑︁ ℓ max RTT $B$ (11) (cid:169) $i$ + { $i$ } (cid:170) ≤ { $xij$ } $j$ (cid:173) $i$ ∈ $Mj$ (cid:174) $i$ ∈ $Mj$ (cid:171) (cid:172) If, for, there exists an $n$ -partition $M$,$M$,...,$M$ that satisfies I $n$ 1 2 $n$ the requirements of the original problem: Because the total load is: $k$ − 1 ∑︁ ($n$ − 2) · $B$ + $ai$ = ($n$ − 2) · $B$ + 2 $B$ = $n$ · $B$ (12) $i$ = 0 And due to the cardinality constraint: | $M$ | = | $M$ | = · · · = | $M$ | = $k$ (13) 1 2 $n$ Therefore, among $M$ 1,$M$ 2,...,$Mn$, there must be exactly ($n$ − 2) partitions that take the form:   ($B$, 0), (0, 0), (0, 0),..., (0, 0) (14) (cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32) (cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32)(cid:32) (cid:124) (cid:123)(cid:122) (cid:125)   ($k$ − 1)×(0, 0) ’s   Without loss of generality, let these be $M$,$M$,...,$M$ as shown 3 4 $n$ above.",
+  "bbox": [
+   342.4,
+   84.7,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S117",
+  "page": 17,
+  "type": "paragraph",
+  "role": null,
+  "order": 117,
+  "text": "best group size increases with rank count. We fix one expert per NPU die, so more ranks mean more experts and more validation work. Allocating more CalCumSum cores increases parallelism and reduces stragglers on the verification path.",
+  "bbox": [
+   53.8,
+   665.5,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S118",
+  "page": 17,
+  "type": "paragraph",
+  "role": null,
+  "order": 118,
+  "text": "**patch primitive**",
+  "bbox": [
+   318.0,
+   681.5,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "S119",
+  "page": 54,
+  "type": "references",
+  "order": 119,
+  "text": "",
+  "bbox": [
+   0,
+   0,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "C001",
+  "page": 2,
+  "type": "caption",
+  "order": 120,
+  "text": "Table 1: Comparison of MoE communication libraries.",
+  "bbox": [
+   328.0,
+   84.5,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "C002",
+  "page": 3,
+  "type": "caption",
+  "order": 121,
+  "text": "Figure 2: MoE Dispatch workflow. Left: logical view of se-",
+  "bbox": [
+   318.0,
+   228.1,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "C003",
+  "page": 3,
+  "type": "caption",
+  "order": 122,
+  "text": "Figure 1: Comparison of traditional cluster using hybrid in-",
+  "bbox": [
+   53.8,
+   270.7,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "C004",
+  "page": 4,
+  "type": "caption",
+  "order": 123,
+  "text": "Table 2: CM384 memory-access latency hierarchy under dis-",
+  "bbox": [
+   317.7,
+   84.5,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "C005",
+  "page": 4,
+  "type": "caption",
+  "order": 124,
+  "text": "Figure 3: Performance analysis of All-to-All communication.",
+  "bbox": [
+   53.8,
+   255.6,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "C006",
+  "page": 5,
+  "type": "caption",
+  "order": 125,
+  "text": "Figure 4: Overview of the UBEP architecture.",
+  "bbox": [
+   83.3,
+   229.6,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "C007",
+  "page": 6,
+  "type": "caption",
+  "order": 126,
+  "text": "Figure 5: Comparison of BSP-based multi-phase execution",
+  "bbox": [
+   94.4,
+   281.4,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "C008",
+  "page": 8,
+  "type": "caption",
+  "order": 127,
+  "text": "Figure 6: Comparison of three Data-as-Flag–based",
+  "bbox": [
+   116.7,
+   215.2,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "C009",
+  "page": 8,
+  "type": "caption",
+  "order": 128,
+  "text": "Table 3: MoE Model configurations. R/S experts means routed",
+  "bbox": [
+   317.7,
+   236.6,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "C010",
+  "page": 9,
+  "type": "caption",
+  "order": 129,
+  "text": "Table 4: Performance of different EPCLs. DeepEP is included",
+  "bbox": [
+   53.5,
+   84.5,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "C011",
+  "page": 10,
+  "type": "caption",
+  "order": 130,
+  "text": "Figure 7: Latency composition of the MoE dispatch operator",
+  "bbox": [
+   88.0,
+   209.5,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "C012",
+  "page": 10,
+  "type": "caption",
+  "order": 131,
+  "text": "Figure 8: Task-wise latency breakdown of the",
+  "bbox": [
+   123.0,
+   349.4,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "C013",
+  "page": 10,
+  "type": "caption",
+  "order": 132,
+  "text": "Figure 9: AIV-Level token dispatch latency under different",
+  "bbox": [
+   318.0,
+   487.5,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "C014",
+  "page": 10,
+  "type": "caption",
+  "order": 133,
+  "text": "Figure 10: Dispatch latency of Data-as-Flag variants versus",
+  "bbox": [
+   318.0,
+   656.1,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "C015",
+  "page": 11,
+  "type": "caption",
+  "order": 134,
+  "text": "Figure 11: Normalized TPOT performance of CANN EP and",
+  "bbox": [
+   53.8,
+   206.3,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "C016",
+  "page": 12,
+  "type": "caption",
+  "order": 135,
+  "text": "Table 5: Portability checklist",
+  "bbox": [
+   200.6,
+   84.5,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "C017",
+  "page": 17,
+  "type": "caption",
+  "order": 136,
+  "text": "Figure 12: Supplementary latency analysis of the MoE Dis-",
+  "bbox": [
+   318.0,
+   670.5,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "C018",
+  "page": 18,
+  "type": "caption",
+  "order": 137,
+  "text": "Figure 13: Performance scalability of different Top-.",
+  "bbox": [
+   274.1,
+   256.6,
+   0,
+   0
+  ],
+  "confidence": "high"
+ },
+ {
+  "id": "C019",
+  "page": 18,
+  "type": "caption",
+  "order": 138,
+  "text": "Figure 14: Heatmaps illustrating the relationship between the CalCumSum AIVs allocation group size, batch size, and varying rank numbers",
+  "bbox": [
+   53.8,
+   605.1,
+   0,
+   0
+  ],
+  "confidence": "high"
+ }
+]

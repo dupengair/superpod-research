@@ -56,6 +56,52 @@
 11. **文本清洗** `tidy()`：标点前空格、行尾连字符 `([A-Za-z])- ([a-z])`、`(cid:66)`→✉、
     Unicode 数学斜体（U+1D400 区）NFKC 归一后包 `$...$`。
 
+12. **times profile（arXiv article 类模板，2026-10-11 HyperOffload 实战新增）**：
+    `--profile times` + `--skip-pages`/`--eq-pages` 可选参数。模板签名：US Letter（612×792）、
+    正文 NimbusRomNo9L-Regu 10pt、节标题 Medi 12pt、小节 Medi 10pt（与正文同号仅粗体，
+    需编号白名单防表格表头误判）、图注 "Figure N:"（**冒号**，且字体与正文相同——必须用
+    冒号判据否则 "Figure 2 provides..." 正文行全部误判图注）、代码/算法块 Calibri/DengXian
+    （→fig_interior）、**页码在页脚**（libertine 在页顶）。
+13. **翻页悬空丢段 bug（严重，2026-10-11 发现并修复）**：页首 body 行的 prev 是前页末行时
+    gap 为负 → new_para_check 判 False → 若此前无已开段落（cur_meta=None，典型：p.1 全
+    front 后接正文），整页/多页累积被 flush 静默丢弃。修复：`if cur_meta is None or
+    new_para_check(...)` 强制开段。**libertine 模板侥幸免疫**（页顶页码 skip 行 gap≈17>16.5
+    恰好触发开段），所以 CM384 首跑未暴露——但 CM384 交付版实测仍受影响（§2 等段落丢失），
+    需重建（见 research/HyperOffload 任务记录）。**教训：行覆盖检测必须用 hyphen-aware
+    norm 且清理 markdown 符号，"字符收支差=图内文字"的解释要先排除丢段**。
+14. **refs 起始页**：以 "References" heading 所在页为准（脚本已改为自动检测），不再硬编码
+    页码；CM384 的 >=54 是其专有值。
+15. **p.1 footnote 判据**：`top>590` 只适用 720pt 页高；Letter(792) 页须加字号条件
+    （`size<=9`）防正文误判。
+16. **行级 trace 调试**：`TRACE=<页码>` 环境变量输出该页每行的分类与段落累积事件
+    （NEWPARA/ACC），定位丢行/误分块时先开 trace 再推理。
+17. **回归基线更新**：CM384 修复后 360 块（paragraph 273）——旧的 312 基线本身带丢段 bug，
+    修复验证以"body 行零丢失"为准而不是块数对齐。
+
+18. **重建时的 ID 体系一致性（2026-10-12 CM384 重建实战）**：修复丢段后重提取会产生新 ID
+    体系，与旧 chunk_*.zh 的 ID 不兼容。合并流程：① 新提取为基底；② 旧译按
+    `norm(旧块text)[:60]` 建映射（非 ID）挂到新块；③ 旧版手工修复块（嵌段中拆出的标题）
+    按前缀替换回新流并重新连续编号；④ 跨页拆分段落的接缝译文要修剪前块尾部/补本块开头，
+    且 **tmap.json 修改后必须当场持久化**（本次接缝脚本改了内存 tmap 却只写了 chunk 文件，
+    下一步从磁盘重载导致 S325 译文丢失，二次返工）；⑤ generate_reader 读的是
+    `blocks_raw.json`——把合并后的块写回该文件名，否则 ID 错位、译文张冠李戴。
+
+19. **sigconf profile（ACM SIGCOMM 双栏，2026-10-12 UBEP 实战新增）**：`--profile sigconf`。
+    模板签名：US Letter 双栏（中线 306，左栏 x0≈53.5/右栏 317.7）、正文 LinLibertine 9pt、
+    图注 LinLibertineTB 粗体 "Figure N:"、图内字 Calibri/DejaVu/Liberation、页眉在页顶
+    （两种形态，统一 top<75 skip）、页码在页脚。
+    - **分栏必须先行**（本 profile 的核心）：桶合并前按 word x0 分栏（键 `(col, bucket)`），
+      否则同 y 的左右栏行被垂直重叠规则合并成错乱行；行级 col 赋值阈值要松（x0 < 中线+6），
+      本例右栏 317.7 曾被 306+12=318 的阈值误判左栏；
+    - **阅读序**：(page, col, top) 排序；new_para_check 中栏切换强制开新段；
+    - 段落无垂直间隙（间隙=行距），段切分纯靠栏内缩进带（本例 1.4–9pt 偏移）；
+    - 图注判据用**最大字号**（合并行内 4-6pt 图内小字会拉低 minsize）；CAP_RE 去掉 ^ 锚
+      （图轴标签 𝑘 可能粘在图注行首）；数学字体（LibertineMathMI/NewTXMI）要放行；
+    - **裁图/表带列感知**：obj/行按图注所在栏过滤后再聚类，x 范围限制在栏内；
+    - 覆盖检测：**不能用 pdfplumber.extract_text 的整页行**（双栏同高行会被拼成一行→假阴性），
+      要用提取器 dbg_lines（栏内正确分组）做行级核对；
+    - tidy() 新增相邻数学段合并（`$a$$b$`→`$ab$`），否则被 validate 误判为 display math。
+
 ## 维护约定
 
 - 新脚本入本目录后必须在上方"脚本清单"登记一行。

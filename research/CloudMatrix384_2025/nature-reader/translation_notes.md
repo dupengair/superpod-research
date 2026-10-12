@@ -1,5 +1,14 @@
 # 翻译与提取说明（translation_notes）
 
+> **⚠️ 2026-10-12 重建说明**：初版提取存在"翻页悬空丢段"bug（页首行被误判为前页段落的延续、
+> 且此前无已开段落时整段被静默丢弃），导致初版 paper.md 丢失部分正文段落（如 §2 开篇段、
+> 若干小节首段；当时"4.9% 字符差=图内文字"的收支解释部分掩盖了该问题）。已修复提取器
+> （tools/nature-reader 经验第 13 条）并重建：正文块 273 段、行级覆盖检测零真实丢失、
+> 翻译由旧译（309 块）+ 补译（50 块）+ 接缝修剪合并而成。**注意**：重建后 S 块 ID 体系
+> 与初版不同——paper-card / paper2ppt / paper-xray 中引用的旧 S-id 对应旧编号，存档于
+> `build_legacy/`；其 PDF 页码/图表编号引用不受影响（数值均直接取自图表，经核验无误）。
+> 中文全文 PDF（../nature-paper-trans/）已基于重建版重新生成（52 页）。
+
 Reader 对象：*Serving Large Language Models on Huawei CloudMatrix384*（arXiv:2506.12708v3，58 页，CC BY 4.0）。
 生成日期：2026-10-10。流程：字体/缩进感知的结构化提取（`tools/nature-reader/`，经验见其 `nature-reader-experiences.md`）→ 分块人工级翻译 → 装配校验。
 

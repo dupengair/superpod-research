@@ -36,6 +36,25 @@
    标注，验证步骤写到证伪条件级别；创新状态一律 `unverified / partially checked`，
    禁止 novelty 措辞（idea gates 第 6 条）。
 
+8. **第二篇实战（HyperOffload，2026-10-12）的增量经验**：
+   - `prepare_paper.py` 对 US Letter/NimbusRomNo9L 模板（times profile 同源的 arXiv article 类）
+     的图表自动检测正常（6 图 6 表全检出，与 CM384 的 0/0 不同）——auditor 的
+     figures/tables_coverage 检查随之生效，**卡内必须逐一引用全部图号/表号**（本次漏了
+     Fig. 1/2 被 error 拦截，补引后通过）；
+   - 系统类论文读法：先从 nature-reader 的 blocks_raw 里把实验节原文全部拉出来再写卡
+     （本次直接读 S054–S077），避免凭 reader 阶段印象写数字；
+   - 微例标准（deep-reading 协议）与 paper-card 的 §09 合流：用"代价函数两项权重随带宽
+     翻转最优序"的手算例演示 Algorithm 1 机制，并明确标注 α/β 未报告是实现细节缺口；
+   - 想法 3（组合实证）直接检验论文的未证主张（与 NSA 正交性），是最便宜的验证型想法；
+     想法 1（消融分账）补证 E1/E2 的组件归因——两类"补证型想法"优先级应高于新机制类。
+
+9. **UBEP 实战（2026-10-12）增量**：prepare 脚本对 ACM 双栏模板的图表/公式自动检测最全
+   （14 图 5 表 15 式全检出）——equations_coverage 检查随之生效，要求 Equation 1–15 逐一
+   在卡内出现（范围写法 "Equation 2–4" 不算，必须逐个枚举）；附录推导式（cid 乱码）在
+   证据清单中统一标注"字符级 Not assessable"，既满足覆盖又诚实声明；笔误（把姊妹篇的
+   "Table 6" 习惯性带过来，而本文只有 5 张表）在初稿就出现——写卡前先 grep 确认
+   论文的图表总数，避免跨论文的习惯污染。
+
 ## 维护约定
 
 - 新脚本入本目录后必须在上方"脚本清单"登记一行。

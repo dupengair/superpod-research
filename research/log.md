@@ -14,3 +14,8 @@
 | Serving Large Language Models on Huawei CloudMatrix384 | CloudMatrix384_2025 | nature-paper-card | 2026-10-10 17:20 |
 | Serving Large Language Models on Huawei CloudMatrix384 | CloudMatrix384_2025 | nature-paper-trans | 2026-10-10 17:50 |
 | Serving Large Language Models on Huawei CloudMatrix384 | CloudMatrix384_2025 | nature-paper-xray | 2026-10-10 18:10 |
+| HyperOffload: Graph-Driven Hierarchical Memory Management for Large Language Models on SuperNode Architectures | HyperOffload_2026 | nature-reader | 2026-10-11 10:40 |
+| HyperOffload: Graph-Driven Hierarchical Memory Management for Large Language Models on SuperNode Architectures | HyperOffload_2026 | nature-paper-card | 2026-10-12 11:05 |
+| HyperOffload: Graph-Driven Hierarchical Memory Management for Large Language Models on SuperNode Architectures | HyperOffload_2026 | nature-paper-xray | 2026-10-12 11:30 |
+| UBEP: Re-architecting Expert Parallelism Communication Library for Production Superpods | UBEP_2026 | nature-reader | 2026-10-12 15:40 |
+| UBEP: Re-architecting Expert Parallelism Communication Library for Production Superpods | UBEP_2026 | nature-paper-card | 2026-10-12 16:30 |

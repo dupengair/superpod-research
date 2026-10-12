@@ -1,0 +1,17 @@
+S001	UBEP：面向生产环境超节点重构专家
+S002	Yipeng Liu 1,∗、Chang Liu 1,∗、Si Shen 1,∗、Jiaqi Zheng 1,†、Yuquan Zhang 2、Yimeng Xu 2、Zhongzhe Hu 2、Zhiyuan Huang 2、Wenkai Ling 2、Baochuan Yang 2、Xianzhi Yu 2
+S003	1 南京大学计算机软件新技术国家重点实验室 2 华为技术有限公司
+S004	摘要
+S005	将混合专家（Mixture-of-Experts，MoE）模型部署到生产环境的高带宽超节点（superpod）上——例如 NVIDIA 的 NVL72/576 与华为的 CloudMatrix384——所带来的关键挑战远不止互连裸带宽。尽管这类系统提供了统一全局地址空间与高带宽互连网络（fabric），但其面向稀疏 MoE 通信的全部潜力仍受制于三个根本性瓶颈：(1) 相互依赖的通信阶段被粗粒度的批量同步并行（Bulk Synchronous Parallel，BSP）编排所强加的严格执行串行化；(2) 高得难以承受、且无法随高互连带宽同步扩展的同步开销；(3) 对不规则 token 流量进行距离无关调度所导致的严重负载不均衡。为消除这些瓶颈，我们提出 UBEP（Unified-Bus Expert Parallelism，统一总线专家并行）——一个为现代超节点体系结构重新思考 MoE All-to-All 原语的生产级可用通信库。大规模实验表明，UBEP 将 All-to-All 时延最多降低 52.4%，将 MoE 推理的每输出 token 时间（Time Per Output Token，TPOT）最多降低 11.1%。
+S006	CCS 概念
+S007	• 网络 → 数据中心网络；• 计算方法学 → 并行计算方法学
+S008	关键词
+S009	混合专家（Mixture-of-Experts）、专家并行（Expert Parallelism）、All-to-All 通信、通信库、超节点（Superpod）、数据中心网络
+S010	ACM 引用格式：Yipeng Liu、Chang Liu、Si Shen、Jiaqi Zheng、Mingfan Li、Yuyang Yang、Guanhua Li、Yuquan Zhang、Yimeng Xu、Zhongzhe Hu、Zhiyuan Huang、Qihang Duan、Junsong Wang、Wenkai Ling、Baochuan Yang、Xianzhi Yu、Han Bao、Yijie Chen 和 Guihai Chen。2026. UBEP: Re-architecting Expert Parallelism Communication Library for Production Superpods. 收录于 ACM SIGCOMM 2026 会议（SIGCOMM '26），2026 年 8 月 17–21 日，美国科罗拉多州丹佛（Denver, CO）。∗ 同等贡献。
+S011	† 通讯作者。允许免费制作本工作全部或部分的数字或硬拷贝副本供个人或课堂使用，前提是此类副本不用于营利或商业目的，且副本在首页带有本声明及完整引用信息。本作品中归作者之外他人所有的组件之版权必须予以尊重。允许注明出处的摘录。除此之外的复制、再版、上传至服务器或向列表再分发，需事先获得特定许可和/或支付费用。许可申请请联系 permissions@acm.org。SIGCOMM '26，2026 年 8 月 17–21 日，美国科罗拉多州丹佛 © 2026 版权由所有者/作者持有。出版权限授权给美国计算机协会（ACM）。ACM ISBN 979-8-4007-2467-1/26/08. https://doi.org/10.1145/3789240.3829183
+S012	并行通信库
+S013	Mingfan Li 2、Yuyang Yang 1、Guanhua Li 1、Qihang Duan 2、Junsong Wang 2、Han Bao 2、Yijie Chen 2、Guihai Chen 1
+S014	美国。ACM，美国纽约州纽约，18 页。https://doi.org/10.1145/3789240.3829183
+S015	1 引言
+S016	大语言模型（LLM）的快速演进，已使混合专家（MoE）体系结构成为在庞大参数规模与推理效率之间取得平衡的标准范式 [7]。为支撑这些通信密集型工作负载，数据中心基础设施正从传统通用集群转向专用的超节点（superpod）体系结构，例如 NVIDIA 的 NVL72/576 [31] 与华为的 CloudMatrix384（CM384）[57]。传统集群依赖 InfiniBand（IB）/RoCE 等横向扩展（scale-out）网络，尾时延高且采用显式消息传递；与之不同，超节点通过 NVLink/统一总线（UB，灵衢）等纵向扩展（scale-up）互连集成数百个加速器，构成一个统一、高带宽、可按 load/store 访问的域。尽管超节点具备前所未有的裸硬件能力，如何针对 MoE 模型固有的不规则、稀疏通信模式高效利用这些能力，仍然是一个关键的系统挑战。这一挑战的核心是专家并行通信库（Expert Parallelism Communication Library，EPCL）——负责编排细粒度 token 交换的系统层。与 NCCL 等通用集合通信库（CCL）不同，DeepEP [51] 等 EPCL 通过为现代 MoE 系统定制的窄面分发（dispatch）/合并（combine）API 来实现 All-to-All 原语。正如 Table 1 所总结的，现有 EPCL 并非为现代多层超节点而设计：DeepEP [51] 与 UCCL-EP [28] 采用批量同步并行（BSP）模型，面向具有混合互连（如 IB 与 NVLink）的非超节点体系结构，并使用粗粒度的内核级调度——在这类系统中传输时间长、占据主导，从而掩盖了软件开销；CANN EP [57] 运行在超节点互连网络之上，但仍保留 BSP、仅含 NPU 内流水线与全局屏障，使软件开销在低时延互连网络上直接暴露；Hybrid-EP [32] 采用异步并行（ASP）模型，以更细的 warp 级调度支持单层超节点，但未考虑分层通信约束。在现代多层超节点中，大幅降低的链路
+S017	时延使 BSP 式串行化与内核调度的软件开销暴露出来，导致高带宽互连网络被严重闲置。在本工作中，我们识别出面向现代超节点重构 EPCL 时存在的三个根本性瓶颈：(1) BSP 式串行化。MoE 通信天然包含路由、重排等相互依赖的阶段；现有 BSP 实现依赖严格的全局屏障来保证一致性——这一设计在低时延超节点中造成执行的串行化 [51, 57]。这种此前被忽视的"停-等（stop-and-wait）"行为阻碍了重叠执行
