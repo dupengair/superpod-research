@@ -16,17 +16,17 @@ tools/
 
 > `nature-skills/` 目录同理：其 README.md 即 nature-skills 全库 21 个 skill 的官方总览。
 
-现有资产：
+现有资产（6/8 个目录已有经验沉淀）：
 
 | 目录 | README.md | 经验文件 |
 |---|---|---|
-| `nature-reader/` | skill 官方说明 | `nature-reader-experiences.md`（提取流水线 4 脚本 + 11 条调参经验，含 generate_reader.py 装配器） |
+| `nature-reader/` | skill 官方说明 | `nature-reader-experiences.md`（提取流水线 4 脚本 + 19 条调参经验：word 级提取、公式保护、翻页丢段 bug 修复、times/sigconf 双 profile、CM384 重建等） |
 | `nature-skills/` | 全库 21 个 skill 官方总览 | 不适用（参考件） |
-| `academic-search/` | skill 官方说明 | 尚未沉淀 |
+| `academic-search/` | skill 官方说明 | `academic-search-experiences.md`（2 条：OA PDF 下载完整性入库前校验、沙箱 heredoc 陷阱） |
 | `nature-paper2ppt/` | skill 官方说明 | `nature-paper2ppt-experiences.md`（9 条经验：EMU/英寸混算、布局预算、复用链等） |
-| `nature-paper-card/` | skill 官方说明（单篇论文结构化精读卡片） | 尚未沉淀 |
-| `nature-paper-trans/` | skill 官方说明（整篇/指定页中文翻译为图片型 PDF） | 尚未沉淀 |
-| `nature-paper-xray/` | skill 官方说明（论文透视精读，组会/读书会用） | 尚未沉淀 |
+| `nature-paper-card/` | skill 官方说明（单篇论文结构化精读卡片） | `nature-paper-card-experiences.md`（9 条经验：prepare 输入喂原始 PDF、图表清单人工补齐、中文卡 audit warning 消化、局限二分纪律等） |
+| `nature-paper-trans/` | skill 官方说明（整篇/指定页中文翻译为图片型 PDF） | `nature-paper-trans-experiences.md`（4 条经验：image_gen 硬依赖、交付契约、与 reader 分工、weasyprint 文本排版替代方案） |
+| `nature-paper-xray/` | skill 官方说明（论文透视精读，组会/读书会用） | `nature-paper-xray-experiences.md`（9 条经验：承重三级判断、公式微例对账、证据边界分级、姊妹篇对照等） |
 | `research-superpower/` | 研究工作流插件官方说明 | 尚未沉淀 |
 
 ## 管理规则（对所有会话生效）

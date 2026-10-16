@@ -44,15 +44,15 @@ AI 基础设施**超节点（Supernode / SuperPod）**方向的论文调研仓�
 │       └── nature-paper-card/         #   16 节精读卡（E1-E6 证据链 + 5 个候选方向）
 │   └── tmp/                           # 检索中间产物（superpod_search/ 等，可清理）
 └── tools/                             # skill/command 工具与经验资产（单层，按 skill 名分目录）
-    ├── README.md                      # 管理规范（先查后用、经验登记规则）
-    ├── nature-reader/                 # PDF→中英对照 reader 流水线（4 脚本 + 调参经验）
-    ├── nature-skills/                 # nature-skills 全库 21 个 skill 官方总览
-    ├── academic-search/               # 学术检索 Skill 说明（arXiv/S2/OpenAlex/CNKI 等）
-    ├── nature-paper2ppt/              # 论文转中文 PPT（含 9 条实战经验）
-    ├── nature-paper-card/             # 单篇论文结构化精读卡片 Skill 说明
-    ├── nature-paper-trans/            # 整篇/指定页中文翻译（图片型 PDF）Skill 说明
-    ├── nature-paper-xray/             # 论文透视精读（组会/读书会）Skill 说明
-    └── research-superpower/           # 研究工作流插件说明（文献筛选、引用追溯）
+    ├── README.md                      # 管理规范（先查后用、经验登记规则）+ 各 skill 经验沉淀索引
+    ├── nature-reader/                 # PDF→中英对照 reader 流水线（4 脚本 + 19 条调参经验）
+    ├── nature-skills/                 # nature-skills 全库 21 个 skill 官方总览（参考件）
+    ├── academic-search/               # 学术检索 Skill（arXiv/S2/OpenAlex/CNKI 等，2 条经验）
+    ├── nature-paper2ppt/              # 论文转中文 PPT（9 条实战经验）
+    ├── nature-paper-card/             # 单篇论文结构化精读卡片 Skill（9 条实战经验）
+    ├── nature-paper-trans/            # 整篇/指定页中文翻译（图片型 PDF，4 条实战经验）
+    ├── nature-paper-xray/             # 论文透视精读（9 条实战经验，组会/读书会）
+    └── research-superpower/           # 研究工作流插件说明（文献筛选、引用追溯，经验待沉淀）
 ```
 
 ## 已有调研报告
